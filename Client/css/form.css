@@ -1,0 +1,46 @@
+form {
+    text-align: center;
+    margin-left:35%;
+    margin-right:35%;
+}
+
+label, legend, span{
+    font-weight: bold;
+}
+.right {
+    float:right;
+}
+h6 {
+    font-weight: 400;
+    color: #428bca;
+    font-style: italic;
+}
+
+@media only screen and (max-width: 600px) {
+    form {
+        margin-left:10%;
+        margin-right:10%;
+    }
+}
+
+input {
+    text-align: center;
+}
+
+::-webkit-input-placeholder {
+    text-align: center;
+}
+
+:-moz-placeholder {
+    /* Firefox 18- */
+    text-align: center;
+}
+
+::-moz-placeholder {
+    /* Firefox 19+ */
+    text-align: center;
+}
+
+:-ms-input-placeholder {
+    text-align: center;
+}
