@@ -12,3 +12,13 @@
 .selectRow {
     background-color: #ececec;
 }
+.toggle {
+    display:none;
+}
+.toggle2 {
+    display:block;
+}
+i {
+    width:100%;
+    text-align:center;
+}

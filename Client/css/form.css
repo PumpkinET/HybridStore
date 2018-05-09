@@ -16,6 +16,10 @@ h6 {
     font-style: italic;
 }
 
+#error {
+    font-weight: 100;
+    color:red;
+}
 @media only screen and (max-width: 600px) {
     form {
         margin-left:10%;

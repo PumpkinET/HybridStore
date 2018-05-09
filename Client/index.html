@@ -38,22 +38,23 @@
 			</nav>
 		</navbar>
 	</header>
-	<form>
+	<form action="javascript:void(0);">
 		<fieldset>
 			<legend>Login info</legend>
 			<div class="form-group">
-				<input type="text" class="form-control" id="exampleInputUsername1" aria-describedby="usernameHelp" placeholder="Enter username">
+				<input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter username">
 				<small id="usernameHelp" class="form-text text-muted">Please ask your manager for an account!</small>
 			</div>
 			<div class="form-group">
-				<input type="password" class="form-control" id="exampleInputPassword1" aria-describedby="passwordHelp" placeholder="Enter password">
+				<input type="password" class="form-control" id="password" aria-describedby="passwordHelp" placeholder="Enter password">
 				<small id="passwordHelp" class="form-text text-muted">Remember to change your password from while to while :D</small>
 			</div>
 		</fieldset>
-		<button type="submit" class="btn btn-primary">Login</button>
+		<button type="submit" class="btn btn-primary" onClick='login()'>Login</button>
 		<a href="reset.html">
 			<h6>Forgot your password?</h6>
 		</a>
+		<h6 id="error"></h6>
 	</form>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -61,7 +62,9 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
 	    crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
-	    crossorigin="anonymous"></script>
+		crossorigin="anonymous"></script>
+		
+	<script src="js/AuthService.js"></script>
 </body>
 
 </html>
