@@ -11,6 +11,11 @@
 	<link rel="stylesheet" href="css/navbar.css">
 	<link rel="stylesheet" href="css/form.css">
 	<link rel="stylesheet" href="css/table.css">
+	<link href='css/fullcalendar.min.css' rel='stylesheet' />
+	<link href='css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+	<script src='js/moment.min.js'></script>
+	<script src='js/jquery.min.js'></script>
+	<script src='js/fullcalendar.min.js'></script>
 	<title>HybridStore Users</title>
 </head>
 
@@ -41,75 +46,162 @@
 						<li class="nav-item active currentNav">
 							<a class="nav-link" href="routine.html">Routine</a>
 							<span class="sr-only">(current)</span>
-						</li>
+            </li>
+            <i class='material-icons' data-toggle="modal" data-target="#exampleModal" sytle="color:white">add_box</i>
 					</ul>
 				</div>
 			</nav>
 		</navbar>
-	</header>
-	<table class="table table-hover" id="itemsTable">
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col">Username</th>
-				<th scope="col">Name</th>
-				<th scope="col">Age</th>
-				<th scope="col">Address</th>
-				<th scope="col">Rank</th>
-				<th scope="col"></th>
-				<th scope="col"></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th scope="row">HalaMadrid</th>
-				<td>Mark</td>
-				<td>Otto</td>
-				<td>@mdo</td>
-				<td>CR7</td>
-				<td>
-					<i class="material-icons">mode_edit</i>
-				</td>
-				<td>
-					<i class="material-icons">delete</i>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">y Nada Mas!</th>
-				<td>Jacob</td>
-				<td>Thornton</td>
-				<td>@fat</td>
-				<td>Pro</td>
-				<td>
-					<i class="material-icons">mode_edit</i>
-				</td>
-				<td>
-					<i class="material-icons">delete</i>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">VamosREAL!</th>
-				<td>Larry</td>
-				<td>the Bird</td>
-				<td>@twitter</td>
-				<td>Noob</td>
-				<td>
-					<i class="material-icons">mode_edit</i>
-				</td>
-				<td>
-					<i class="material-icons">delete</i>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+  </header>
+  
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Add routine</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">Admin</th>
+								<th scope="col">Target</th>
+								<th scope="col">Title</th>
+								<th scope="col">Start</th>
+								<th scope="col">End</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="add-adminuser">
+								</td>
+								<td>
+									<input type="text" class="form-control" id="add-targetuser">
+								</td>
+								<td>
+									<input type="text" class="form-control" id="add-title">
+								</td>
+								<td>
+									<input type="text" class="form-control" id="add-start-date">
+								</td>
+								<td>
+									<input type="text" class="form-control" id="add-end-date">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" onClick='addDate()'>Save changes</button>
+				</div>
+			</div>
+		</div>
+  </div>
+  
+	<script>
+/*
+  $(document).ready(function() {
+    $('#calendar').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay'
+      },
+      defaultDate: '2018-03-12',
+      navLinks: true, // can click day/week names to navigate views
+      selectable: true,
+      selectHelper: true,
+      select: function(start, end) {
+        var title = prompt('Event Title:');
+        var eventData;
+        if (title) {
+          eventData = {
+            title: title,
+            start: start,
+            end: end
+          };
+          $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+        }
+        $('#calendar').fullCalendar('unselect');
+      },
+      editable: true,
+      eventLimit: true, // allow "more" link when too many events
+      events: [
+        {
+          title: 'All Day Event',
+          start: '2018-03-01'
+        },
+        {
+          title: 'Long Event',
+          start: '2018-03-07',
+          end: '2018-03-10'
+        },
+        {
+          id: 999,
+          title: 'Repeating Event',
+          start: '2018-03-09T16:00:00'
+        },
+        {
+          id: 999,
+          title: 'Repeating Event',
+          start: '2018-03-16T16:00:00'
+        },
+        {
+          title: 'Conference',
+          start: '2018-03-11',
+          end: '2018-03-13'
+        },
+        {
+          title: 'Meeting',
+          start: '2018-03-12T10:30:00',
+          end: '2018-03-12T12:30:00'
+        },
+        {
+          title: 'Lunch',
+          start: '2018-03-12T12:00:00'
+        },
+        {
+          title: 'Meeting',
+          start: '2018-03-12T14:30:00'
+        },
+        {
+          title: 'Happy Hour',
+          start: '2018-03-12T17:30:00'
+        },
+        {
+          title: 'Dinner',
+          start: '2018-03-12T20:00:00'
+        },
+        {
+          title: 'Birthday Party',
+          start: '2018-03-13T07:00:00'
+        },
+        {
+          title: 'Click for Google',
+          url: 'http://google.com/',
+          start: '2018-03-28'
+        }
+      ]
+    });
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-	    crossorigin="anonymous"></script>
+  });
+*/
+</script>
+	<div id='calendar'></div>
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
 	    crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
 	    crossorigin="anonymous"></script>
-	<script src="js/sort.js"></script>
-	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="js/RoutineService.js"></script>
+  <script>
+		window.addEventListener("load", getAll(), false);
+	</script>
 	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 </body>

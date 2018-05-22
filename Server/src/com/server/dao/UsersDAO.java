@@ -18,7 +18,8 @@ public class UsersDAO {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT USERNAME, GRADE, NAME, AGE, ADDRESS  FROM USERS WHERE USERNAME='"+ username +"'");
+			ResultSet rs = stmt.executeQuery(
+					"SELECT USERNAME, GRADE, NAME, AGE, ADDRESS  FROM USERS WHERE USERNAME='" + username + "'");
 			while (rs.next())
 				temp = new Users(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getInt(4), rs.getString(5));
 			con.close();
@@ -27,6 +28,7 @@ public class UsersDAO {
 		}
 		return temp;
 	}
+
 	public static List<Users> getAll() {
 		List<Users> temp = new ArrayList<Users>();
 		try {
@@ -57,7 +59,7 @@ public class UsersDAO {
 			stmt.setString(3, user.getName());
 			stmt.setInt(4, user.getAge());
 			stmt.setString(5, user.getAddress());
-			
+
 			result = stmt.executeUpdate() == 1;
 
 			con.close();

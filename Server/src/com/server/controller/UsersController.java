@@ -20,6 +20,7 @@ public class UsersController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public UsersController() {
+		
 		super();
 	}
 
@@ -44,6 +45,7 @@ public class UsersController extends HttpServlet {
 
 		response.getWriter().write(new Gson().toJson(result));
 		response.getWriter().close();
+		
 	}
 
 	@Override
