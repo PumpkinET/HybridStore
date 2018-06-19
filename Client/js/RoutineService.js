@@ -67,9 +67,9 @@ function render(obj) {
             editable: true,
             eventLimit: true,
             events: [{
-                title: obj[0].title,
-                start: obj[0].startDate,
-                end: obj[0].endDate
+                title: obj[2].title,
+                start: obj[2].startDate,
+                end: obj[2].endDate
             }]
         });
     });

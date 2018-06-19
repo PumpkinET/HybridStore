@@ -10,6 +10,9 @@ label, legend, span{
 .right {
     float:right;
 }
+.left {
+    float:left;
+}
 h6 {
     font-weight: 400;
     color: #428bca;

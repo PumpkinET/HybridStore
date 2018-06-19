@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.server.model.Users;
+import com.server.util.Config;
 import com.server.util.MySQLUtil;
 
 public class UsersDAO {
@@ -16,12 +17,15 @@ public class UsersDAO {
 		Users temp = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			Config.parseConfig();
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.username, MySQLUtil.password);
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
 					"SELECT USERNAME, GRADE, NAME, AGE, ADDRESS  FROM USERS WHERE USERNAME='" + username + "'");
 			while (rs.next())
 				temp = new Users(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getInt(4), rs.getString(5));
+			
+			stmt.close();
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);
@@ -33,11 +37,13 @@ public class UsersDAO {
 		List<Users> temp = new ArrayList<Users>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			Config.parseConfig();
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.username, MySQLUtil.password);
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT USERNAME, GRADE, NAME, AGE, ADDRESS  FROM USERS");
 			while (rs.next())
 				temp.add(new Users(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getInt(4), rs.getString(5)));
+			stmt.close();
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);
@@ -49,7 +55,8 @@ public class UsersDAO {
 		boolean result = false;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			Config.parseConfig();
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.username, MySQLUtil.password);
 
 			PreparedStatement stmt = con
 					.prepareStatement("INSERT INTO USERS(USERNAME, GRADE, NAME, AGE, ADDRESS) VALUES(?,?,?,?,?)");
@@ -61,7 +68,7 @@ public class UsersDAO {
 			stmt.setString(5, user.getAddress());
 
 			result = stmt.executeUpdate() == 1;
-
+			stmt.close();
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);
@@ -73,7 +80,8 @@ public class UsersDAO {
 		boolean result = false;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			Config.parseConfig();
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.username, MySQLUtil.password);
 
 			PreparedStatement stmt = con
 					.prepareStatement("UPDATE USERS SET GRADE=?, NAME=?, AGE=?, ADDRESS=? WHERE USERNAME=?");
@@ -96,7 +104,8 @@ public class UsersDAO {
 		boolean result = false;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			Config.parseConfig();
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.username, MySQLUtil.password);
 
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM USERS WHERE USERNAME=?");
 			stmt.setString(1, username);

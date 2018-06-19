@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import com.server.model.Login;
+import com.server.util.Config;
 import com.server.util.MySQLUtil;
 
 public class AuthDAO {
@@ -13,7 +14,8 @@ public class AuthDAO {
 		int count = 0;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			Config.parseConfig();
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.username, MySQLUtil.password);
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT USERNAME, PASSWORD FROM USERS WHERE USERNAME='" + login.getUsername()
 					+ "' AND PASSWORD='" + login.getPassword() + "'");

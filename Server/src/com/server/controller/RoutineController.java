@@ -17,25 +17,14 @@ import com.server.model.Routine;
 import com.server.model.Users;
 import com.server.service.UsersService;
 
-/**
- * Servlet implementation class RoutineController
- */
 @WebServlet("/RoutineController")
 public class RoutineController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
 	public RoutineController() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
@@ -44,10 +33,6 @@ public class RoutineController extends HttpServlet {
 		response.getWriter().close();
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));

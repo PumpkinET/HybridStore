@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.server.model.Routine;
+import com.server.util.Config;
 import com.server.util.MySQLUtil;
 
 public class RoutineDAO {
@@ -17,7 +18,8 @@ public class RoutineDAO {
 		Routine temp = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			Config.parseConfig();
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.username, MySQLUtil.password);
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM ROUTINE WHERE id=" + id);
 			while (rs.next())
@@ -34,7 +36,8 @@ public class RoutineDAO {
 		List<Routine> temp = new ArrayList<Routine>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			Config.parseConfig();
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.username, MySQLUtil.password);
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM ROUTINE");
 			while (rs.next())
@@ -51,7 +54,8 @@ public class RoutineDAO {
 		boolean result = false;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			Config.parseConfig();
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.username, MySQLUtil.password);
 
 			PreparedStatement stmt = con.prepareStatement(
 					"INSERT INTO ROUTINE (ADMINUSER,TARGETUSER,TITLE, STARTDATE,ENDDATE) VALUES (?,?,?,?,?)");
@@ -75,7 +79,8 @@ public class RoutineDAO {
 		boolean result = false;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			Config.parseConfig();
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.username, MySQLUtil.password);
 
 			PreparedStatement stmt = con.prepareStatement(
 					"UPDATE ROUTINE SET ADMINUSER=?, TARGETUSER=?, TITLE=?, START=?, END=? WHERE ROUTINE=?");
@@ -98,7 +103,8 @@ public class RoutineDAO {
 		boolean result = false;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			Config.parseConfig();
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.username, MySQLUtil.password);
 
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM ROUTINE WHERE ID=?");
 			stmt.setInt(1, id);

@@ -1,0 +1,128 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageButton
+        android:id="@+id/targetShopThumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:background="#00000000"
+        android:scaleType="centerCrop" />
+
+    <GridLayout xmlns:grid="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/targetShopThumbnail"
+        android:background="#FFF"
+        android:columnCount="4"
+        android:paddingTop="5dp">
+
+        <ImageButton
+            android:id="@+id/targetShopHome"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/ic_menu_home" />
+
+        <ImageButton
+            android:id="@+id/targetShopInformation"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/ic_menu_info"
+            android:gravity="center" />
+
+        <ImageButton
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/ic_menu_directions"
+            android:gravity="center" />
+
+        <ImageButton
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/ic_menu_star"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="Home" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="Information" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="Directions" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="Favorite" />
+
+    </GridLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/gridLayout"
+        android:layout_marginBottom="5dp"
+        android:background="#FFF">
+
+        <TextView
+            android:id="@+id/targetShopSubTitles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="hey"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycleviewer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/targetShopThumbnail"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/targetShopThumbnail"
+        android:layout_below="@+id/relativeLayout"
+        android:background="@android:color/background_light"
+        android:padding="4dp"
+        android:scrollbars="vertical" />
+</RelativeLayout>

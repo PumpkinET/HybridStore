@@ -1,0 +1,76 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/updateProfileAvatar"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:adjustViewBounds="false"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="28dp"
+        android:scaleType="centerCrop" />
+
+    <EditText
+        android:id="@+id/updateProfileUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/updateProfileAvatar"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/updateProfilePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/updateProfileUsername"
+        android:layout_alignStart="@+id/updateProfileUsername"
+        android:layout_below="@+id/updateProfileUsername"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="Name"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/updateProfileEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/updateProfilePassword"
+        android:layout_alignRight="@+id/updateProfilePassword"
+        android:layout_below="@+id/updateProfilePassword"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:text="Name"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/updateProfileButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/updateProfileEmail"
+        android:layout_alignRight="@+id/updateProfileEmail"
+        android:layout_below="@+id/updateProfileEmail"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="28dp"
+        android:background="@color/colorAccent"
+        android:textColor="#FFF"
+        android:text="Update" />
+
+</RelativeLayout>
