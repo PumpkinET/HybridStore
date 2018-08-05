@@ -47,7 +47,8 @@ $(document).ready(function () {
         fieldInput = inBox.val();
     }
     $("#createStore").click(function () {
-        createStore();
+        //createStore();
+		console.log("TEST");
     });
 
     function createStore() {
