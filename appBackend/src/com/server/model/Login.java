@@ -1,24 +1,21 @@
 package com.server.model;
 
 public class Login {
-	String username;
-	String password;
 	String email;
+	String password;
 	String avatar;
-	public Login(String username, String password) {
+	String name;
+	public Login(String email, String password) {
 		super();
-		this.username = username;
+		this.email = email;
 		this.password = password;
 	}
-	public Login(String username, String password, String email, String avatar) {
+	public Login(String email, String password, String avatar, String name) {
 		super();
-		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.avatar = avatar;
-	}
-	public String getUsername() {
-		return username;
+		this.name = name;
 	}
 	public String getPassword() {
 		return password;
@@ -28,6 +25,9 @@ public class Login {
 	}
 	public String getAvatar() {
 		return avatar;
+	}
+	public String getName() {
+		return name;
 	}
 	
 }

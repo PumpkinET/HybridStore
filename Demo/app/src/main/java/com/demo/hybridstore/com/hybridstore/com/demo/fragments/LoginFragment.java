@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.demo.hybridstore.MainActivity;
+import com.demo.hybridstore.com.hybridstore.model.Categories;
 import com.hybridstore.app.R;
 import com.demo.hybridstore.com.hybridstore.model.Config;
 import com.demo.hybridstore.com.hybridstore.model.Auth;
@@ -94,7 +95,7 @@ public class LoginFragment extends Fragment {
                 urlConnection.setRequestMethod("POST");
 
                 JSONObject jObj = new JSONObject();
-                jObj.put("username", params[0]);
+                jObj.put("email", params[0]);
                 jObj.put("password", params[1]);
 
                 OutputStream os = urlConnection.getOutputStream();
@@ -124,14 +125,13 @@ public class LoginFragment extends Fragment {
                 Gson gs = new GsonBuilder().create();
                 Login login = gs.fromJson(result, Login.class);
 
-                Auth.username = login.getUsername();
-                Auth.password = login.getPassword();
                 Auth.email = login.getEmail();
+                Auth.password = login.getPassword();
                 Auth.avatar = login.getAvatar();
+                Auth.name = login.getName();
 
-
-                ((MainActivity) getActivity()).loginMenu(login.getUsername(), login.getEmail(), login.getAvatar());
-                MainFragment fragment = new MainFragment();
+                ((MainActivity) getActivity()).loginMenu(login.getName(), login.getEmail(), login.getAvatar());
+                CategoriesFragment fragment = new CategoriesFragment();
                 android.support.v4.app.FragmentTransaction fragmentTransaction =
                         getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, fragment);

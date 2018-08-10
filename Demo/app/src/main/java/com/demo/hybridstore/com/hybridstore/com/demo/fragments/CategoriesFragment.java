@@ -8,9 +8,12 @@ package com.demo.hybridstore.com.hybridstore.com.demo.fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import com.hybridstore.app.R;
@@ -27,11 +30,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CategoriesFragment extends Fragment {
 
     View rootView;
-
+    GridView gridview;
+    CategoriesAdapter categoriesAdapter;
     public CategoriesFragment() {
     }
 
@@ -43,6 +49,24 @@ public class CategoriesFragment extends Fragment {
         getActivity().setTitle("Categories");
 
         new CategoriesAsyncer().execute();
+        gridview = (GridView) rootView.findViewById(R.id.categoriesGridView);
+        EditText filter_categories = (EditText)rootView.findViewById(R.id.filter_categories);
+        filter_categories.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                categoriesAdapter.getFilter().filter(cs);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         return rootView;
 
     }
@@ -74,8 +98,9 @@ public class CategoriesFragment extends Fragment {
             if (result != null) {
                 Gson gs = new GsonBuilder().create();
                 Categories[] categories = gs.fromJson(result, Categories[].class);
-                GridView gridview = (GridView) rootView.findViewById(R.id.categoriesGridView);
-                gridview.setAdapter(new CategoriesAdapter(rootView.getContext(), categories));
+                categoriesAdapter = new CategoriesAdapter(rootView.getContext(), new ArrayList<Categories>(Arrays.asList(categories)));
+                gridview.setAdapter(categoriesAdapter);
+                gridview.setTextFilterEnabled(true);
             }
         }
     }

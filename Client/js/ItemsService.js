@@ -3,7 +3,7 @@ var lastRow = 1;
 function getAll() {
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "http://localhost:8080/Server/ItemsController", true);
+        xhr.open("GET", "http://localhost:8080/Server/ItemsController?dbName=Mcdonalds", true);
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {

@@ -2,6 +2,7 @@ package com.demo.hybridstore;
 
 import android.app.FragmentManager;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,6 +27,7 @@ import com.demo.hybridstore.com.hybridstore.com.demo.fragments.ShopsFragment;
 import com.demo.hybridstore.com.hybridstore.com.demo.fragments.SignupFragment;
 import com.demo.hybridstore.com.hybridstore.model.Auth;
 import com.hybridstore.app.R;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MainFragment fragment = new MainFragment();
+        CategoriesFragment fragment = new CategoriesFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         profileLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Auth.username != null) {
+                if (Auth.email != null) {
                     ProfileFragment fragment = new ProfileFragment();
                     android.support.v4.app.FragmentTransaction fragmentTransaction =
                             getSupportFragmentManager().beginTransaction();
@@ -119,13 +121,14 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            MainFragment fragment = new MainFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment);
-            fragmentTransaction.commit();
-        } else if (id == R.id.nav_login) {
+//        if (id == R.id.nav_home) {
+//            MainFragment fragment = new MainFragment();
+//            android.support.v4.app.FragmentTransaction fragmentTransaction =
+//                    getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.fragment_container, fragment);
+//            fragmentTransaction.commit();
+//        } else
+        if (id == R.id.nav_login) {
             LoginFragment fragment = new LoginFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
@@ -164,23 +167,22 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void loginMenu(String username, String email, String avatar) {
+    public void loginMenu(String name, String email, String avatar) {
         navigationView.getMenu().findItem(R.id.nav_signup).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_signout).setVisible(true);
 
-        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileName)).setText(username);
+        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileName)).setText(name);
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileEmail)).setText(email);
 
         ImageView img = navigationView.getHeaderView(0).findViewById(R.id.profileAvatar);
         img.setBackgroundColor(Color.TRANSPARENT);
-        Picasso.get().load(avatar).into(img);
+        Picasso.get().load(avatar).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(img);
 
-        Toast.makeText(MainActivity.this, "Welcome back, " + username + "!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Welcome back, " + name + "!", Toast.LENGTH_SHORT).show();
     }
 
     public void resetMenu() {
-        Auth.username = null;
         Auth.avatar = null;
         Auth.email = null;
         Auth.password = null;
@@ -193,6 +195,7 @@ public class MainActivity extends AppCompatActivity
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileEmail)).setText("Please login to start buying.");
 
         ImageView img = navigationView.getHeaderView(0).findViewById(R.id.profileAvatar);
-
+        img.setImageResource(R.drawable.ic_menu_login);
+        //img.setBackground(R.drawable.ic_menu_login);
     }
 }

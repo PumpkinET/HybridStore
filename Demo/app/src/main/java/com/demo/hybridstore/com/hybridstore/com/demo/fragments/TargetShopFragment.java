@@ -125,7 +125,7 @@ public class TargetShopFragment extends Fragment {
             ArrayList<Item> card = new ArrayList<>();
             for (int i = 0; i < item.getItems().size(); i++) {
                 Object[] obj = item.getItems().get(i);
-                card.add(new Item(obj[0].toString(), obj[1].toString(), obj[2].toString()));
+                card.add(new Item(obj[0].toString(), obj[1].toString(), obj[2].toString(), obj[4].toString()));
             }
             mAdapter = new CardAdapter(card);
             mRecycleView.setAdapter(mAdapter);

@@ -8,9 +8,12 @@ package com.demo.hybridstore.com.hybridstore.com.demo.fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import com.demo.hybridstore.com.hybridstore.adapters.ShopAdapter;
@@ -26,11 +29,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ShopsFragment extends Fragment {
 
     View rootView;
-
+    GridView gridview;
+    ShopAdapter shopsAdapter;
     public ShopsFragment() {
     }
 
@@ -42,6 +48,24 @@ public class ShopsFragment extends Fragment {
         getActivity().setTitle("Shops");
 
         new ShopAsycner().execute();
+        gridview = (GridView) rootView.findViewById(R.id.shopsGridView);
+        EditText filter_shops = (EditText)rootView.findViewById(R.id.filter_shops);
+        filter_shops.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                shopsAdapter.getFilter().filter(cs);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         return rootView;
     }
 
@@ -72,8 +96,10 @@ public class ShopsFragment extends Fragment {
             if (result != null) {
                 Gson gs = new GsonBuilder().create();
                 Shop[] shop = gs.fromJson(result, Shop[].class);
-                GridView gridview = (GridView) rootView.findViewById(R.id.shopsGridView);
-                gridview.setAdapter(new ShopAdapter(rootView.getContext(), shop));
+
+                shopsAdapter = new ShopAdapter(rootView.getContext(), new ArrayList<Shop>(Arrays.asList(shop)));
+                gridview.setAdapter(shopsAdapter);
+                gridview.setTextFilterEnabled(true);
             }
         }
     }

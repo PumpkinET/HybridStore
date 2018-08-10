@@ -12,7 +12,7 @@
         android:focusableInTouchMode="true">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/filter_shops"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentLeft="true"
@@ -22,7 +22,7 @@
             android:layout_marginRight="10dp"
             android:background="#FFF"
             android:ems="10"
-            android:hint="search for item.."
+            android:hint="search for shop.."
             android:inputType="textPersonName"
             android:textAlignment="center" />
 

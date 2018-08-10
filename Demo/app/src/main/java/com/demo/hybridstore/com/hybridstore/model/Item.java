@@ -4,11 +4,13 @@ public class Item {
     private String title;
     private String image;
     private String description;
+    private String price;
 
-    public Item(String title, String image, String description) {
+    public Item(String title, String image, String description, String price) {
         this.title = title;
         this.image = image;
         this.description = description;
+        this.price = price;
     }
 
     public String getTitle() {
@@ -22,4 +24,6 @@ public class Item {
     public String getDescription() {
         return this.description;
     }
+
+    public String getPrice() { return this.price; }
 }

@@ -1,15 +1,15 @@
 package com.server.android;
 
 public class LoginAndroid {
-	String username;
+	String email;
 	String password;
-	public LoginAndroid(String username, String password) {
+	public LoginAndroid(String email, String password) {
 		super();
-		this.username = username;
+		this.email = email;
 		this.password = password;
 	}
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 	public String getPassword() {
 		return password;

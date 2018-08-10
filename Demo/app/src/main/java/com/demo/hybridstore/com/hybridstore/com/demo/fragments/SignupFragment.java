@@ -19,7 +19,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.demo.hybridstore.com.hybridstore.model.Config;
 import com.hybridstore.app.R;
@@ -46,9 +49,9 @@ public class SignupFragment extends Fragment {
     View rootView;
     String encodedImage;
     JSONObject jsonObject;
-    JSONObject Response;
     Uri selectedImage;
-
+    EditText email, password, name;
+    Button bSignup;
     public SignupFragment() {
     }
 
@@ -68,16 +71,27 @@ public class SignupFragment extends Fragment {
             }
         });
 
+        email = (EditText) rootView.findViewById(R.id.signup_Email);
+        password = (EditText) rootView.findViewById(R.id.signup_Password);
+        name = (EditText) rootView.findViewById(R.id.signup_Name);
+        bSignup = (Button) rootView.findViewById(R.id.bRegister);
+
+
+        bSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RegisterAsyncer().execute(email.getText().toString(), password.getText().toString(), name.getText().toString());
+            }
+        });
+
         return rootView;
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 100) {
-                Uri selectedImage = data.getData();
+                selectedImage = data.getData();
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 Bitmap selectedImageBitmap = null;
                 try {
@@ -91,55 +105,24 @@ public class SignupFragment extends Fragment {
                 img.getLayoutParams().width = 300;
                 img.getLayoutParams().height = 300;
                 img.setImageURI(selectedImage);
-                new UploadAsyncer().execute(selectedImage);
             }
         }
     }
 
-    public class UploadAsyncer extends AsyncTask<Uri, String, String> {
+    public class RegisterAsyncer extends AsyncTask<String, String, String> {
         public void onPreExecute() {
         }
-
-        private String getRealPathFromURI(Context context, Uri contentUri) {
-            Cursor cursor = null;
-            try {
-                String[] proj = {MediaStore.Images.Media.DATA};
-                cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                return cursor.getString(column_index);
-            } catch (Exception e) {
-                Log.e(TAG, "getRealPathFromURI Exception : " + e.toString());
-                return "";
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-        }
-
         @Override
-        protected String doInBackground(Uri... params) {
+        protected String doInBackground(String... params) {
             try {
-                String path = getRealPathFromURI(getContext(), params[0]);
-                String filename = path.substring(path.lastIndexOf("/") + 1);
-                String file;
-                if (filename.indexOf(".") > 0) {
-                    file = filename.substring(0, filename.lastIndexOf("."));
-                } else {
-                    file = filename;
-                }
-//                Log.d(TAG, "Real Path: " + path);
-//                Log.d(TAG, "Filename With Extension: " + filename);
-//                Log.d(TAG, "File Without Extension: " + file);
-//                Log.d("Vicky", "encodedImage = " + encodedImage);
-
                 jsonObject = new JSONObject();
+                jsonObject.put("email", params[0]);
+                jsonObject.put("name", params[1]);
+                jsonObject.put("password", params[2]);
                 jsonObject.put("imageString", encodedImage);
-                jsonObject.put("imageName", filename);
 
                 String data = jsonObject.toString();
-                URL url = new URL("http://" + Config.ip + ":8080/appBackend/UploadController");
+                URL url = new URL("http://" + Config.ip + ":8080/appBackend/SignupController");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);
                 connection.setDoInput(true);

@@ -93,6 +93,7 @@ public class UsersDAO {
 			stmt.setString(5, user.getUsername());
 			result = stmt.executeUpdate() == 1;
 
+			stmt.close();
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);

@@ -1,27 +1,27 @@
 package com.demo.hybridstore.com.hybridstore.model;
 
 public class Login {
-    String username;
-    String password;
     String email;
+    String password;
     String avatar;
+    String name;
 
-    public Login(String username, String password) {
+    public Login(String email, String password) {
         super();
-        this.username = username;
+        this.email = email;
         this.password = password;
     }
 
-    public Login(String username, String password, String email, String avatar) {
+    public Login(String email, String password, String avatar, String name) {
         super();
-        this.username = username;
+        this.email = email;
         this.password = password;
         this.email = email;
         this.avatar = avatar;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
     public String getPassword() {

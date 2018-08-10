@@ -1,15 +1,13 @@
 package com.demo.hybridstore.com.hybridstore.adapters;
 
-/**
- * Created by Dell Latitude on 16/06/2018.
- */
-
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,29 +17,33 @@ import com.demo.hybridstore.com.hybridstore.com.demo.fragments.TargetShopFragmen
 import com.demo.hybridstore.com.hybridstore.model.Shop;
 import com.squareup.picasso.Picasso;
 
-public class ShopAdapter extends BaseAdapter {
-    private Context mContext;
-    private Shop[] shops;
+import java.util.ArrayList;
 
-    public ShopAdapter(Context c, Shop[] shops) {
+public class ShopAdapter extends BaseAdapter implements Filterable {
+    private Context mContext;
+    ArrayList<Shop> orgList;
+    ArrayList<Shop> filList;
+
+    public ShopAdapter(Context c, ArrayList<Shop> shops) {
         mContext = c;
-        this.shops = shops;
+        orgList = shops;
+        filList = shops;
     }
 
     public int getCount() {
-        return shops.length;
+        return filList.size();
     }
 
     public Object getItem(int position) {
-        return null;
+        return filList.get(position);
     }
 
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Shop shop = shops[position];
+        final Shop shop = filList.get(position);
         if (convertView == null) {
             final LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             convertView = layoutInflater.inflate(R.layout.adapter_shop, null);
@@ -71,6 +73,30 @@ public class ShopAdapter extends BaseAdapter {
         });
 
         return convertView;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+                String searchStr = constraint.toString().toUpperCase();
+                ArrayList<Shop> resultsData = new ArrayList<Shop>();
+                for(int i = 0; i<orgList.size(); i++) {
+                    if (orgList.get(i).getShopName().toUpperCase().startsWith(searchStr)) resultsData.add(orgList.get(i));
+                }
+                results.count = resultsData.size();
+                results.values = resultsData;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filList = (ArrayList<Shop>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
 }

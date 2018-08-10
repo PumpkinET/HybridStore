@@ -1,7 +1,12 @@
 package com.demo.hybridstore.com.hybridstore.com.demo.fragments;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +20,16 @@ import com.demo.hybridstore.com.hybridstore.model.Login;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hybridstore.app.R;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -30,12 +38,17 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static android.app.Activity.RESULT_OK;
+
 public class ProfileFragmentTab extends Fragment {
 
     ImageView img;
-    EditText username, password, email;
-    Button update;
     View rootView;
+    String encodedImage;
+    JSONObject jsonObject;
+    Uri selectedImage;
+    EditText email, password, name;
+    Button update;
 
     public ProfileFragmentTab() {
     }
@@ -47,20 +60,32 @@ public class ProfileFragmentTab extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_profile_tab, container, false);
 
         img = (ImageView) rootView.findViewById(R.id.updateProfileAvatar);
-        username = (EditText) rootView.findViewById(R.id.updateProfileUsername);
-        password = (EditText) rootView.findViewById(R.id.updateProfilePassword);
         email = (EditText) rootView.findViewById(R.id.updateProfileEmail);
+        password = (EditText) rootView.findViewById(R.id.updateProfilePassword);
+        name = (EditText) rootView.findViewById(R.id.updateProfileName);
         update = (Button) rootView.findViewById(R.id.updateProfileButton);
 
-        Picasso.get().load(Auth.avatar).into(img);
-        username.setText(Auth.username);
-        password.setText(Auth.password);
-        email.setText(Auth.email);
+        Picasso
+                .get()
+                .load(Auth.avatar)
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .into(img);
 
+        email.setText(Auth.email);
+        password.setText(Auth.password);
+        name.setText(Auth.name);
+
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 100);
+            }
+        });
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ProfileAsyncer().execute(username.getText().toString(), password.getText().toString(), email.getText().toString());
+                new ProfileAsyncer().execute( password.getText().toString(), name.getText().toString());
             }
         });
 
@@ -68,35 +93,58 @@ public class ProfileFragmentTab extends Fragment {
 
     }
 
-    public class ProfileAsyncer extends AsyncTask<String, Void, String> {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 100) {
+                selectedImage = data.getData();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                Bitmap selectedImageBitmap = null;
+                try {
+                    selectedImageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                selectedImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                byte[] byteArrayImage = byteArrayOutputStream.toByteArray();
+                encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+                img.getLayoutParams().width = 300;
+                img.getLayoutParams().height = 300;
+                img.setImageURI(selectedImage);
+            }
+        }
+    }
+
+    public class ProfileAsyncer extends AsyncTask<String, String, String> {
         public void onPreExecute() {
         }
-
         @Override
         protected String doInBackground(String... params) {
-            BufferedReader reader = null;
-            BufferedWriter writer = null;
             try {
-                URL url = new URL("http://" + Config.ip + ":8080/appBackend/AuthController");
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("POST");
+                jsonObject = new JSONObject();
+                jsonObject.put("email", Auth.email);
+                jsonObject.put("password", params[0]);
+                jsonObject.put("name", params[1]);
+                jsonObject.put("imageString", encodedImage);
 
-                JSONObject jObj = new JSONObject();
-                jObj.put("username", params[0]);
-                jObj.put("password", params[1]);
-
-                OutputStream os = urlConnection.getOutputStream();
-                writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                writer.write(jObj.toString());
+                String data = jsonObject.toString();
+                URL url = new URL("http://" + Config.ip + ":8080/appBackend/SignupController");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setDoInput(true);
+                connection.setRequestMethod("PUT");
+                connection.setFixedLengthStreamingMode(data.getBytes().length);
+                connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                OutputStream out = new BufferedOutputStream(connection.getOutputStream());
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                writer.write(data);
                 writer.flush();
                 writer.close();
+                out.close();
+                connection.connect();
 
-                urlConnection.connect();
-                int statusCode = urlConnection.getResponseCode();
+                int statusCode = connection.getResponseCode();
                 if (statusCode == 200) {
-                    InputStream stream = urlConnection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(stream));
-                    return reader.readLine();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -108,10 +156,6 @@ public class ProfileFragmentTab extends Fragment {
 
         @Override
         public void onPostExecute(String result) {
-            if (result != null) {
-                Gson gs = new GsonBuilder().create();
-                Login login = gs.fromJson(result, Login.class);
-            }
         }
     }
 

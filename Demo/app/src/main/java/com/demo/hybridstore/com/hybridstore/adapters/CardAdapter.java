@@ -30,12 +30,14 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         public TextView mTitle;
         public ImageView mImageView;
         public TextView mDescription;
+        public TextView mPrice;
 
         public CardViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             mTitle = itemView.findViewById(R.id.cardTitle);
             mImageView = itemView.findViewById(R.id.cardImage);
             mDescription = itemView.findViewById(R.id.cardDescription);
+            mPrice = itemView.findViewById(R.id.cardTitle2);
 
             itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -70,6 +72,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         holder.mTitle.setText(currentItem.getTitle());
         Picasso.get().load(currentItem.getImageResource()).into(holder.mImageView);
         holder.mDescription.setText(currentItem.getDescription());
+        holder.mPrice.setText(currentItem.getPrice());
     }
 
     @Override
