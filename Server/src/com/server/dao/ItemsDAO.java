@@ -6,10 +6,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.server.model.Items;
-import com.server.model.Users;
 import com.server.util.Config;
 import com.server.util.MySQLUtil;
 
@@ -23,7 +21,10 @@ public class ItemsDAO {
 			String url = "jdbc:mysql://localhost:3306/" + dbName;
 			Connection con = DriverManager.getConnection(url, MySQLUtil.username, MySQLUtil.password);
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM ITEM");
+			ResultSet rs;
+			
+			rs = stmt.executeQuery("SELECT * FROM ITEM");
+			
 			ResultSetMetaData rsmd = rs.getMetaData();
 			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
 				String name = rsmd.getColumnName(i);

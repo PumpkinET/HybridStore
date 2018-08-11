@@ -51,6 +51,8 @@ public class CategoriesFragment extends Fragment {
         new CategoriesAsyncer().execute();
         gridview = (GridView) rootView.findViewById(R.id.categoriesGridView);
         EditText filter_categories = (EditText)rootView.findViewById(R.id.filter_categories);
+
+
         filter_categories.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

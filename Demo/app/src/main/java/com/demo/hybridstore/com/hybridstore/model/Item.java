@@ -5,12 +5,24 @@ public class Item {
     private String image;
     private String description;
     private String price;
+    private String color = "#FFFFFF";
 
     public Item(String title, String image, String description, String price) {
         this.title = title;
         this.image = image;
         this.description = description;
         this.price = price;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
+
+    public void switchColor() {
+        if (this.color.equals("#FFFFFF"))
+            this.color = "#bdc3c7";
+        else
+            this.color = "#FFFFFF";
     }
 
     public String getTitle() {
@@ -25,5 +37,7 @@ public class Item {
         return this.description;
     }
 
-    public String getPrice() { return this.price; }
+    public String getPrice() {
+        return this.price;
+    }
 }

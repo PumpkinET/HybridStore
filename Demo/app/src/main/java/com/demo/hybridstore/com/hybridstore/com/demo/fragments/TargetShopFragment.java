@@ -9,6 +9,7 @@ import android.app.FragmentManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -122,7 +123,7 @@ public class TargetShopFragment extends Fragment {
             mRecycleView = rootView.findViewById(R.id.recycleviewer);
             mRecycleView.setHasFixedSize(true);
             mLayoutManager = new LinearLayoutManager(rootView.getContext());
-            ArrayList<Item> card = new ArrayList<>();
+            final ArrayList<Item> card = new ArrayList<>();
             for (int i = 0; i < item.getItems().size(); i++) {
                 Object[] obj = item.getItems().get(i);
                 card.add(new Item(obj[0].toString(), obj[1].toString(), obj[2].toString(), obj[4].toString()));
@@ -130,6 +131,26 @@ public class TargetShopFragment extends Fragment {
             mAdapter = new CardAdapter(card);
             mRecycleView.setAdapter(mAdapter);
             mRecycleView.setLayoutManager(mLayoutManager);
+
+            mAdapter.setOnItemClickListener(new CardAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    TargetItemFragment fragment = new TargetItemFragment();
+                    fragment.setTargetItem(card.get(position), shop.getShopName());
+                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                            ((FragmentActivity) rootView.getContext()).getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, fragment);
+                    fragmentTransaction.commit();
+                }
+            });
+            mAdapter.setOnItemLongClickListener(new CardAdapter.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(int position) {
+                    card.get(position).switchColor();
+                    mAdapter.notifyDataSetChanged();
+                    return true;
+                }
+            });
         }
     }
 }

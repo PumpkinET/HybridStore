@@ -12,15 +12,19 @@ import com.server.model.Shop;
 import com.server.util.MySQLUtil;
 
 public class ShopDAO {
-	public static List<Shop> getAll() {
+	public static List<Shop> getAll(String category) {
 		List<Shop> temp = new ArrayList<Shop>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM SHOP");
+			ResultSet rs;
+			if(category.equals("All"))
+			 rs = stmt.executeQuery("SELECT * FROM SHOP");
+			else
+				rs = stmt.executeQuery("SELECT * FROM SHOP WHERE CATEGORY='" + category +"'");
 			while (rs.next())
-				temp.add(new Shop(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+				temp.add(new Shop(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)));
 			stmt.close();
 			con.close();
 		} catch (Exception e) {

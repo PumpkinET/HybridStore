@@ -6,15 +6,16 @@ public class Shop {
 	private String shopThumbnail;
 	private String shopDescription;
 	private String shopIp;
+	private String shopCategory;
 
-
-	public Shop(String shopName, String shopOwner, String shopThumbnail, String shopDescription, String shopIp) {
+	public Shop(String shopName, String shopOwner, String shopThumbnail, String shopDescription, String shopIp, String shopCategory) {
 		super();
 		this.shopName = shopName;
 		this.shopOwner = shopOwner;
 		this.shopThumbnail = shopThumbnail;
 		this.shopDescription = shopDescription;
 		this.shopIp = shopIp;
+		this.shopCategory = shopCategory;
 	}
 
 	public String getShopName() {
@@ -36,7 +37,10 @@ public class Shop {
 	public String getShopIp() {
 		return shopIp;
 	}
-
+	
+	public String getShopCategory() {
+		return shopCategory;
+	}
 	
 	public void setShopName(String shopName) {
 		this.shopName = shopName;

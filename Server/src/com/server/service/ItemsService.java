@@ -1,7 +1,5 @@
 package com.server.service;
 
-import java.util.List;
-
 import com.server.dao.ItemsDAO;
 import com.server.model.Items;
 

@@ -1,6 +1,7 @@
 package com.demo.hybridstore.com.hybridstore.adapters;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.demo.hybridstore.com.hybridstore.com.demo.fragments.LoginFragment;
+import com.demo.hybridstore.com.hybridstore.com.demo.fragments.ShopsFragment;
 import com.demo.hybridstore.com.hybridstore.model.Categories;
 import com.hybridstore.app.R;
 import com.squareup.picasso.Picasso;
@@ -51,6 +54,18 @@ public class CategoriesAdapter extends BaseAdapter implements Filterable {
 
         Picasso.get().load(category.getCategoryThumbnail()).into(imageView);
         nameTextView.setText(category.getCategoryName());
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShopsFragment fragment = new ShopsFragment();
+                fragment.setTargetCategory(category.getCategoryName());
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.commit();
+            }
+        });
 
         return convertView;
     }

@@ -46,6 +46,7 @@ public class LoginFragment extends Fragment {
     Button bLogin;
     TextView txtSignup;
 
+
     public LoginFragment() {
     }
 

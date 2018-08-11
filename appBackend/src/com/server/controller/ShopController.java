@@ -36,7 +36,11 @@ public class ShopController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("application/json");
-		response.getWriter().write(new Gson().toJson(ShopDAO.getAll()));
+		String cat = request.getParameter("category");
+		if(cat == null)
+			response.getWriter().write(new Gson().toJson(ShopDAO.getAll("All")));
+		else 
+			response.getWriter().write(new Gson().toJson(ShopDAO.getAll(cat)));
 		response.getWriter().close();
 	}
 

@@ -37,9 +37,13 @@ public class ShopsFragment extends Fragment {
     View rootView;
     GridView gridview;
     ShopAdapter shopsAdapter;
+    String category;
     public ShopsFragment() {
     }
 
+    public void setTargetCategory(String category) {
+        this.category = category;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,7 +79,11 @@ public class ShopsFragment extends Fragment {
         protected String doInBackground(String... params) {
             BufferedReader reader = null;
             try {
-                URL url = new URL("http://" + Config.ip + ":8080/appBackend/ShopController");
+                URL url;
+                if(category == null)
+                    url = new URL("http://" + Config.ip + ":8080/appBackend/ShopController");
+                else
+                    url = new URL("http://" + Config.ip + ":8080/appBackend/ShopController?category="+category);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
 
