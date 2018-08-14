@@ -6,18 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.demo.hybridstore.com.hybridstore.model.Item;
+import com.demo.hybridstore.com.hybridstore.model.Cart;
 import com.hybridstore.app.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 
-public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
-    private ArrayList<Item> mCardList;
+public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder> {
+    private ArrayList<Cart> mCardList;
     private OnItemClickListener mListener;
     private OnItemLongClickListener mListener2;
 
@@ -38,16 +37,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public static class CardViewHolder extends RecyclerView.ViewHolder {
         public TextView mTitle;
         public ImageView mImageView;
-        public TextView mDescription;
         public TextView mPrice;
-        public RelativeLayout mSelected;
 
         public CardViewHolder(View itemView, final OnItemClickListener listener, final OnItemLongClickListener listener2) {
             super(itemView);
-            mSelected = itemView.findViewById(R.id.itemSwitcher);
             mTitle = itemView.findViewById(R.id.cardTitle);
             mImageView = itemView.findViewById(R.id.historyImage);
-            mDescription = itemView.findViewById(R.id.cardDescription);
             mPrice = itemView.findViewById(R.id.cardTitle2);
 
 
@@ -80,27 +75,25 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         }
     }
 
-    public CardAdapter(ArrayList<Item> cardList) {
+    public CartAdapter(ArrayList<Cart> cardList) {
         mCardList = cardList;
     }
 
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_cart, parent, false);
         CardViewHolder cm = new CardViewHolder(v, mListener, mListener2);
         return cm;
     }
 
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
-        Item currentItem = mCardList.get(position);
+        Cart currentItem = mCardList.get(position);
 
         int color = Color.parseColor(currentItem.getColor());
-        holder.mSelected.setBackgroundColor(color);
 
         holder.mTitle.setText(currentItem.getTitle());
         Picasso.get().load(currentItem.getImageResource()).into(holder.mImageView);
-        holder.mDescription.setText(currentItem.getDescription());
         holder.mPrice.setText(currentItem.getPrice());
     }
 

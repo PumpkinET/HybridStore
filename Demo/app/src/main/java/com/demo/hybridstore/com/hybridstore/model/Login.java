@@ -5,6 +5,7 @@ public class Login {
     String password;
     String avatar;
     String name;
+    String session;
 
     public Login(String email, String password) {
         super();
@@ -12,16 +13,22 @@ public class Login {
         this.password = password;
     }
 
-    public Login(String email, String password, String avatar, String name) {
+    public Login(String email, String password, String avatar, String name, String session) {
         super();
         this.email = email;
         this.password = password;
         this.email = email;
         this.avatar = avatar;
+        this.name = name;
+        this.session = session;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getSession() {
+        return session;
     }
 
     public String getPassword() {

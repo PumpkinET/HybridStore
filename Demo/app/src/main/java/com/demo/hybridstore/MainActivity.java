@@ -12,6 +12,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     NavigationView navigationView;
     LinearLayout profileLayout;
-
+    ImageView myCart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.ic_menu_cart));
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -88,6 +89,14 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+        myCart = (ImageView)findViewById(R.id.myCart);
+        myCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, CartActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -101,14 +110,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-
-        return true;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -184,7 +185,7 @@ public class MainActivity extends AppCompatActivity
         Auth.avatar = null;
         Auth.email = null;
         Auth.password = null;
-        Auth.auth = null;
+        Auth.session = null;
         navigationView.getMenu().findItem(R.id.nav_signup).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_signout).setVisible(false);

@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.server.android.LoginAndroid;
 import com.server.dao.AuthDAO;
 import com.server.model.Login;
+import com.server.util.SessionUtil;
 
 @WebServlet("/AuthController")
 public class AuthController extends HttpServlet {
@@ -40,8 +41,12 @@ public class AuthController extends HttpServlet {
 		if (loginObj == null) {
 			response.setStatus(403);
 		} else {
-			response.getWriter().write(new Gson().toJson(AuthDAO.login(login)));
+			String session = request.getSession().getId();
+			Login secured = new Login(loginObj.getEmail(), loginObj.getPassword(), loginObj.getAvatar(), loginObj.getName(), session);
+			SessionUtil.sessions.put(session, secured);
+			response.getWriter().write(new Gson().toJson(secured));
 			response.getWriter().close();
+			System.out.println(secured.toString());
 		}
 	}
 }

@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.demo.hybridstore.CartActivity;
 import com.hybridstore.app.R;
 import com.demo.hybridstore.com.hybridstore.adapters.CardAdapter;
 import com.demo.hybridstore.com.hybridstore.model.Item;
@@ -62,6 +63,7 @@ public class TargetShopFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_targetshop, container, false);
         getActivity().setTitle(shop.getShopName());
+        CartActivity.shopName = shop.getShopName();
 
         final ImageView imageView = (ImageView) rootView.findViewById(R.id.targetShopThumbnail);
         final TextView shopSubTitles = (TextView) rootView.findViewById(R.id.targetShopSubTitles);
@@ -96,7 +98,6 @@ public class TargetShopFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             BufferedReader reader = null;
-            BufferedWriter writer = null;
             try {
                 URL url = new URL(shop.getShopIp());
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -126,7 +127,7 @@ public class TargetShopFragment extends Fragment {
             final ArrayList<Item> card = new ArrayList<>();
             for (int i = 0; i < item.getItems().size(); i++) {
                 Object[] obj = item.getItems().get(i);
-                card.add(new Item(obj[0].toString(), obj[1].toString(), obj[2].toString(), obj[4].toString()));
+                card.add(new Item(obj[3].toString(), obj[0].toString(), obj[1].toString(), obj[2].toString(), obj[4].toString()));
             }
             mAdapter = new CardAdapter(card);
             mRecycleView.setAdapter(mAdapter);

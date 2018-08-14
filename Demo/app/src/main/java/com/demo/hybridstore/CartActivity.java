@@ -1,60 +1,95 @@
 package com.demo.hybridstore;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.demo.hybridstore.com.hybridstore.com.demo.fragments.CategoriesFragment;
-import com.demo.hybridstore.com.hybridstore.com.demo.fragments.LoginFragment;
-import com.demo.hybridstore.com.hybridstore.com.demo.fragments.MainFragment;
-import com.demo.hybridstore.com.hybridstore.com.demo.fragments.ProfileFragment;
-import com.demo.hybridstore.com.hybridstore.com.demo.fragments.ShopsFragment;
-import com.demo.hybridstore.com.hybridstore.com.demo.fragments.SignupFragment;
+import com.demo.hybridstore.com.hybridstore.adapters.CardAdapter;
+import com.demo.hybridstore.com.hybridstore.adapters.CartAdapter;
+import com.demo.hybridstore.com.hybridstore.com.demo.fragments.TargetItemFragment;
 import com.demo.hybridstore.com.hybridstore.model.Auth;
+import com.demo.hybridstore.com.hybridstore.model.Cart;
 import com.hybridstore.app.R;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 public class CartActivity extends AppCompatActivity {
 
+    private RecyclerView mRecycleView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    public static ArrayList<Cart> card = new ArrayList<>();
+    public static CartAdapter mAdapter = new CartAdapter(card);
+    public static String shopName = "";
+    FloatingActionButton fab;
+    float totalPriceValue = 0 ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+        setTitle("My Cart");
+        for (int i = 0; i < card.size(); i++) {
+            totalPriceValue += Float.parseFloat(card.get(i).getPrice());
+        }
+        mRecycleView = findViewById(R.id.cartrecycleviewer);
+        mRecycleView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getBaseContext());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setTitle("My Cart");
-        toolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.ic_menu_cart));
+        mRecycleView.setAdapter(mAdapter);
+        mRecycleView.setLayoutManager(mLayoutManager);
+
+        mAdapter.setOnItemLongClickListener(new CartAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(int position) {
+                totalPriceValue -= Float.parseFloat(card.get(position).getPrice());
+                card.remove(position);
+                mAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
+
+        fab = findViewById(R.id.confirmCart);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Auth.email != null) {
+                    Intent i = new Intent(CartActivity.this, PaymentActivity.class);
+                    i.putExtra("finalPrice", totalPriceValue);
+                    i.putExtra("shopName", shopName);
+                    startActivity(i);
+                }
+            }
+        });
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        FragmentManager fm = getFragmentManager();
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else if (fm.getBackStackEntryCount() > 0) {
-            fm.popBackStack();
-        } else {
-            super.onBackPressed();
+     public static void addtoCart(Cart cart) {
+        boolean b = false;
+
+        for (int i = 0; i < card.size(); i++) {
+            if (card.get(i).getTitle().equals(cart.getTitle())) {
+                b = true;
+            }
         }
+        if (b == false) {
+            card.add(new Cart(cart.getId(),cart.getTitle(), cart.getImageResource(), cart.getPrice()));
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+    public static void removeFromCart(Cart cart) {
+        for(int i = 0; i<card.size(); i++) {
+            if(card.get(i).getTitle().equals(cart.getTitle())) {
+                card.remove(i);
+            }
+        }
+        mAdapter.notifyDataSetChanged();
     }
 }

@@ -6,5 +6,5 @@ public class Auth {
     public static String password = null;
     public static String avatar = null;
     public static String name = null;
-    public static String auth = null;
+    public static String session = null;
 }

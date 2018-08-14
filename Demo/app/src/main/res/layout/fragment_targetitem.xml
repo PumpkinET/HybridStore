@@ -13,7 +13,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/cardImage"
+                android:id="@+id/historyImage"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_alignParentEnd="true"
@@ -28,7 +28,7 @@
             android:id="@+id/cardTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/cardImage"
+            android:layout_below="@+id/historyImage"
             android:text="TextView"
             android:layout_margin="4dp"
             android:textAlignment="center"

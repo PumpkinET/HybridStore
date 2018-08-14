@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.server.dao.ItemsDAO;
 import com.server.model.Users;
 import com.server.service.ItemsService;
 import com.server.service.UsersService;
@@ -30,6 +31,7 @@ public class ItemsController extends HttpServlet {
 			response.addHeader("Access-Control-Allow-Origin", "*");
 			response.setContentType("application/json");
 			response.getWriter().write(new Gson().toJson(ItemsService.getAll(request.getParameter("dbName"))));
+			//response.getWriter().write(new Gson().toJson(ItemsDAO.getCartHistory(request.getParameter("dbName"), request.getParameter("items"))));
 			response.getWriter().close();
 		}
 	}
