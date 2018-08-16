@@ -108,7 +108,6 @@ function editRow() {
             "address": $('#add-address').val(),
             "id": $('#add-id').val()
         });
-        console.log(JSON.stringify(data));
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);

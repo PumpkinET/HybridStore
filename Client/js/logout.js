@@ -6,4 +6,5 @@ $(document).ready(function () {
     if (sessionStorage.getItem("session") == null) {
         window.location = "index.html";
     }
+    $('#shopName').text(sessionStorage.getItem("storename"));
 });

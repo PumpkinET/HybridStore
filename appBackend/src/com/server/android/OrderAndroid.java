@@ -12,7 +12,14 @@ public class OrderAndroid {
 	String postalCode;
 	String totalPrice;
 	String items;
-
+	int status;
+	String statusValue;
+	
+	public OrderAndroid(String id, int status) {
+		this.id = id;
+		this.status = status;
+	}
+	
 	public OrderAndroid(String email, String shopName, String firstName, String lastName, String streetAdd,
 			String country, String city, String postalCode, String totalPrice, String items) {
 		super();
@@ -29,7 +36,7 @@ public class OrderAndroid {
 	}
 
 	public OrderAndroid(String id, String email, String shopName, String firstName, String lastName, String streetAdd,
-			String country, String city, String postalCode, String totalPrice, String items) {
+			String country, String city, String postalCode, String totalPrice, String items, int status, String statusValue) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -42,6 +49,8 @@ public class OrderAndroid {
 		this.postalCode = postalCode;
 		this.totalPrice = totalPrice;
 		this.items = items;
+		this.status = status;
+		this.statusValue = statusValue;
 	}
 
 	public String getEmail() {
@@ -132,11 +141,27 @@ public class OrderAndroid {
 		this.id = id;
 	}
 
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getStatusValue() {
+		return statusValue;
+	}
+
+	public void setStatusValue(String statusValue) {
+		this.statusValue = statusValue;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderAndroid [id=" + id + ", email=" + email + ", shopName=" + shopName + ", firstName=" + firstName
 				+ ", lastName=" + lastName + ", streetAdd=" + streetAdd + ", country=" + country + ", city=" + city
-				+ ", postalCode=" + postalCode + ", totalPrice=" + totalPrice + ", items=" + items + "]";
+				+ ", postalCode=" + postalCode + ", totalPrice=" + totalPrice + ", items=" + items + ", status="
+				+ status + ", statusValue=" + statusValue + "]";
 	}
-
 }

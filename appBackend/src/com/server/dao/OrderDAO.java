@@ -19,12 +19,14 @@ public class OrderDAO {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM ORDERS WHERE SHOPNAME='" + shopName + "'");
+			ResultSet rs = stmt.executeQuery(
+					"SELECT ORDERS.ID, ORDERS.EMAIL, ORDERS.SHOPNAME, ORDERS.FIRSTNAME, ORDERS.LASTNAME, ORDERS.STREET_ADR, ORDERS.COUNTRY, ORDERS.CITY, ORDERS.POSTALCODE, ORDERS.TOTALPRICE, ORDERS.ITEMS, ORDERS.STATUS, STATUS.VALUE FROM ORDERS INNER JOIN STATUS ON ORDERS.STATUS = STATUS.ID  WHERE SHOPNAME='"
+							+ shopName + "'");
 
 			while (rs.next()) {
 				orders.add(new OrderAndroid(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
 						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
-						rs.getString(10), rs.getString(11)));
+						rs.getString(10), rs.getString(11), rs.getInt(12), rs.getString(13)));
 			}
 			con.close();
 		} catch (Exception e) {
@@ -40,18 +42,40 @@ public class OrderDAO {
 			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT SHOP.SHOPNAME, SHOP.SHOPTHUMBNAIL, SHOP.SHOPIP, ORDERS.TOTALPRICE, ORDERS.STREET_ADR, ORDERS.COUNTRY, ORDERS.CITY, ORDERS.POSTALCODE, ORDERS.ITEMS  FROM ORDERS INNER JOIN SHOP ON  ORDERS.SHOPNAME = SHOP.SHOPNAME WHERE ORDERS.EMAIL='"
+					"SELECT SHOP.SHOPNAME, SHOP.SHOPTHUMBNAIL, SHOP.SHOPIP, ORDERS.TOTALPRICE, ORDERS.STREET_ADR, ORDERS.COUNTRY, ORDERS.CITY, ORDERS.POSTALCODE, ORDERS.ITEMS, ORDERS.STATUS  FROM ORDERS INNER JOIN SHOP ON  ORDERS.SHOPNAME = SHOP.SHOPNAME WHERE ORDERS.EMAIL='"
 							+ email + "'");
 
 			while (rs.next()) {
-				orders.add(new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)));
+				orders.add(
+						new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+								rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getInt(10)));
 			}
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 		return orders;
+	}
+
+	public static boolean put(String dbName, OrderAndroid order) {
+		boolean result = false;
+		try {
+			System.out.println(order.toString());
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
+			PreparedStatement stmt = con.prepareStatement("UPDATE ORDERS SET STATUS=? WHERE ID=?");
+
+			stmt.setInt(1, order.getStatus());
+			stmt.setInt(2, Integer.parseInt(order.getId()));
+
+			result = stmt.executeUpdate() == 1;
+
+			stmt.close();
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return result;
 	}
 
 	public static void register_order(OrderAndroid order) throws IOException {

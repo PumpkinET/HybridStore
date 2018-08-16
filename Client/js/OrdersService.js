@@ -1,3 +1,7 @@
+'use strict';
+
+var tempIndex;
+
 function getAll() {
     try {
         var xhr = new XMLHttpRequest();
@@ -7,17 +11,19 @@ function getAll() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
                 for (var i = 0; i < obj.length; i++) {
-                    $("tbody").append("<tr class='targetRow'>" +
-                        "<td>" + "<span class='toggle2'>" + obj[i].email + "</span><input type='text' disabled class='toggle' value='" + obj[i].email + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + obj[i].firstName + "</span><input type='text' class='toggle' value='" + obj[i].firstName + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + obj[i].lastName + "</span><input type='text' class='toggle' value='" + obj[i].lastName + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + obj[i].streetAdd + "</span><input type='text' class='toggle' value='" + obj[i].streetAdd + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + obj[i].country + "</span><input type='text' class='toggle' value='" + obj[i].country + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + obj[i].city + "</span><input type='text' class='toggle' value='" + obj[i].city + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + obj[i].postalCode + "</span><input type='text' class='toggle' value='" + obj[i].postalCode + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + obj[i].totalPrice + "</span><input type='text' class='toggle' value='" + obj[i].totalPrice + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + obj[i].items + "</span><input type='text' class='toggle' value='" + obj[i].items + "'></td>" +
-                        "</tr>");
+                    $("#tbody_list").append("<tr class='targetRow'>" +
+                        "<td>" + "<span>" + obj[i].id + "</span></td>" +
+                        "<td>" + "<span>" + obj[i].email + "</span></td>" +
+                        "<td>" + "<span>" + obj[i].firstName + "</span></td>" +
+                        "<td>" + "<span>" + obj[i].lastName + "</span></td>" +
+                        "<td>" + "<span>" + obj[i].streetAdd + "</span></td>" +
+                        "<td>" + "<span>" + obj[i].country + "</span></td>" +
+                        "<td>" + "<span>" + obj[i].city + "</span></td>" +
+                        "<td>" + "<span>" + obj[i].postalCode + "</span></td>" +
+                        "<td>" + "<span>" + obj[i].totalPrice + "</span></td>" +
+                        "<td>" + "<span>" + obj[i].items + "</span></td>" +
+                        "<td>" + "<span style='display:none;'>" + obj[i].status + "</span>" +"<span>" + obj[i].statusValue + "</span></td>" +
+                        "<td><i class='material-icons' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td></tr></tr>");
                 }
             }
         }
@@ -26,3 +32,39 @@ function getAll() {
         alert("Request failed");
     }
 }
+
+function editRow() {
+    try {
+        var xhr = new XMLHttpRequest();
+        xhr.open("PUT", "http://localhost:8080/appBackend/OrdersController?shopName=" + sessionStorage.getItem('storename'), true);
+
+        var data = JSON.stringify({
+            "id": $('#add-id').val(),
+            "status": $('#add-status').val(),
+        });
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var obj = JSON.parse(xhr.responseText);
+                if (obj == true) {
+                    var res = JSON.parse(data);
+                    console.log();
+                    $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(11)').html('<span>' + $('#add-status option:selected').text() + "</span>");
+                }
+            }
+        }
+
+        xhr.send(data);
+    } catch (exception) {
+        alert("Request failed");
+    }
+}
+
+$(document).ready(function () {
+    $("#tbody_list .targetRow").click(function () {
+        console.log($(this).index() + 1);
+        tempIndex = $(this).index() + 1;
+        $('#add-id').val($('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(1) span').text());
+        $('#add-status').val($('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(11) span:nth-child(1)').text());
+    });
+});

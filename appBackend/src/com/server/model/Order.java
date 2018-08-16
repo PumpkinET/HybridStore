@@ -10,9 +10,10 @@ public class Order {
 	private String city;
 	private String postalcode;
 	private String items;
-
+	private int	status;
+	
 	public Order(String shopName, String shopThumbnail, String shopIp, String finalPrice, String streetAdd,
-			String country, String city, String postalcode, String items) {
+			String country, String city, String postalcode, String items, int status) {
 		super();
 		this.shopName = shopName;
 		this.shopThumbnail = shopThumbnail;
@@ -23,6 +24,7 @@ public class Order {
 		this.city = city;
 		this.postalcode = postalcode;
 		this.items = items;
+		this.status = status;
 	}
 
 	public String getShopName() {
@@ -96,5 +98,21 @@ public class Order {
 	public void setItems(String items) {
 		this.items = items;
 	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "Order [shopName=" + shopName + ", shopThumbnail=" + shopThumbnail + ", shopIp=" + shopIp
+				+ ", finalPrice=" + finalPrice + ", streetAdd=" + streetAdd + ", country=" + country + ", city=" + city
+				+ ", postalcode=" + postalcode + ", items=" + items + ", status=" + status + "]";
+	}
+	
 
 }

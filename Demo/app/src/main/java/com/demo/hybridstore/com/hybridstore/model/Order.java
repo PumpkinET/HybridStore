@@ -10,9 +10,11 @@ public class Order {
     private String city;
     private String postalcode;
     private String items;
+    private int status;
+    private String statusValue;
 
     public Order(String shopName, String shopThumbnail, String shopIp, String finalPrice, String streetAdd,
-                 String country, String city, String postalcode, String items) {
+                 String country, String city, String postalcode, String items, int status) {
         super();
         this.shopName = shopName;
         this.shopThumbnail = shopThumbnail;
@@ -23,6 +25,8 @@ public class Order {
         this.city = city;
         this.postalcode = postalcode;
         this.items = items;
+        this.status = status;
+        this.statusValue = statusValue;
     }
     public String getShopName() {
         return shopName;
@@ -75,4 +79,6 @@ public class Order {
     }
 
     public String getItems() { return this.items; }
+    public int getStatus() { return this.status; }
+    public String getStatusValue() { return this.statusValue; }
 }
