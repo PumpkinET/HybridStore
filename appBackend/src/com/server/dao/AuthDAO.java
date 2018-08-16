@@ -24,8 +24,8 @@ public class AuthDAO {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM USERS WHERE EMAIL='" + login.getEmail()
-					+ "' AND PASSWORD='" + login.getPassword() + "'");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM USERS WHERE EMAIL='" + login.getEmail() + "' AND PASSWORD='"
+					+ login.getPassword() + "'");
 
 			while (rs.next()) {
 				loginObj = new Login(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
@@ -36,7 +36,7 @@ public class AuthDAO {
 		}
 		return loginObj;
 	}
-	
+
 	public static void register(RegisterAndroid register) throws IOException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -46,14 +46,14 @@ public class AuthDAO {
 
 			stmt.setString(1, register.getEmail());
 			stmt.setString(2, register.getPassword());
-			stmt.setString(3, "http://10.0.0.21/android/profile/"+register.getEmail());
+			stmt.setString(3, "http://10.0.0.21/android/profile/" + register.getEmail());
 			stmt.setString(4, register.getName());
-			
+
 			stmt.executeUpdate();
-			
+
 			stmt.close();
-			con.close();	
-			
+			con.close();
+
 			String dataString = register.getImageString();
 			byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(dataString);
 			BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
@@ -63,23 +63,23 @@ public class AuthDAO {
 			System.out.println(e);
 		}
 	}
-	
+
 	public static void update(RegisterAndroid register) throws IOException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
-			
+
 			PreparedStatement stmt = con.prepareStatement("UPDATE USERS SET PASSWORD=?, NAME=? WHERE EMAIL=?");
 
 			stmt.setString(1, register.getPassword());
 			stmt.setString(2, register.getName());
 			stmt.setString(3, register.getEmail());
 			stmt.executeUpdate();
-			
+
 			stmt.close();
-			con.close();	
-			
-			if(register.getImageString() != null) {
+			con.close();
+
+			if (register.getImageString() != null) {
 				String dataString = register.getImageString();
 				byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(dataString);
 				BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));

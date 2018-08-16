@@ -7,7 +7,7 @@ public class Routine {
 	String title;
 	String startDate;
 	String endDate;
-	
+
 	public Routine(int id, String adminuser, String targetuser, String title, String startDate, String endDate) {
 		super();
 		this.id = id;

@@ -40,7 +40,7 @@ public class TargetItemFragment extends Fragment {
         mTitle.setText(item.getTitle());
         Picasso.get().load(item.getImageResource()).into(mImageView);
         mDescription.setText(item.getDescription());
-        mPrice.setText(item.getPrice());
+        mPrice.setText(item.getPrice() + "");
         return rootView;
     }
 }

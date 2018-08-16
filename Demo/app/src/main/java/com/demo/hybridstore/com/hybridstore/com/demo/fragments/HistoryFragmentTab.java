@@ -1,22 +1,19 @@
 package com.demo.hybridstore.com.hybridstore.com.demo.fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.demo.hybridstore.com.hybridstore.adapters.CardAdapter;
-import com.demo.hybridstore.com.hybridstore.adapters.CartAdapter;
+import com.demo.hybridstore.ItemsActivity;
 import com.demo.hybridstore.com.hybridstore.adapters.HistoryAdapter;
 import com.demo.hybridstore.com.hybridstore.model.Auth;
 import com.demo.hybridstore.com.hybridstore.model.Config;
-import com.demo.hybridstore.com.hybridstore.model.Item;
-import com.demo.hybridstore.com.hybridstore.model.Items;
 import com.demo.hybridstore.com.hybridstore.model.Order;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -83,13 +80,21 @@ public class HistoryFragmentTab extends Fragment {
         @Override
         public void onPostExecute(String result) {
             Gson gs = new GsonBuilder().create();
-            Order[] order = gs.fromJson(result, Order[].class);
+            final Order[] order = gs.fromJson(result, Order[].class);
 
             mAdapter = new HistoryAdapter(new ArrayList<Order>(Arrays.asList(order)));
             mRecycleView.setAdapter(mAdapter);
             mRecycleView.setLayoutManager(mLayoutManager);
+
+            mAdapter.setOnItemClickListener(new HistoryAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    Intent i = new Intent(getActivity(), ItemsActivity.class);
+                    i.putExtra("shopUrl", order[position].getShopIp());
+                    i.putExtra("items", order[position].getItems());
+                    startActivity(i);
+                }
+            });
         }
     }
-
-
 }

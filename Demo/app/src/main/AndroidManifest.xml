@@ -24,6 +24,7 @@
         </activity>
         <activity android:name="com.demo.hybridstore.CartActivity"></activity>
         <activity android:name="com.demo.hybridstore.PaymentActivity"></activity>
+        <activity android:name="com.demo.hybridstore.ItemsActivity"></activity>
         <!--<activity-->
             <!--android:name=".TabsActivity"-->
             <!--android:label="@string/title_activity_tabs"-->

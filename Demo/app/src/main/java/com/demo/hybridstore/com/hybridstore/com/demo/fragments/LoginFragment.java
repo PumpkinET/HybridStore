@@ -55,6 +55,7 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_login, container, false);
         getActivity().setTitle("Login");
+        ((MainActivity) getActivity()).updateMenu(R.id.nav_login);
 
         username = (EditText) rootView.findViewById(R.id.editText_username);
         password = (EditText) rootView.findViewById(R.id.editView_password);

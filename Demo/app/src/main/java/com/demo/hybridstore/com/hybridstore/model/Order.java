@@ -9,10 +9,10 @@ public class Order {
     private String country;
     private String city;
     private String postalcode;
-
+    private String items;
 
     public Order(String shopName, String shopThumbnail, String shopIp, String finalPrice, String streetAdd,
-                 String country, String city, String postalcode) {
+                 String country, String city, String postalcode, String items) {
         super();
         this.shopName = shopName;
         this.shopThumbnail = shopThumbnail;
@@ -22,6 +22,7 @@ public class Order {
         this.country = country;
         this.city = city;
         this.postalcode = postalcode;
+        this.items = items;
     }
     public String getShopName() {
         return shopName;
@@ -72,4 +73,6 @@ public class Order {
     public void setPostalcode(String postalcode) {
         this.postalcode = postalcode;
     }
+
+    public String getItems() { return this.items; }
 }

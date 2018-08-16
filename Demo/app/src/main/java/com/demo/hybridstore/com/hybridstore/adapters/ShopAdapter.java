@@ -1,6 +1,8 @@
 package com.demo.hybridstore.com.hybridstore.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.demo.hybridstore.MainActivity;
 import com.hybridstore.app.R;
 import com.demo.hybridstore.com.hybridstore.com.demo.fragments.TargetShopFragment;
 import com.demo.hybridstore.com.hybridstore.model.Shop;
@@ -68,10 +71,21 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
                 android.support.v4.app.FragmentTransaction fragmentTransaction =
                         ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
 
+        ImageButton location = (ImageButton) convertView.findViewById(R.id.shopLocation);
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("google.streetview:cbll=46.414382,10.013988");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                v.getContext().startActivity(mapIntent);
+            }
+        });
         return convertView;
     }
 
@@ -83,8 +97,9 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
                 FilterResults results = new FilterResults();
                 String searchStr = constraint.toString().toUpperCase();
                 ArrayList<Shop> resultsData = new ArrayList<Shop>();
-                for(int i = 0; i<orgList.size(); i++) {
-                    if (orgList.get(i).getShopName().toUpperCase().startsWith(searchStr)) resultsData.add(orgList.get(i));
+                for (int i = 0; i < orgList.size(); i++) {
+                    if (orgList.get(i).getShopName().toUpperCase().startsWith(searchStr))
+                        resultsData.add(orgList.get(i));
                 }
                 results.count = resultsData.size();
                 results.values = resultsData;

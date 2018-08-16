@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridView;
 
+import com.demo.hybridstore.MainActivity;
 import com.demo.hybridstore.com.hybridstore.adapters.ShopAdapter;
 import com.demo.hybridstore.com.hybridstore.model.Config;
 import com.demo.hybridstore.com.hybridstore.model.Shop;
@@ -50,7 +51,7 @@ public class ShopsFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_shops, container, false);
         getActivity().setTitle("Shops");
-
+        ((MainActivity) getActivity()).updateMenu(R.id.nav_shops);
         new ShopAsycner().execute();
         gridview = (GridView) rootView.findViewById(R.id.shopsGridView);
         EditText filter_shops = (EditText)rootView.findViewById(R.id.filter_shops);

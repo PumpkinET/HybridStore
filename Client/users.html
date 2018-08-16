@@ -36,6 +36,11 @@
 								<span class="sr-only">(current)</span>
 							</a>
 						</li>
+						<i class='material-icons' data-toggle="modal" data-target="#exampleModal" sytle="color:white">add_box</i>
+						<li class="nav-item">
+							<a class="nav-link" href="orders.html">Orders
+							</a>
+						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="reports.html">Reports</a>
 						</li>
@@ -43,22 +48,28 @@
 							<a class="nav-link" href="routine.html">Routine</a>
 						</li>
 					</ul>
+					<ul class="navbar-nav">
+						<li class="nav-item">
+							<a class="nav-link" href="#" id="logout">Logout</a>
+						</li>
+					</ul>
 				</div>
 			</nav>
 		</navbar>
 	</header>
+
 	<table class="table table-hover" id="itemsTable">
 		<thead class="thead-dark">
 			<tr>
 				<th scope="col">Username</th>
+				<th scope="col">Password</th>
+				<th scope="col">Email</th>
+				<th scope="col">Grade</th>
 				<th scope="col">Name</th>
 				<th scope="col">Age</th>
-				<th scope="col">Grade</th>
 				<th scope="col">Address</th>
+				<th scope="col">ID</th>
 				<th scope="col"></th>
-				<th scope="col">
-					<i class='material-icons' data-toggle="modal" data-target="#exampleModal" sytle="color:white">add</i>
-				</th>
 			</tr>
 		</thead>
 		<tbody id="tbody">
@@ -79,29 +90,48 @@
 					<table class="table table-hover">
 						<thead class="thead-dark">
 							<tr>
-								<th scope="col">Username</th>
-								<th scope="col">Name</th>
-								<th scope="col">Age</th>
-								<th scope="col">Grade</th>
-								<th scope="col">Address</th>
+								<th scope="col">Add User</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<td>
-									<input type="text" class="form-control" id="add-username">
+									<input type="text" class="form-control" id="add-username" placeholder="username">
 								</td>
+							</tr>
+							<tr>
 								<td>
-									<input type="text" class="form-control" id="add-name">
+									<input type="text" class="form-control" id="add-password" placeholder="password">
 								</td>
+							</tr>
+							<tr>
 								<td>
-									<input type="text" class="form-control" id="add-age">
+									<input type="text" class="form-control" id="add-email" placeholder="email">
 								</td>
+							</tr>
+							<tr>
 								<td>
-									<input type="text" class="form-control" id="add-grade">
+									<input type="text" class="form-control" id="add-grade" placeholder="grade">
 								</td>
+							</tr>
+							<tr>
 								<td>
-									<input type="text" class="form-control" id="add-address">
+									<input type="text" class="form-control" id="add-name" placeholder="name">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="add-age" placeholder="age">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="add-address" placeholder="address">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="add-id" placeholder="id">
 								</td>
 							</tr>
 						</tbody>
@@ -109,7 +139,9 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" onClick='addRow()'>Save changes</button>
+					<button type="button" class="btn btn-primary" onClick='addRow()'>Add</button>
+					<button type="button" class="btn btn-primary" onClick='editRow()'>Update</button>
+					<button type="button" class="btn btn-primary" onClick='deleteRow()'>Delete</button>
 				</div>
 			</div>
 		</div>
@@ -121,6 +153,7 @@
 	    crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
 	    crossorigin="anonymous"></script>
+	<script src="js/logout.js"></script>
 	<script src="js/sort.js"></script>
 	<script src="js/UsersService.js"></script>
 	<script>

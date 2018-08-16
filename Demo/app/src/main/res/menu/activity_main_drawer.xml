@@ -4,10 +4,14 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <!--<item-->
-            <!--android:id="@+id/nav_home"-->
-            <!--android:icon="@drawable/ic_menu_home"-->
-            <!--android:title="Home" />-->
+        <item
+            android:id="@+id/nav_categories"
+            android:icon="@drawable/ic_menu_categories"
+            android:title="Categories" />
+        <item
+            android:id="@+id/nav_shops"
+            android:icon="@drawable/ic_menu_shops"
+            android:title="Shops" />
         <item
             android:id="@+id/nav_login"
             android:icon="@drawable/ic_menu_login"
@@ -20,18 +24,6 @@
             android:id="@+id/nav_signout"
             android:icon="@drawable/ic_menu_signout"
             android:title="Sign out" />
-    </group>
-
-    <!--<item android:title="Shopping"></item>-->
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_categories"
-            android:icon="@drawable/ic_menu_categories"
-            android:title="Categories" />
-        <item
-            android:id="@+id/nav_shops"
-            android:icon="@drawable/ic_menu_shops"
-            android:title="Shops" />
     </group>
 
 </menu>

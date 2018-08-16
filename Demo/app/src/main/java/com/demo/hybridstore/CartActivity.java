@@ -38,7 +38,7 @@ public class CartActivity extends AppCompatActivity {
 
         setTitle("My Cart");
         for (int i = 0; i < card.size(); i++) {
-            totalPriceValue += Float.parseFloat(card.get(i).getPrice());
+            totalPriceValue += card.get(i).getPrice();
         }
         mRecycleView = findViewById(R.id.cartrecycleviewer);
         mRecycleView.setHasFixedSize(true);
@@ -50,7 +50,7 @@ public class CartActivity extends AppCompatActivity {
         mAdapter.setOnItemLongClickListener(new CartAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(int position) {
-                totalPriceValue -= Float.parseFloat(card.get(position).getPrice());
+                totalPriceValue -= card.get(position).getPrice();
                 card.remove(position);
                 mAdapter.notifyDataSetChanged();
                 return true;

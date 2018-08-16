@@ -94,7 +94,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder
 
         holder.mTitle.setText(currentItem.getTitle());
         Picasso.get().load(currentItem.getImageResource()).into(holder.mImageView);
-        holder.mPrice.setText(currentItem.getPrice());
+        holder.mPrice.setText(currentItem.getPrice() + "");
     }
 
     @Override

@@ -1,23 +1,18 @@
 package com.demo.hybridstore;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,7 +22,6 @@ import android.widget.Toast;
 
 import com.demo.hybridstore.com.hybridstore.com.demo.fragments.CategoriesFragment;
 import com.demo.hybridstore.com.hybridstore.com.demo.fragments.LoginFragment;
-import com.demo.hybridstore.com.hybridstore.com.demo.fragments.MainFragment;
 import com.demo.hybridstore.com.hybridstore.com.demo.fragments.ProfileFragment;
 import com.demo.hybridstore.com.hybridstore.com.demo.fragments.ShopsFragment;
 import com.demo.hybridstore.com.hybridstore.com.demo.fragments.SignupFragment;
@@ -36,21 +30,19 @@ import com.hybridstore.app.R;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     NavigationView navigationView;
     LinearLayout profileLayout;
     ImageView myCart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         CategoriesFragment fragment = new CategoriesFragment();
-        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                getSupportFragmentManager().beginTransaction();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.add(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
@@ -72,7 +64,6 @@ public class MainActivity extends AppCompatActivity
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileEmail)).setText("Please login to start buying.");
         navigationView.setNavigationItemSelectedListener(this);
 
-
         profileLayout = (LinearLayout) navigationView.getHeaderView(0).findViewById(R.id.profileLayout);
 
         profileLayout.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +80,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-        myCart = (ImageView)findViewById(R.id.myCart);
+        myCart = (ImageView) findViewById(R.id.myCart);
         myCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,13 +93,28 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        FragmentManager fm = getFragmentManager();
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (fm.getBackStackEntryCount() > 0) {
-            fm.popBackStack();
-        } else {
-            super.onBackPressed();
+        } else if(getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        }
+        else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to exit?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            MainActivity.this.finish();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 
@@ -118,13 +124,6 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-//        if (id == R.id.nav_home) {
-//            MainFragment fragment = new MainFragment();
-//            android.support.v4.app.FragmentTransaction fragmentTransaction =
-//                    getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.fragment_container, fragment);
-//            fragmentTransaction.commit();
-//        } else
         if (id == R.id.nav_login) {
             LoginFragment fragment = new LoginFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
@@ -144,17 +143,19 @@ public class MainActivity extends AppCompatActivity
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_shops) {
             ShopsFragment fragment = new ShopsFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_signout) {
             this.resetMenu();
             Toast.makeText(MainActivity.this, "Why did you left us!", Toast.LENGTH_SHORT).show();
-            MainFragment fragment = new MainFragment();
+            CategoriesFragment fragment = new CategoriesFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
@@ -195,6 +196,9 @@ public class MainActivity extends AppCompatActivity
 
         ImageView img = navigationView.getHeaderView(0).findViewById(R.id.profileAvatar);
         img.setImageResource(R.drawable.ic_menu_login);
-        //img.setBackground(R.drawable.ic_menu_login);
     }
+    public void updateMenu(int id) {
+        navigationView.setCheckedItem(id);
+    }
+
 }

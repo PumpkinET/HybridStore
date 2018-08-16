@@ -3,7 +3,7 @@ var lastRow = 1;
 function getAll() {
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "http://localhost:8080/Server/RoutineController", true);
+        xhr.open("GET", "http://localhost:8080/Server/RoutineController?dbName=" + sessionStorage.getItem('storename'), true);
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
@@ -17,28 +17,16 @@ function getAll() {
     }
 }
 
-
-function deleteRow(index) {
-    try {
-        var xhr = new XMLHttpRequest();
-        xhr.open("DELETE", "http://localhost:8080/Server/UsersController/" + $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(1) input').val(), true);
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var obj = JSON.parse(xhr.responseText);
-                if (obj == true) {
-                    $('.targetRow:nth-child(' + (index + 1) + ')').hide();
-                    lastRow--;
-                }
-            }
-        }
-        xhr.send();
-    } catch (exception) {
-        alert("Request failed");
-    }
-}
-
 function render(obj) {
+    var filter = [];
+    for (var i = 0; i < obj.length; i++) {
+        filter.push({
+            title: obj[i].title,
+            start: obj[i].startDate,
+            end: obj[i].endDate
+        });
+    }
+
     $(document).ready(function () {
         $('#calendar').fullCalendar({
             header: {
@@ -66,11 +54,7 @@ function render(obj) {
             },
             editable: true,
             eventLimit: true,
-            events: [{
-                title: obj[2].title,
-                start: obj[2].startDate,
-                end: obj[2].endDate
-            }]
+            events: filter
         });
     });
 }
@@ -78,7 +62,7 @@ function render(obj) {
 function addDate() {
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:8080/Server/RoutineController", true);
+        xhr.open("POST", "http://localhost:8080/Server/RoutineController?dbName=" + sessionStorage.getItem('storename'), true);
 
         var data = JSON.stringify({
             "adminuser": $('#add-adminuser').val(),
@@ -98,40 +82,4 @@ function addDate() {
     } catch (exception) {
         alert("Request failed");
     }
-}
-
-function editRow(index, isDone) {
-    if (isDone == true) {
-        try {
-            var xhr = new XMLHttpRequest();
-            xhr.open("PUT", "http://localhost:8080/Server/UsersController", true);
-
-            var data = JSON.stringify({
-                "username": $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(1) input').val(),
-                "name": $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(2) input').val(),
-                "age": $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(3) input').val(),
-                "grade": $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(4) input').val(),
-                "address": $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(5) input').val()
-            });
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var obj = JSON.parse(xhr.responseText);
-                    if (obj == true) {
-                        var res = JSON.parse(data);
-                        $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(2)').html('<span>' + res.name + "</span>");
-                        $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(3)').html('<span>' + res.age + "</span>");
-                        $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(4)').html('<span>' + res.grade + "</span>");
-                        $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(5)').html('<span>' + res.address + "</span>");
-                    }
-                }
-            }
-
-            xhr.send(data);
-        } catch (exception) {
-            alert("Request failed");
-        }
-    }
-    $('.targetRow:nth-child(' + (index + 1) + ') .toggle').toggle();
-    $('.targetRow:nth-child(' + (index + 1) + ') .toggle2').toggle();
 }

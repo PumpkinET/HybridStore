@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,31 +36,37 @@ public class CreateStoreController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		String json = "";
 		if (br != null)
 			json = br.readLine();
 		Gson gson = new GsonBuilder().create();
-		CreateStore[] store = gson.fromJson(json, CreateStore[].class);
-		System.out.println(Arrays.asList(store));
+		CreateStore store = gson.fromJson(json, CreateStore.class);
+
 		URL url = new URL("http://10.0.0.21:8080/appBackend/ShopController");
-		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("POST");
 		conn.setDoOutput(true);
 		JSONObject jObj = new JSONObject();
-        jObj.put("shopName", store[3].getStoreName());
-        jObj.put("shopOwner", store[3].getOwnerName());
 
-        OutputStream os = conn.getOutputStream();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-        writer.write(jObj.toString());
-        writer.flush();
-        writer.close();
-        
+		jObj.put("shopName", store.getStoreName());
+		jObj.put("shopOwner", store.getOwnerName());
+		jObj.put("shopThumbnail", store.getThumbnail());
+		jObj.put("shopDescription", store.getDescription());
+		jObj.put("shopIp", store.getIp());
+		jObj.put("shopCategory", store.getCategory());
+
+		OutputStream os = conn.getOutputStream();
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+		writer.write(jObj.toString());
+		writer.flush();
+		writer.close();
+
 		conn.connect();
 		int statusCode = conn.getResponseCode();
-		
-		CreateStoreDAO.createItemsTable(gson.fromJson(json, CreateStore[].class));
+
+		CreateStoreDAO.createItemsTable(gson.fromJson(json, CreateStore.class));
 	}
 
 }

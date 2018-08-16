@@ -94,14 +94,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
         Item currentItem = mCardList.get(position);
-
-        int color = Color.parseColor(currentItem.getColor());
-        holder.mSelected.setBackgroundColor(color);
+        if(currentItem.getColor()!= null) {
+            int color = Color.parseColor(currentItem.getColor());
+            holder.mSelected.setBackgroundColor(color);
+        }
 
         holder.mTitle.setText(currentItem.getTitle());
         Picasso.get().load(currentItem.getImageResource()).into(holder.mImageView);
         holder.mDescription.setText(currentItem.getDescription());
-        holder.mPrice.setText(currentItem.getPrice());
+        holder.mPrice.setText(currentItem.getPrice() + "");
     }
 
     @Override

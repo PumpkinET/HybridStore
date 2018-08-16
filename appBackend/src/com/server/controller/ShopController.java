@@ -15,49 +15,43 @@ import com.google.gson.GsonBuilder;
 import com.server.dao.ShopDAO;
 import com.server.model.Shop;
 
-/**
- * Servlet implementation class ShopController
- */
 @WebServlet("/ShopController")
 public class ShopController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ShopController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	public ShopController() {
+		super();
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.setContentType("application/json");
 		String cat = request.getParameter("category");
-		if(cat == null)
+		if (cat == null)
 			response.getWriter().write(new Gson().toJson(ShopDAO.getAll("All")));
-		else 
+		else
 			response.getWriter().write(new Gson().toJson(ShopDAO.getAll(cat)));
 		response.getWriter().close();
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		String json = "";
 		if (br != null)
 			json = br.readLine();
 		Gson gson = new GsonBuilder().create();
 		Shop shop = gson.fromJson(json, Shop.class);
-		shop.setShopIp("http://10.0.0.21:8080/Server/ItemsController?dbName="+shop.getShopName());
-		shop.setShopDescription("Long description example");
-		shop.setShopThumbnail("http://images.globes.co.il/images/NewGlobes/big_image_800/2015/aroma-575_2014731T130210.jpg");
+
+		shop.setShopName(shop.getShopName());
+		shop.setShopOwner(shop.getShopOwner());
+		shop.setShopThumbnail(shop.getShopThumbnail());
+		shop.setShopDescription(shop.getShopDescription());
+		shop.setShopIp(shop.getShopIp() + "/ItemsController?dbName=" + shop.getShopName() + "&filter=true");
+		shop.setShopCategory(shop.getShopCategory());
+
 		ShopDAO.createStore(shop);
 	}
 

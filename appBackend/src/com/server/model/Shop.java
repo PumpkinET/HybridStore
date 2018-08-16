@@ -8,7 +8,8 @@ public class Shop {
 	private String shopIp;
 	private String shopCategory;
 
-	public Shop(String shopName, String shopOwner, String shopThumbnail, String shopDescription, String shopIp, String shopCategory) {
+	public Shop(String shopName, String shopOwner, String shopThumbnail, String shopDescription, String shopIp,
+			String shopCategory) {
 		super();
 		this.shopName = shopName;
 		this.shopOwner = shopOwner;
@@ -37,13 +38,17 @@ public class Shop {
 	public String getShopIp() {
 		return shopIp;
 	}
-	
+
 	public String getShopCategory() {
 		return shopCategory;
 	}
-	
+
 	public void setShopName(String shopName) {
 		this.shopName = shopName;
+	}
+
+	public void setShopCategory(String category) {
+		this.shopCategory = category;
 	}
 
 	public void setShopOwner(String shopOwner) {

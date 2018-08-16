@@ -7,6 +7,7 @@ import java.io.IOException;
 
 public class Config {
 	static boolean read = false;
+
 	public static boolean parseConfig() {
 		if (read == false) {
 			String fileName = "C:\\config.ini";
@@ -18,11 +19,9 @@ public class Config {
 				while ((line = bufferedReader.readLine()) != null) {
 					if (line.split(";")[0].equals("URL")) {
 						MySQLUtil.URL = line.split(";")[1];
-					}
-					else if (line.split(";")[0].equals("username")) {
+					} else if (line.split(";")[0].equals("username")) {
 						MySQLUtil.username = line.split(";")[1];
-					}
-					else if (line.split(";")[0].equals("password")) {
+					} else if (line.split(";")[0].equals("password")) {
 						MySQLUtil.password = line.split(";")[1];
 					}
 				}

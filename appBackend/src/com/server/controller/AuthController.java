@@ -25,12 +25,9 @@ public class AuthController extends HttpServlet {
 		super();
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		System.out.println("HEY");
-	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		String json = "";
 		if (reader != null)
@@ -46,7 +43,6 @@ public class AuthController extends HttpServlet {
 			SessionUtil.sessions.put(session, secured);
 			response.getWriter().write(new Gson().toJson(secured));
 			response.getWriter().close();
-			System.out.println(secured.toString());
 		}
 	}
 }

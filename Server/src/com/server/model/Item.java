@@ -18,7 +18,7 @@ public class Item {
 	public String getId() {
 		return this.id;
 	}
-	
+
 	public String getTitle() {
 		return this.title;
 	}

@@ -25,31 +25,28 @@ public class AuthController extends HttpServlet {
 		super();
 	}
 
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		response.getWriter().write("ٍsfayen");
-	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-		String json = "";
-		if (br != null)
-			json = br.readLine();
-		
-		Gson gson = new GsonBuilder().create();
-		Login login = gson.fromJson(json, Login.class);
-		boolean result = AuthDAO.login(login);
+		if (request.getParameter("dbName") != null) {
+			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+			String json = "";
+			if (br != null)
+				json = br.readLine();
 
-		if (result == false)
-			response.setStatus(403);
-		else {
-			String session = request.getSession().getId();
-			SessionUtil.sessions.put(session, UsersDAO.get(login.getUsername()));
-			System.out.println(SessionUtil.sessions.toString());
-			response.getWriter().write(session);
-			response.getWriter().close();
+			Gson gson = new GsonBuilder().create();
+			Login login = gson.fromJson(json, Login.class);
+			boolean result = AuthDAO.login(request.getParameter("dbName"), login);
+
+			if (result == false)
+				response.setStatus(403);
+			else {
+				String session = request.getSession().getId();
+				SessionUtil.sessions.put(session, UsersDAO.get(request.getParameter("dbName"), login.getUsername()));
+				System.out.println(SessionUtil.sessions.toString());
+				response.getWriter().write(session);
+				response.getWriter().close();
+			}
 		}
 	}
 }

@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.demo.hybridstore.MainActivity;
 import com.demo.hybridstore.com.hybridstore.model.Config;
 import com.hybridstore.app.R;
 
@@ -61,7 +62,7 @@ public class SignupFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_signup, container, false);
         getActivity().setTitle("Signup");
-
+        ((MainActivity) getActivity()).updateMenu(R.id.nav_signup);
         img = (ImageView) rootView.findViewById(R.id.imageView_Avatar);
         img.setOnClickListener(new View.OnClickListener() {
             @Override

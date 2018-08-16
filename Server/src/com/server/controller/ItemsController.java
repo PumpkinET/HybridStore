@@ -3,7 +3,6 @@ package com.server.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,9 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.server.dao.ItemsDAO;
-import com.server.model.Users;
-import com.server.service.ItemsService;
-import com.server.service.UsersService;
+import com.server.model.AddItem;
 
 @WebServlet("/ItemsController/*")
 public class ItemsController extends HttpServlet {
@@ -30,8 +27,21 @@ public class ItemsController extends HttpServlet {
 		if (request.getParameter("dbName") != null) {
 			response.addHeader("Access-Control-Allow-Origin", "*");
 			response.setContentType("application/json");
-			response.getWriter().write(new Gson().toJson(ItemsService.getAll(request.getParameter("dbName"))));
-			//response.getWriter().write(new Gson().toJson(ItemsDAO.getCartHistory(request.getParameter("dbName"), request.getParameter("items"))));
+
+			if (request.getParameter("filter") != null) {
+				if (request.getParameter("items") != null)
+					response.getWriter().write(new Gson().toJson(
+							ItemsDAO.getCartHistory(request.getParameter("dbName"), request.getParameter("items"))));
+				else
+					response.getWriter()
+							.write(new Gson().toJson(ItemsDAO.getStoreItems(request.getParameter("dbName"))));
+			} else {
+				if (request.getParameter("items") != null)
+					response.getWriter().write(new Gson().toJson(
+							ItemsDAO.getCartHistory(request.getParameter("dbName"), request.getParameter("items"))));
+				else
+					response.getWriter().write(new Gson().toJson(ItemsDAO.getAll(request.getParameter("dbName"))));
+			}
 			response.getWriter().close();
 		}
 	}
@@ -44,11 +54,11 @@ public class ItemsController extends HttpServlet {
 		if (br != null)
 			json = br.readLine();
 		Gson gson = new GsonBuilder().create();
-
-		boolean result = UsersService.post(gson.fromJson(json, Users.class));
-
-		response.getWriter().write(new Gson().toJson(result));
-		response.getWriter().close();
+		if (request.getParameter("dbName") != null) {
+			boolean result = ItemsDAO.post(request.getParameter("dbName"), gson.fromJson(json, AddItem[].class));
+			response.getWriter().write(new Gson().toJson(result));
+			response.getWriter().close();
+		}
 	}
 
 	@Override
@@ -59,22 +69,25 @@ public class ItemsController extends HttpServlet {
 		if (br != null)
 			json = br.readLine();
 		Gson gson = new GsonBuilder().create();
-
-		boolean result = UsersService.put(gson.fromJson(json, Users.class));
-
-		response.getWriter().write(new Gson().toJson(result));
-		response.getWriter().close();
+		if (request.getParameter("dbName") != null) {
+			boolean result = ItemsDAO.put(request.getParameter("dbName"), gson.fromJson(json, AddItem[].class));
+			response.getWriter().write(new Gson().toJson(result));
+			response.getWriter().close();
+		}
 	}
 
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		String[] urldata = request.getPathInfo().split("/");
+		if (request.getParameter("dbName") != null) {
+			System.out.println(request.getParameter("dbName"));
+			System.out.println(request.getParameter("item"));
+			boolean result = ItemsDAO.delete(request.getParameter("dbName"),
+					Integer.parseInt(request.getParameter("item")));
 
-		boolean result = UsersService.delete(urldata[1]);
-
-		response.getWriter().write(new Gson().toJson(result));
-		response.getWriter().close();
+			response.getWriter().write(new Gson().toJson(result));
+			response.getWriter().close();
+		}
 	}
 
 }

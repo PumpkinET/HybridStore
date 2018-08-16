@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridView;
 
+import com.demo.hybridstore.MainActivity;
 import com.hybridstore.app.R;
 import com.demo.hybridstore.com.hybridstore.model.Config;
 import com.demo.hybridstore.com.hybridstore.adapters.CategoriesAdapter;
@@ -47,7 +48,7 @@ public class CategoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_categories, container, false);
         getActivity().setTitle("Categories");
-
+        ((MainActivity) getActivity()).updateMenu(R.id.nav_categories);
         new CategoriesAsyncer().execute();
         gridview = (GridView) rootView.findViewById(R.id.categoriesGridView);
         EditText filter_categories = (EditText)rootView.findViewById(R.id.filter_categories);

@@ -1,31 +1,53 @@
-var lastRow = 1;
+'use strict';
+
+class AddItem {
+    constructor(column, value) {
+        this.column = column;
+        this.value = value;
+    }
+}
+
+var dynamicData = [];
+var tempIndex;
 
 function getAll() {
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "http://localhost:8080/Server/ItemsController?dbName=Mcdonalds", true);
-
+        xhr.open("GET", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename'), true);
+        var imageIndex;
+        var id;
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
                 console.log(obj);
                 for (var i = 0; i < obj.columns.length; i++) {
-                    $("thead tr").append("<th scope='col'>" + obj.columns[i] + "</th>");
+                    dynamicData.push(new AddItem(obj.columns[i], '?'));
+                    $("#tbody_add").append("<tr><td><input type='text' class='form-control' id='add-" + obj.columns[i] + "' placeholder='" + obj.columns[i] + "'></td></tr>");
+                }
+                for (var i = 0; i < obj.columns.length; i++) {
+                    $("#thead_list tr").append("<th scope='col'>" + obj.columns[i] + "</th>");
+
+                    if (obj.columns[i] == "image") {
+                        imageIndex = i;
+                    }
+                    if (obj.columns[i] == "id") {
+                        id = i;
+                    }
                 }
                 $("thead tr").append("<th scope='col'></th>");
-                $("thead tr").append("<th scope='col'></th>");
-
                 for (var i = 0; i < obj.items.length; i++) {
                     var str = "";
                     str += "<tr class='targetRow'>";
-                    for (var j = 0; j < obj.items[i].length; j++) { 
-                        str += "<td><span class='toggle2'>" + obj.items[i][j] + "</span><input type='text' class='toggle' value='" + obj.items[i][j] + "'></td>";
-                    }   
-                    str += "<td><i class='material-icons toggle' onClick='editRow(" + i + ", true)'>done</i><i class='material-icons toggle2' onClick='editRow(" + i + ", false)'>mode_edit</i></td><td><i class='material-icons' onClick='deleteRow(" + i + ")'>delete</i></td></tr>";
-                    $("tbody").append(str);
+                    for (var j = 0; j < obj.items[i].length; j++) {
+                        if (j == imageIndex) {
+                            str += "<td><img src='" + obj.items[i][j] + "' height='50' width='50'></td>";
+                        } else {
+                            str += "<td><span>" + obj.items[i][j] + "</span></td>";
+                        }
+                    }
+                    str += "<td><i class='material-icons' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td></tr>";
+                    $("#tbody_list").append(str);
                 }
-
-                lastRow = i;
             }
         }
         xhr.send();
@@ -34,17 +56,42 @@ function getAll() {
     }
 }
 
-function deleteRow(index) {
+function editRow() {
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("DELETE", "http://localhost:8080/Server/UsersController/" + $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(1) input').val(), true);
-
+        xhr.open("PUT", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename'), true);
+        var data = [];
+        for (var i = 0; i < dynamicData.length; i++) {
+            data.push(new AddItem(dynamicData[i].column, $("#add-" + dynamicData[i].column).val()));
+        }
+        console.log(JSON.stringify(data));
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
                 if (obj == true) {
-                    $('.targetRow:nth-child(' + (index + 1) + ')').hide();
-                    lastRow--;
+                    for (var i = 0; i < data.length; i++) {
+                        $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(' + (i + 1) + ')').html('<span>' + data[i].value + "</span>");
+                    }
+                }
+            }
+        }
+
+        xhr.send(JSON.stringify(data));
+    } catch (exception) {
+        alert("Request failed");
+    }
+}
+
+
+function deleteRow() {
+    try {
+        var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", "http://localhost:8080/Server/ItemsController?dbName=" + +sessionStorage.getItem('storename') + "&item=" + $('#add-id').val(), true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var obj = JSON.parse(xhr.responseText);
+                if (obj == true) {
+                    $('.targetRow:nth-child(' + tempIndex + ')').hide();
                 }
             }
         }
@@ -57,74 +104,50 @@ function deleteRow(index) {
 function addRow() {
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:8080/Server/UsersController", true);
+        xhr.open("POST", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename'), true);
 
-        var data = JSON.stringify({
-            "username": $('#add-username').val(),
-            "name": $('#add-name').val(),
-            "age": $('#add-age').val(),
-            "grade": $('#add-grade').val(),
-            "address": $('#add-address').val()
-        });
+        for (var i = 0; i < dynamicData.length; i++) {
+            dynamicData[i].value = $("#add-" + dynamicData[i].column).val();
+        }
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
                 if (obj == true) {
-                    var res = JSON.parse(data);
+                    var str = "";
+                    str += "<tr class='targetRow'>";
 
-                    $("#tbody").append("<tr class='targetRow'>" +
-                        "<td>" + "<span class='toggle2'>" + res.username + "</span><input type='text' disabled class='toggle' value='" + res.username + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + res.name + "</span><input type='text' class='toggle' value='" + res.name + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + res.age + "</span><input type='text' class='toggle' value='" + res.age + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + res.grade + "</span><input type='text' class='toggle' value='" + res.grade + "'></td>" +
-                        "<td>" + "<span class='toggle2'>" + res.address + "</span><input type='text' class='toggle' value='" + res.address + "'></td>" +
-                        "<td><i class='material-icons toggle' onClick='editRow(" + lastRow + ", true)'>done</i><i class='material-icons toggle2' onClick='editRow(" + lastRow + ", false)'>mode_edit</i></td><td><i class='material-icons' onClick='deleteRow(" + lastRow + ")'>delete</i></td></tr>");
-
-                    lastRow++;
+                    for (var i = 0; i < dynamicData.length; i++) {
+                        if (dynamicData[i].column == "image") {
+                            str += "<td><img src='" + dynamicData[i].value + "' height='50' width='50'></td>";
+                        } else {
+                            str += "<td><span>" + dynamicData[i].value + "</span></td>";
+                        }
+                    }
+                    str += "<td><i class='material-icons' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td>";
+                    $("#tbody_list").append(str);
                 }
             }
         }
 
-        xhr.send(data);
+        xhr.send(JSON.stringify(dynamicData));
     } catch (exception) {
         alert("Request failed");
     }
 }
 
-function editRow(index, isDone) {
-    /*if (isDone == true) {
-        try {
-            var xhr = new XMLHttpRequest();
-            xhr.open("PUT", "http://localhost:8080/Server/UsersController", true);
+$(document).ready(function () {
+    $("#tbody_list .targetRow").click(function () {
+        console.log($(this).index() + 1);
+        tempIndex = $(this).index() + 1;
 
-            var data = JSON.stringify({
-                "username": $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(1) input').val(),
-                "name": $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(2) input').val(),
-                "age": $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(3) input').val(),
-                "grade": $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(4) input').val(),
-                "address": $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(5) input').val()
-            });
+        for (var i = 0; i < dynamicData.length; i++) {
+            if (dynamicData[i].column == "image") {
+                $("#add-" + dynamicData[i].column).val($("#tbody_list .targetRow:nth-child(" + tempIndex + ") td:nth-child(" + (i + 1) + ") img").attr('src'));
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var obj = JSON.parse(xhr.responseText);
-                    if (obj == true) {
-                        var res = JSON.parse(data);
-                        $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(2)').html('<span>' + res.name + "</span>");
-                        $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(3)').html('<span>' + res.age + "</span>");
-                        $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(4)').html('<span>' + res.grade + "</span>");
-                        $('.targetRow:nth-child(' + (index + 1) + ') td:nth-child(5)').html('<span>' + res.address + "</span>");
-                    }
-                }
+            } else {
+                $("#add-" + dynamicData[i].column).val($("#tbody_list .targetRow:nth-child(" + tempIndex + ") td:nth-child(" + (i + 1) + ") span").text());
             }
-
-            xhr.send(data);
-        } catch (exception) {
-            alert("Request failed");
         }
-    }*/
-    console.log('test');
-    $('.targetRow:nth-child(' + (index + 1) + ') .toggle').toggle();
-    $('.targetRow:nth-child(' + (index + 1) + ') .toggle2').toggle();
-}
+    });
+});

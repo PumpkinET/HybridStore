@@ -7,10 +7,10 @@ public class Cart {
     private String title;
     private String image;
     private String description;
-    private String price;
+    private int price;
     private String color = "#FFFFFF";
 
-    public Cart(String id, String title, String image, String price) {
+    public Cart(String id, String title, String image, int price) {
         this.id = id;
         this.title = title;
         this.image = image;
@@ -43,7 +43,7 @@ public class Cart {
         return this.description;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return this.price;
     }
 

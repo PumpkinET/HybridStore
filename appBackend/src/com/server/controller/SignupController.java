@@ -22,13 +22,10 @@ public class SignupController extends HttpServlet {
 		super();
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.setContentType("application/json");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		String json = "";
 		if (reader != null)
@@ -36,8 +33,11 @@ public class SignupController extends HttpServlet {
 		Gson gson = new GsonBuilder().create();
 		AuthDAO.register(gson.fromJson(json, RegisterAndroid.class));
 	}
+
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.setContentType("application/json");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		String json = "";
 		if (reader != null)
