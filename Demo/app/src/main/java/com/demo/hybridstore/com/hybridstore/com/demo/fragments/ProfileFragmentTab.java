@@ -1,4 +1,5 @@
 package com.demo.hybridstore.com.hybridstore.com.demo.fragments;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -85,7 +86,7 @@ public class ProfileFragmentTab extends Fragment {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ProfileAsyncer().execute( password.getText().toString(), name.getText().toString());
+                new ProfileAsyncer().execute(password.getText().toString(), name.getText().toString());
             }
         });
 
@@ -118,6 +119,7 @@ public class ProfileFragmentTab extends Fragment {
     public class ProfileAsyncer extends AsyncTask<String, String, String> {
         public void onPreExecute() {
         }
+
         @Override
         protected String doInBackground(String... params) {
             try {

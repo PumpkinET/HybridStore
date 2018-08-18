@@ -11,9 +11,9 @@ public class Order {
 	private String postalcode;
 	private String items;
 	private int	status;
-	
+	private java.sql.Date date;
 	public Order(String shopName, String shopThumbnail, String shopIp, String finalPrice, String streetAdd,
-			String country, String city, String postalcode, String items, int status) {
+			String country, String city, String postalcode, String items, int status, java.sql.Date date) {
 		super();
 		this.shopName = shopName;
 		this.shopThumbnail = shopThumbnail;
@@ -25,6 +25,7 @@ public class Order {
 		this.postalcode = postalcode;
 		this.items = items;
 		this.status = status;
+		this.date = date;
 	}
 
 	public String getShopName() {
@@ -105,6 +106,15 @@ public class Order {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	
+	public java.sql.Date getDate() {
+		return date;
+	}
+
+	public void setDate(java.sql.Date date) {
+		this.date = date;
 	}
 
 	@Override

@@ -28,11 +28,20 @@ public class OrdersController extends HttpServlet {
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.setContentType("application/json");
 		if (request.getParameter("shopName") != null) {
-			response.getWriter().write(new Gson().toJson(OrderDAO.getOrderByShop(request.getParameter("shopName"))));
+			if (request.getParameter("startDate") != null && request.getParameter("endDate") != null) {
+				response.getWriter().write(new Gson().toJson(OrderDAO.getOrderByShop(request.getParameter("shopName"),
+						request.getParameter("startDate"), request.getParameter("endDate"))));
+			} else if (request.getParameter("startDate") != null) {
+				response.getWriter().write(new Gson().toJson(OrderDAO.getOrderByShop(request.getParameter("shopName"),
+						request.getParameter("startDate"), null)));
+			} else {
+				response.getWriter().write(
+						new Gson().toJson(OrderDAO.getOrderByShop(request.getParameter("shopName"), null, null)));
+			}
 			response.getWriter().close();
 		}
 	}
-	
+
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");

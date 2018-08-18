@@ -23,93 +23,136 @@
             android:src="@drawable/ic_menu_next"
             tools:ignore="VectorDrawableCompat" />
 
-        <EditText
-            android:id="@+id/payment_firstName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:hint="First name"
-            android:inputType="textPersonName" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/payment_lastName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/payment_firstName"
-            android:layout_alignStart="@+id/payment_firstName"
-            android:layout_below="@+id/payment_firstName"
-            android:ems="10"
-            android:hint="Last name"
-            android:inputType="textPersonName" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/payment_streetAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/payment_lastName"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:hint="Street address"
-            android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/payment_shopName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:hint="Shop Name"
+                    android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/payment_Country"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/payment_streetAddress"
-            android:layout_alignStart="@+id/payment_streetAddress"
-            android:layout_below="@+id/payment_streetAddress"
-            android:ems="10"
-            android:hint="Country"
-            android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/payment_totalPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/payment_shopName"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:hint="Total Price"
+                    android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/payment_postalCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/payment_City"
-            android:layout_alignStart="@+id/payment_City"
-            android:layout_below="@+id/payment_City"
-            android:ems="10"
-            android:hint="Postal code"
-            android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/payment_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/payment_totalPrice"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:hint="Ordered by"
+                    android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/payment_City"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/payment_Country"
-            android:layout_alignStart="@+id/payment_Country"
-            android:layout_below="@+id/payment_Country"
-            android:ems="10"
-            android:hint="City"
-            android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/payment_firstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/payment_email"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="First name"
+                    android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/textView_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/payment_Pay"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/payment_Pay"
-            android:layout_toStartOf="@+id/payment_Pay"
-            android:text="TextView"
-            android:textAlignment="center" />
+                <EditText
+                    android:id="@+id/payment_lastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/payment_firstName"
+                    android:layout_alignStart="@+id/payment_firstName"
+                    android:layout_below="@+id/payment_firstName"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="Last name"
+                    android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/textView_totalPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/payment_Pay"
-            android:layout_toLeftOf="@+id/payment_Pay"
-            android:layout_toStartOf="@+id/payment_Pay"
-            android:text="TextView"
-            android:textAlignment="center" />S
+                <EditText
+                    android:id="@+id/payment_streetAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/payment_lastName"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="Street address"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/payment_Country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/payment_streetAddress"
+                    android:layout_alignStart="@+id/payment_streetAddress"
+                    android:layout_below="@+id/payment_streetAddress"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="Country"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/payment_postalCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/payment_City"
+                    android:layout_alignStart="@+id/payment_City"
+                    android:layout_below="@+id/payment_City"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="Postal code"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/payment_City"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/payment_Country"
+                    android:layout_alignStart="@+id/payment_Country"
+                    android:layout_below="@+id/payment_Country"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="City"
+                    android:inputType="textPersonName" />
+
+            </RelativeLayout>
+        </ScrollView>
 
     </RelativeLayout>
 

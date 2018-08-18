@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.server.dao.UsersDAO;
+import com.server.model.ErrorMessage;
 import com.server.model.Users;
 
 @WebServlet("/UsersController/*")
@@ -43,7 +44,7 @@ public class UsersController extends HttpServlet {
 				json = br.readLine();
 			Gson gson = new GsonBuilder().create();
 
-			boolean result = UsersDAO.post(request.getParameter("dbName"), gson.fromJson(json, Users.class));
+			ErrorMessage result = UsersDAO.post(request.getParameter("dbName"), gson.fromJson(json, Users.class));
 
 			response.getWriter().write(new Gson().toJson(result));
 			response.getWriter().close();
@@ -60,7 +61,7 @@ public class UsersController extends HttpServlet {
 				json = br.readLine();
 			Gson gson = new GsonBuilder().create();
 
-			boolean result = UsersDAO.put(request.getParameter("dbName"), gson.fromJson(json, Users.class));
+			ErrorMessage result = UsersDAO.put(request.getParameter("dbName"), gson.fromJson(json, Users.class));
 
 			response.getWriter().write(new Gson().toJson(result));
 			response.getWriter().close();
@@ -70,10 +71,9 @@ public class UsersController extends HttpServlet {
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		if (request.getParameter("dbName") != null) {
-			String[] urldata = request.getPathInfo().split("/");
-
-			boolean result = UsersDAO.delete(request.getParameter("dbName"), urldata[1]);
+		if (request.getParameter("dbName") != null && request.getParameter("user") != null) {
+			
+			ErrorMessage result = UsersDAO.delete(request.getParameter("dbName"), request.getParameter("user"));
 
 			response.getWriter().write(new Gson().toJson(result));
 			response.getWriter().close();

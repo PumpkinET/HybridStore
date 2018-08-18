@@ -1,0 +1,49 @@
+CREATE DATABASE `appbackenddb` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+CREATE TABLE `categories` (
+  `categoryname` varchar(50) NOT NULL,
+  `categorythumbnail` varchar(999) DEFAULT NULL,
+  PRIMARY KEY (`categoryname`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(45) DEFAULT NULL,
+  `shopname` varchar(45) NOT NULL,
+  `firstname` varchar(45) DEFAULT NULL,
+  `lastname` varchar(45) DEFAULT NULL,
+  `street_adr` varchar(200) DEFAULT NULL,
+  `country` varchar(45) DEFAULT NULL,
+  `city` varchar(45) DEFAULT NULL,
+  `postalcode` varchar(45) DEFAULT NULL,
+  `totalprice` varchar(45) DEFAULT NULL,
+  `items` longtext,
+  `status` int(11) DEFAULT '0',
+  `date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `shop` (
+  `shopname` varchar(50) NOT NULL,
+  `shopowner` varchar(45) DEFAULT NULL,
+  `shopthumbnail` varchar(999) DEFAULT NULL,
+  `shopdescription` varchar(500) DEFAULT NULL,
+  `shopip` varchar(100) DEFAULT NULL,
+  `category` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`shopname`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `status` (
+  `id` int(11) NOT NULL,
+  `value` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `users` (
+  `email` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `avatar` varchar(999) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`email`),
+  UNIQUE KEY `username_UNIQUE` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -35,7 +35,9 @@ public class CreateStoreDAO {
 				+ "grade int(11) DEFAULT NULL, " + "name varchar(45) DEFAULT NULL, " + "age int(11) DEFAULT NULL, "
 				+ "address varchar(500) DEFAULT NULL, " + "id varchar(45) DEFAULT NULL, " + "PRIMARY KEY (username))";
 
-		String admin = "INSERT INTO USERS(USERNAME, PASSWORD) VALUES('Admin', 'Admin')";
+		String grades = "CREATE TABLE GRADES (id int(11) NOT NULL, value varchar(45) DEFAULT NULL, PRIMARY KEY (id))";
+		String grades_values = "INSERT INTO GRADES(ID, VALUE) VALUES(0, 'employee'),(1, 'adminstrator'),(2, 'owner')";
+		String admin = "INSERT INTO USERS(USERNAME, PASSWORD, GRADE) VALUES('Admin', 'Admin', 2)";
 
 		try {
 			String userName = "root";
@@ -46,13 +48,18 @@ public class CreateStoreDAO {
 
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(routine);
-			statement.close();
+//			statement.close();
 
-			statement = connection.createStatement();
+//			statement = connection.createStatement();
 			statement.executeUpdate(users);
-			statement.close();
-
-			statement = connection.createStatement();
+//			statement.close();
+			
+//			statement = connection.createStatement();
+			statement.executeUpdate(grades);
+			statement.executeUpdate(grades_values);
+//			statement.close();
+			
+//			statement = connection.createStatement();
 			statement.executeUpdate(admin);
 			statement.close();
 
@@ -93,7 +100,6 @@ public class CreateStoreDAO {
 
 		item += "PRIMARY KEY (id))";
 
-		System.out.println(item);
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			String userName = "root";

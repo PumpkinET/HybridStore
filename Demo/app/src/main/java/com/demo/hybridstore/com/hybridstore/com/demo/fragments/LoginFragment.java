@@ -1,10 +1,5 @@
 package com.demo.hybridstore.com.hybridstore.com.demo.fragments;
 
-/**
- * Created by Dell Latitude on 11/05/2018.
- */
-
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.demo.hybridstore.MainActivity;
-import com.demo.hybridstore.com.hybridstore.model.Categories;
 import com.hybridstore.app.R;
 import com.demo.hybridstore.com.hybridstore.model.Config;
 import com.demo.hybridstore.com.hybridstore.model.Auth;
@@ -112,10 +107,11 @@ public class LoginFragment extends Fragment {
                     InputStream stream = urlConnection.getInputStream();
                     reader = new BufferedReader(new InputStreamReader(stream));
                     return reader.readLine();
+                } else if(statusCode == 403) {
+                    return  null;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (Exception e) {
+                Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
             return null;
@@ -141,6 +137,7 @@ public class LoginFragment extends Fragment {
                 fragmentTransaction.replace(R.id.fragment_container, fragment);
                 fragmentTransaction.commit();
             }
+            else Toast.makeText(getActivity(), "Wrong email / password!", Toast.LENGTH_SHORT).show();
         }
     }
 }

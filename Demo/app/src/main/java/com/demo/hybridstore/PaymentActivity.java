@@ -33,8 +33,9 @@ public class PaymentActivity extends AppCompatActivity {
 
         setTitle("Confirm Payment");
 
-        final TextView totalPrice = findViewById(R.id.textView_totalPrice);
-        final TextView email = findViewById(R.id.textView_email);
+        final EditText eShopName = findViewById(R.id.payment_shopName);
+        final EditText totalPrice = findViewById(R.id.payment_totalPrice);
+        final EditText email = findViewById(R.id.payment_email);
 
         final EditText firstname = findViewById(R.id.payment_firstName);
         final EditText lasttime = findViewById(R.id.payment_lastName);
@@ -47,7 +48,8 @@ public class PaymentActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         final float id = b.getFloat("finalPrice");
         final String shopName = b.getString("shopName");
-        totalPrice.setText("Total Price : " + id);
+        eShopName.setText(shopName + "₪");
+        totalPrice.setText(id + "");
 
         for(int i = 0; i<CartActivity.card.size(); i++) {
             items += CartActivity.card.get(i).getId()+ ",";

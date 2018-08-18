@@ -52,7 +52,6 @@ public class ProfileFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-//            return ProfileFragment.PlaceholderFragment.newInstance(position + 1);
             Fragment fragment = null;
             switch (position) {
                 case 0:

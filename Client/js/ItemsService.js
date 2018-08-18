@@ -19,7 +19,6 @@ function getAll() {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
-                console.log(obj);
                 for (var i = 0; i < obj.columns.length; i++) {
                     dynamicData.push(new AddItem(obj.columns[i], '?'));
                     $("#tbody_add").append("<tr><td><input type='text' class='form-control' id='add-" + obj.columns[i] + "' placeholder='" + obj.columns[i] + "'></td></tr>");
@@ -34,7 +33,7 @@ function getAll() {
                         id = i;
                     }
                 }
-                $("thead tr").append("<th scope='col'></th>");
+                $("thead tr").append("<th scope='col' class='permission'></th>");
                 for (var i = 0; i < obj.items.length; i++) {
                     var str = "";
                     str += "<tr class='targetRow'>";
@@ -45,9 +44,12 @@ function getAll() {
                             str += "<td><span>" + obj.items[i][j] + "</span></td>";
                         }
                     }
-                    str += "<td><i class='material-icons' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td></tr>";
+                    str += "<td><i class='material-icons permission' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td></tr>";
                     $("#tbody_list").append(str);
                 }
+            }
+            else if (xhr.status === 0) {
+                alert('Server is offline!');
             }
         }
         xhr.send();
@@ -64,15 +66,18 @@ function editRow() {
         for (var i = 0; i < dynamicData.length; i++) {
             data.push(new AddItem(dynamicData[i].column, $("#add-" + dynamicData[i].column).val()));
         }
-        console.log(JSON.stringify(data));
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
-                if (obj == true) {
+                if (obj.result == true) {
                     for (var i = 0; i < data.length; i++) {
                         $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(' + (i + 1) + ')').html('<span>' + data[i].value + "</span>");
                     }
                 }
+                $('#error').html(obj.errorMessage);
+            }
+            else if (xhr.status === 0) {
+                $('#error').html('Server is offline!');
             }
         }
 
@@ -86,13 +91,17 @@ function editRow() {
 function deleteRow() {
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("DELETE", "http://localhost:8080/Server/ItemsController?dbName=" + +sessionStorage.getItem('storename') + "&item=" + $('#add-id').val(), true);
+        xhr.open("DELETE", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename') + "&item=" + $('#add-id').val(), true);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
-                if (obj == true) {
+                if (obj.result == true) {
                     $('.targetRow:nth-child(' + tempIndex + ')').hide();
                 }
+                $('#error').html(obj.errorMessage);
+            }
+            else if (xhr.status === 0) {
+                $('#error').html('Server is offline!');
             }
         }
         xhr.send();
@@ -113,7 +122,7 @@ function addRow() {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
-                if (obj == true) {
+                if (obj.result == true) {
                     var str = "";
                     str += "<tr class='targetRow'>";
 
@@ -124,9 +133,13 @@ function addRow() {
                             str += "<td><span>" + dynamicData[i].value + "</span></td>";
                         }
                     }
-                    str += "<td><i class='material-icons' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td>";
+                    str += "<td><i class='material-icons permission' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td>";
                     $("#tbody_list").append(str);
                 }
+                $('#error').html(obj.errorMessage);
+            }
+            else if (xhr.status === 0) {
+                $('#error').html('Server is offline!');
             }
         }
 

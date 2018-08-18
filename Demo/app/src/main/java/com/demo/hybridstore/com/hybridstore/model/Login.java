@@ -1,11 +1,11 @@
 package com.demo.hybridstore.com.hybridstore.model;
 
 public class Login {
-    String email;
-    String password;
-    String avatar;
-    String name;
-    String session;
+    private String email;
+    private String password;
+    private String avatar;
+    private String name;
+    private String session;
 
     public Login(String email, String password) {
         super();
@@ -42,5 +42,4 @@ public class Login {
     public String getAvatar() {
         return avatar;
     }
-
 }

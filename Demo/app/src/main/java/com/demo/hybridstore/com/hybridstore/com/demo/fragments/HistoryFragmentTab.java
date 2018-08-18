@@ -60,7 +60,7 @@ public class HistoryFragmentTab extends Fragment {
         protected String doInBackground(String... params) {
             BufferedReader reader = null;
             try {
-                URL url = new URL("http://" + Config.ip + ":8080/appBackend/OrderController?session="+Auth.session);
+                URL url = new URL("http://" + Config.ip + ":8080/appBackend/OrderController?session=" + Auth.session);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
 

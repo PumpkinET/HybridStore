@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.server.model.CRUDMessages;
+import com.server.model.ErrorMessage;
 import com.server.model.Routine;
 import com.server.util.Config;
 import com.server.util.MySQLUtil;
@@ -33,8 +35,8 @@ public class RoutineDAO {
 		return temp;
 	}
 
-	public static boolean post(String dbName, Routine routine) {
-		boolean result = false;
+	public static ErrorMessage post(String dbName, Routine routine) {
+		ErrorMessage result = new ErrorMessage(false, "");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Config.parseConfig();
@@ -50,17 +52,19 @@ public class RoutineDAO {
 			stmt.setString(4, routine.getStartDate());
 			stmt.setString(5, routine.getEndDate());
 
-			result = stmt.executeUpdate() == 1;
-
+			result.setResult(stmt.executeUpdate() == 1);
+			result.setErrorMessage(CRUDMessages.add);
+			
+			stmt.close();
 			con.close();
 		} catch (Exception e) {
-			System.out.println(e);
+			result.setErrorMessage(e.toString());
 		}
 		return result;
 	}
 
-	public static boolean put(String dbName, Routine routine) {
-		boolean result = false;
+	public static ErrorMessage put(String dbName, Routine routine) {
+		ErrorMessage result = new ErrorMessage(false, "");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Config.parseConfig();
@@ -75,11 +79,14 @@ public class RoutineDAO {
 			stmt.setString(3, routine.getTitle());
 			stmt.setString(4, routine.getStartDate());
 			stmt.setString(5, routine.getEndDate());
-			result = stmt.executeUpdate() == 1;
-
+			
+			result.setResult(stmt.executeUpdate() == 1);
+			result.setErrorMessage(CRUDMessages.update);
+			
+			stmt.close();
 			con.close();
 		} catch (Exception e) {
-			System.out.println(e);
+			result.setErrorMessage(e.toString());
 		}
 		return result;
 	}

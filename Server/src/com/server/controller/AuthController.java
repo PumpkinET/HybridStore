@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.server.dao.AuthDAO;
 import com.server.dao.UsersDAO;
 import com.server.model.Login;
+import com.server.model.Users;
 import com.server.util.SessionUtil;
 
 @WebServlet("/AuthController")
@@ -37,14 +38,18 @@ public class AuthController extends HttpServlet {
 			Gson gson = new GsonBuilder().create();
 			Login login = gson.fromJson(json, Login.class);
 			boolean result = AuthDAO.login(request.getParameter("dbName"), login);
-
 			if (result == false)
 				response.setStatus(403);
 			else {
 				String session = request.getSession().getId();
-				SessionUtil.sessions.put(session, UsersDAO.get(request.getParameter("dbName"), login.getUsername()));
-				System.out.println(SessionUtil.sessions.toString());
-				response.getWriter().write(session);
+				Users user = UsersDAO.get(request.getParameter("dbName"), login.getUsername());
+				
+				if(user.getGrade() != 0)
+					SessionUtil.adminSessions.put(session, user);
+				
+				SessionUtil.sessions.put(session, user);
+				user.setSession(session);
+				response.getWriter().write(new Gson().toJson(user));
 				response.getWriter().close();
 			}
 		}

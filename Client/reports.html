@@ -56,6 +56,33 @@
 			</nav>
 		</navbar>
 	</header>
+	<form action="javascript:void(0);">
+		<fieldset>
+			<legend>Total Items per order(s)</legend>
+			<div class="form-group">
+				<input type="date" value="2018-1-1" class="form-control" id="add-start-date" aria-describedby="startDateHelp">
+				<small id="startDateHelp" class="form-text text-muted">Start date</small>
+			</div>
+			<div class="form-group">
+				<input type="date" class="form-control" id="add-end-date" aria-describedby="endDateHelp">
+				<small id="endDateHelp" class="form-text text-muted">End date</small>
+			</div>
+		</fieldset>
+		<button type="submit" class="btn btn-primary" onClick='pie()'>Filter</button>
+	</form>
+	<div id="pie_div"></div>
+	<form action="javascript:void(0);">
+		<fieldset>
+			<legend>Total Items per order(s)</legend>
+			<div class="form-group">
+				<label for="exampleFormControlSelect1">Select year</label>
+				<select class="form-control" id="exampleFormControlSelect1">
+				</select>
+			</div>
+		</fieldset>
+		<button type="submit" class="btn btn-primary" onClick='line()'>Filter</button>
+	</form>
+	<div id="line_div"></div>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	    crossorigin="anonymous"></script>
@@ -63,8 +90,13 @@
 	    crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
 	    crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="js/logout.js"></script>
 	<script src="js/sort.js"></script>
+	<script src="js/ReportsService.js"></script>
+	<script>
+		// window.addEventListener("load", getAll(), false);
+	</script>
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>

@@ -1,13 +1,6 @@
 package com.demo.hybridstore.com.hybridstore.com.demo.fragments;
 
-/**
- * Created by Dell Latitude on 11/05/2018.
- */
-
-
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,14 +8,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.demo.hybridstore.MainActivity;
 import com.demo.hybridstore.com.hybridstore.model.Config;
@@ -41,7 +33,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
 
 
 public class SignupFragment extends Fragment {
@@ -140,6 +131,7 @@ public class SignupFragment extends Fragment {
 
                 int statusCode = connection.getResponseCode();
                 if (statusCode == 200) {
+                    return "Succesfully created";
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -151,6 +143,7 @@ public class SignupFragment extends Fragment {
 
         @Override
         public void onPostExecute(String result) {
+            Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -9,7 +9,8 @@ public class Users {
 	int age;
 	String address;
 	String id;
-
+	String value;
+	String session;
 	public Users(String username, String password, String email, int grade, String name, int age, String address,
 			String id) {
 		super();
@@ -21,6 +22,19 @@ public class Users {
 		this.age = age;
 		this.address = address;
 		this.id = id;
+	}
+	public Users(String username, String password, String email, int grade, String name, int age, String address,
+			String id, String value) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.grade = grade;
+		this.name = name;
+		this.age = age;
+		this.address = address;
+		this.id = id;
+		this.value = value;
 	}
 
 	public String getUsername() {
@@ -87,10 +101,23 @@ public class Users {
 		this.id = id;
 	}
 
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+	public String getSession() {
+		return session;
+	}
+	public void setSession(String session) {
+		this.session = session;
+	}
 	@Override
 	public String toString() {
 		return "Users [username=" + username + ", password=" + password + ", email=" + email + ", grade=" + grade
-				+ ", name=" + name + ", age=" + age + ", address=" + address + ", id=" + id + "]";
+				+ ", name=" + name + ", age=" + age + ", address=" + address + ", id=" + id + ", value=" + value + "]";
 	}
 
 }

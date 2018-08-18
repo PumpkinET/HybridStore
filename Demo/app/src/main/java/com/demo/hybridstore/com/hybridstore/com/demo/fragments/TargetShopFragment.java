@@ -1,10 +1,7 @@
 package com.demo.hybridstore.com.hybridstore.com.demo.fragments;
 
-/**
- * Created by Dell Latitude on 11/05/2018.
- */
-
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,10 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.demo.hybridstore.CartActivity;
 import com.hybridstore.app.R;
-import com.demo.hybridstore.com.hybridstore.adapters.CardAdapter;
+import com.demo.hybridstore.com.hybridstore.adapters.ItemAdapter;
 import com.demo.hybridstore.com.hybridstore.model.Item;
 import com.demo.hybridstore.com.hybridstore.model.Shop;
 import com.google.gson.Gson;
@@ -39,7 +37,7 @@ import java.util.Arrays;
 public class TargetShopFragment extends Fragment {
 
     private RecyclerView mRecycleView;
-    private CardAdapter mAdapter;
+    private ItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View mViewCard;
     View rootView;
@@ -58,8 +56,29 @@ public class TargetShopFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_targetshop, container, false);
         getActivity().setTitle(shop.getShopName());
-        CartActivity.shopName = shop.getShopName();
 
+        if (CartActivity.card.size() != 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Are you sure you want to start new cart?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            CartActivity.clearCart();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            getActivity().getSupportFragmentManager().popBackStack();
+                        }
+                    });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+        } else
+            Toast.makeText(getContext(), "Long press on item to add to cart!", Toast.LENGTH_SHORT).show();
+
+        CartActivity.shopName = shop.getShopName();
         final ImageView imageView = (ImageView) rootView.findViewById(R.id.targetShopThumbnail);
         final TextView shopSubTitles = (TextView) rootView.findViewById(R.id.targetShopSubTitles);
         ImageButton info = (ImageButton) rootView.findViewById(R.id.targetShopInformation);
@@ -121,15 +140,15 @@ public class TargetShopFragment extends Fragment {
             mLayoutManager = new LinearLayoutManager(rootView.getContext());
 
             final ArrayList<Item> card = new ArrayList<Item>(Arrays.asList(item));
-            for(int i = 0; i<card.size(); i++) {
+            for (int i = 0; i < card.size(); i++) {
                 card.get(i).resetColor();
             }
 
-            mAdapter = new CardAdapter(card);
+            mAdapter = new ItemAdapter(card);
             mRecycleView.setAdapter(mAdapter);
             mRecycleView.setLayoutManager(mLayoutManager);
 
-            mAdapter.setOnItemClickListener(new CardAdapter.OnItemClickListener() {
+            mAdapter.setOnItemClickListener(new ItemAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
                     TargetItemFragment fragment = new TargetItemFragment();
@@ -141,7 +160,7 @@ public class TargetShopFragment extends Fragment {
                     fragmentTransaction.commit();
                 }
             });
-            mAdapter.setOnItemLongClickListener(new CardAdapter.OnItemLongClickListener() {
+            mAdapter.setOnItemLongClickListener(new ItemAdapter.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(int position) {
                     card.get(position).switchColor();

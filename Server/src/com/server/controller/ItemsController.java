@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.server.dao.ItemsDAO;
 import com.server.model.AddItem;
+import com.server.model.ErrorMessage;
 
 @WebServlet("/ItemsController/*")
 public class ItemsController extends HttpServlet {
@@ -55,7 +56,7 @@ public class ItemsController extends HttpServlet {
 			json = br.readLine();
 		Gson gson = new GsonBuilder().create();
 		if (request.getParameter("dbName") != null) {
-			boolean result = ItemsDAO.post(request.getParameter("dbName"), gson.fromJson(json, AddItem[].class));
+			ErrorMessage result = ItemsDAO.post(request.getParameter("dbName"), gson.fromJson(json, AddItem[].class));
 			response.getWriter().write(new Gson().toJson(result));
 			response.getWriter().close();
 		}
@@ -70,7 +71,7 @@ public class ItemsController extends HttpServlet {
 			json = br.readLine();
 		Gson gson = new GsonBuilder().create();
 		if (request.getParameter("dbName") != null) {
-			boolean result = ItemsDAO.put(request.getParameter("dbName"), gson.fromJson(json, AddItem[].class));
+			ErrorMessage result = ItemsDAO.put(request.getParameter("dbName"), gson.fromJson(json, AddItem[].class));
 			response.getWriter().write(new Gson().toJson(result));
 			response.getWriter().close();
 		}
@@ -80,9 +81,7 @@ public class ItemsController extends HttpServlet {
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		if (request.getParameter("dbName") != null) {
-			System.out.println(request.getParameter("dbName"));
-			System.out.println(request.getParameter("item"));
-			boolean result = ItemsDAO.delete(request.getParameter("dbName"),
+			ErrorMessage result = ItemsDAO.delete(request.getParameter("dbName"),
 					Integer.parseInt(request.getParameter("item")));
 
 			response.getWriter().write(new Gson().toJson(result));

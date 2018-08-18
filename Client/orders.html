@@ -56,7 +56,7 @@
 			</nav>
 		</navbar>
 	</header>
-	<table class="table table-hover" id="itemsTable">
+	<table class="table table-hover table-responsive-md" id="itemsTable">
 		<thead class="thead-dark">
 			<tr>
 				<th scope="col">ID</th>
@@ -70,6 +70,7 @@
 				<th scope="col">Total Price</th>
 				<th scope="col">Items</th>
 				<th scope="col">Status</th>
+				<th scope="col">Date</th>
 				<th scope="col"></th>
 			</tr>
 		</thead>
@@ -113,10 +114,33 @@
 							</tr>
 						</tbody>
 					</table>
+					<table class="table table-hover">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">Generate Invoice</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="add-invoice-company" placeholder="company name">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="add-invoice-number" placeholder="invoice number">
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary" onClick='editRow()'>Update</button>
+					<button type="button" class="btn btn-primary" onClick='invoice()'>Invoice</button>
+				</div>
+				<div class="modal-footer">
+					<h6 id="error"></h6>
 				</div>
 			</div>
 		</div>
@@ -127,6 +151,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
 	    crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+	    crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js" integrity="sha384-THVO/sM0mFD9h7dfSndI6TS0PgAGavwKvB5hAxRRvc0o9cPLohB0wb/PTA7LdUHs"
 	    crossorigin="anonymous"></script>
 	<script src="js/logout.js"></script>
 	<script src="js/sort.js"></script>

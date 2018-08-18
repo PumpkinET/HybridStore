@@ -33,7 +33,7 @@
 							<a class="nav-link active currentNav" href="items.html">Items</a>
 							<span class="sr-only">(current)</span>
 						</li>
-						<i class='material-icons' data-toggle="modal" data-target="#exampleModal" sytle="color:white">add_box</i>
+						<i class='material-icons permission' data-toggle="modal" data-target="#exampleModal" sytle="color:white">add_box</i>
 						<li class="nav-item">
 							<a class="nav-link" href="users.html">Users
 							</a>
@@ -59,7 +59,7 @@
 			</nav>
 		</navbar>
 	</header>
-	<table class="table table-hover" id="itemsTable">
+	<table class="table table-hover table-responsive-md" id="itemsTable">
 		<thead class="thead-dark" id="thead_list">
 			<tr>
 			</tr>
@@ -93,7 +93,10 @@
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary" onClick='addRow()'>Add</button>
 					<button type="button" class="btn btn-primary" onClick='editRow()'>Update</button>
-					<button type="button" class="btn btn-primary" onClick='deleteRow()'>Delete</button>
+					<button type="button" class="btn btn-primary" onClick='deleteRow()'>Delete</button>	
+				</div>
+				<div class="modal-footer">
+					<h6 id="error"></h6>
 				</div>
 			</div>
 		</div>

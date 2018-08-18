@@ -88,9 +88,14 @@ $(document).ready(function () {
             data.ip = $('#InputIP').val();
             data.category = $('#exampleFormControlSelect1').val();
             xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {}
+                if (xhr.readyState === 4 && xhr.status === 200) {
+
+                } 
+                else if (xhr.status === 0) {
+                    $('#error').html('Server is offline!');
+                }
             }
-            //alert(JSON.stringify(data));
+
             xhr.send(JSON.stringify(data));
         } catch (exception) {
             alert("Request failed");

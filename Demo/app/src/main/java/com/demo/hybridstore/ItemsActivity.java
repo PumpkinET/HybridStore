@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.demo.hybridstore.com.hybridstore.adapters.CardAdapter;
+import com.demo.hybridstore.com.hybridstore.adapters.ItemAdapter;
 import com.demo.hybridstore.com.hybridstore.model.Item;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,15 +22,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ItemsActivity extends AppCompatActivity {
-    private CardAdapter mAdapter;
+    private ItemAdapter mAdapter;
     private RecyclerView mRecycleView;
     private RecyclerView.LayoutManager mLayoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
 
-        setTitle("Order Items");
+        setTitle("Ordered Items");
 
         mRecycleView = findViewById(R.id.itemsrecycleviewer);
         mRecycleView.setHasFixedSize(true);
@@ -72,7 +73,7 @@ public class ItemsActivity extends AppCompatActivity {
             Gson gs = new GsonBuilder().create();
             final Item[] item = gs.fromJson(result, Item[].class);
 
-            mAdapter = new CardAdapter(new ArrayList<Item>(Arrays.asList(item)));
+            mAdapter = new ItemAdapter(new ArrayList<Item>(Arrays.asList(item)));
             mRecycleView.setAdapter(mAdapter);
             mRecycleView.setLayoutManager(mLayoutManager);
         }

@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.server.model.AddItem;
+import com.server.model.CRUDMessages;
+import com.server.model.ErrorMessage;
 import com.server.model.Item;
 import com.server.model.Items;
 import com.server.util.Config;
@@ -105,8 +107,8 @@ public class ItemsDAO {
 		return item;
 	}
 
-	public static boolean delete(String dbName, int id) {
-		boolean result = false;
+	public static ErrorMessage delete(String dbName, int id) {
+		ErrorMessage result = new ErrorMessage(false, "");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Config.parseConfig();
@@ -115,17 +117,20 @@ public class ItemsDAO {
 
 			PreparedStatement stmt = con.prepareStatement("DELETE FROM ITEM WHERE ID=?");
 			stmt.setInt(1, id);
-			result = stmt.executeUpdate() == 1;
-
+			
+			result.setResult(stmt.executeUpdate() == 1);
+			result.setErrorMessage(CRUDMessages.remove);
+			
+			stmt.close();
 			con.close();
 		} catch (Exception e) {
-			System.out.println(e);
+			result.setErrorMessage(e.toString());
 		}
 		return result;
 	}
 
-	public static boolean post(String dbName, AddItem[] item) {
-		boolean result = false;
+	public static ErrorMessage post(String dbName, AddItem[] item) {
+		ErrorMessage result = new ErrorMessage(false, "");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Config.parseConfig();
@@ -145,17 +150,18 @@ public class ItemsDAO {
 			for (int i = 0; i < item.length; i++) {
 				stmt.setObject(i + 1, item[i].value);
 			}
-			result = stmt.executeUpdate() == 1;
+			result.setResult(stmt.executeUpdate() == 1);
+			result.setErrorMessage(CRUDMessages.add);
 			stmt.close();
 			con.close();
 		} catch (Exception e) {
-			System.out.println(e);
+			result.setErrorMessage(e.toString());
 		}
 		return result;
 	}
 
-	public static boolean put(String dbName, AddItem[] item) {
-		boolean result = false;
+	public static ErrorMessage put(String dbName, AddItem[] item) {
+		ErrorMessage result = new ErrorMessage(false, "");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Config.parseConfig();
@@ -177,14 +183,13 @@ public class ItemsDAO {
 			}
 			stmt.setObject(item.length, item[0].value);
 
-			result = stmt.executeUpdate() == 1;
+			result.setResult(stmt.executeUpdate() == 1);
+			result.setErrorMessage(CRUDMessages.update);
 
 			stmt.close();
 			con.close();
-		} catch (
-
-		Exception e) {
-			System.out.println(e);
+		} catch (Exception e) {
+			result.setErrorMessage(e.toString());
 		}
 		return result;
 	}

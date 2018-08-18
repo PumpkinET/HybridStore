@@ -15,7 +15,7 @@
 </head>
 
 <body>
-	<header>
+	<header> 
 		<navbar>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<a class="navbar-brand" href="#">
@@ -36,7 +36,7 @@
 								<span class="sr-only">(current)</span>
 							</a>
 						</li>
-						<i class='material-icons' data-toggle="modal" data-target="#exampleModal" sytle="color:white">add_box</i>
+						<i class='material-icons permission' data-toggle="modal" data-target="#exampleModal" sytle="color:white">add_box</i>
 						<li class="nav-item">
 							<a class="nav-link" href="orders.html">Orders
 							</a>
@@ -58,7 +58,7 @@
 		</navbar>
 	</header>
 
-	<table class="table table-hover" id="itemsTable">
+	<table class="table table-hover table-responsive-md" id="itemsTable">
 		<thead class="thead-dark">
 			<tr>
 				<th scope="col">Username</th>
@@ -69,7 +69,7 @@
 				<th scope="col">Age</th>
 				<th scope="col">Address</th>
 				<th scope="col">ID</th>
-				<th scope="col"></th>
+				<th scope="col" class='permission'></th>
 			</tr>
 		</thead>
 		<tbody id="tbody">
@@ -111,7 +111,11 @@
 							</tr>
 							<tr>
 								<td>
-									<input type="text" class="form-control" id="add-grade" placeholder="grade">
+									<div class="form-group">
+										<label for="add-grade">User Permission</label>
+										<select class="form-control" id="add-grade">
+										</select>
+									</div>
 								</td>
 							</tr>
 							<tr>
@@ -143,6 +147,9 @@
 					<button type="button" class="btn btn-primary" onClick='editRow()'>Update</button>
 					<button type="button" class="btn btn-primary" onClick='deleteRow()'>Delete</button>
 				</div>
+				<div class="modal-footer">
+					<h6 id="error"></h6>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -158,6 +165,7 @@
 	<script src="js/UsersService.js"></script>
 	<script>
 		window.addEventListener("load", getAll(), false);
+		window.addEventListener("load", getGrades(), false);
 	</script>
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>

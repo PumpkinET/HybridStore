@@ -39,6 +39,7 @@ public class CategoriesFragment extends Fragment {
     View rootView;
     GridView gridview;
     CategoriesAdapter categoriesAdapter;
+
     public CategoriesFragment() {
     }
 
@@ -47,13 +48,13 @@ public class CategoriesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_categories, container, false);
+
         getActivity().setTitle("Categories");
+
         ((MainActivity) getActivity()).updateMenu(R.id.nav_categories);
         new CategoriesAsyncer().execute();
         gridview = (GridView) rootView.findViewById(R.id.categoriesGridView);
-        EditText filter_categories = (EditText)rootView.findViewById(R.id.filter_categories);
-
-
+        EditText filter_categories = (EditText) rootView.findViewById(R.id.filter_categories);
         filter_categories.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -71,7 +72,6 @@ public class CategoriesFragment extends Fragment {
             }
         });
         return rootView;
-
     }
 
     public class CategoriesAsyncer extends AsyncTask<String, Void, String> {

@@ -1,12 +1,10 @@
 package com.demo.hybridstore.com.hybridstore.model;
 
-import com.demo.hybridstore.CartActivity;
 
 public class Cart {
     private String id;
     private String title;
     private String image;
-    private String description;
     private int price;
     private String color = "#FFFFFF";
 
@@ -14,7 +12,6 @@ public class Cart {
         this.id = id;
         this.title = title;
         this.image = image;
-        //this.description = description;
         this.price = price;
     }
 
@@ -25,8 +22,7 @@ public class Cart {
     public void switchColor() {
         if (this.color.equals("#FFFFFF")) {
             this.color = "#bdc3c7";
-        }
-        else {
+        } else {
             this.color = "#FFFFFF";
         }
     }
@@ -39,14 +35,12 @@ public class Cart {
         return this.image;
     }
 
-    public String getDescription() {
-        return this.description;
-    }
-
     public int getPrice() {
         return this.price;
     }
 
-    public String getId() { return this.id; }
+    public String getId() {
+        return this.id;
+    }
 
 }

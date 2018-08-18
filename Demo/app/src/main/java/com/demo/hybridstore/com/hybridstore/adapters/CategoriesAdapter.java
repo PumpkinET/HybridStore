@@ -2,7 +2,6 @@ package com.demo.hybridstore.com.hybridstore.adapters;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.demo.hybridstore.com.hybridstore.com.demo.fragments.LoginFragment;
 import com.demo.hybridstore.com.hybridstore.com.demo.fragments.ShopsFragment;
 import com.demo.hybridstore.com.hybridstore.model.Categories;
 import com.hybridstore.app.R;
@@ -21,10 +19,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class CategoriesAdapter extends BaseAdapter implements Filterable {
-
     private Context mContext;
     ArrayList<Categories> orgList;
     ArrayList<Categories> filList;
+
     public CategoriesAdapter(Context c, ArrayList<Categories> categories) {
         mContext = c;
         orgList = categories;
@@ -44,18 +42,18 @@ public class CategoriesAdapter extends BaseAdapter implements Filterable {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Categories category = filList.get(position);
         if (convertView == null) {
             final LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             convertView = layoutInflater.inflate(R.layout.adapter_categories, null);
         }
-        final ImageView imageView = (ImageView) convertView.findViewById(R.id.categoryThumbnail);
-        final TextView nameTextView = (TextView) convertView.findViewById(R.id.categoryName);
+        final Categories category = filList.get(position);
+        final ImageView mCategoryThumbnail = (ImageView) convertView.findViewById(R.id.category_Thumbnail);
+        final TextView mCategoryTitle = (TextView) convertView.findViewById(R.id.category_Title);
 
-        Picasso.get().load(category.getCategoryThumbnail()).into(imageView);
-        nameTextView.setText(category.getCategoryName());
+        Picasso.get().load(category.getCategoryThumbnail()).into(mCategoryThumbnail);
+        mCategoryTitle.setText(category.getCategoryName());
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        mCategoryThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ShopsFragment fragment = new ShopsFragment();
@@ -66,9 +64,9 @@ public class CategoriesAdapter extends BaseAdapter implements Filterable {
                 fragmentTransaction.commit();
             }
         });
-
         return convertView;
     }
+
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -77,14 +75,14 @@ public class CategoriesAdapter extends BaseAdapter implements Filterable {
                 FilterResults results = new FilterResults();
                 String searchStr = constraint.toString().toUpperCase();
                 ArrayList<Categories> resultsData = new ArrayList<Categories>();
-                for(int i = 0; i<orgList.size(); i++) {
-                    if (orgList.get(i).getCategoryName().toUpperCase().startsWith(searchStr)) resultsData.add(orgList.get(i));
+                for (int i = 0; i < orgList.size(); i++) {
+                    if (orgList.get(i).getCategoryName().toUpperCase().startsWith(searchStr))
+                        resultsData.add(orgList.get(i));
                 }
                 results.count = resultsData.size();
                 results.values = resultsData;
                 return results;
             }
-
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 filList = (ArrayList<Categories>) results.values;

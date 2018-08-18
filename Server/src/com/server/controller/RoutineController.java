@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.server.dao.RoutineDAO;
+import com.server.model.ErrorMessage;
 import com.server.model.Routine;
 
 @WebServlet("/RoutineController")
@@ -43,7 +44,7 @@ public class RoutineController extends HttpServlet {
 				json = br.readLine();
 			Gson gson = new GsonBuilder().create();
 
-			boolean result = RoutineDAO.post(request.getParameter("dbName"), gson.fromJson(json, Routine.class));
+			ErrorMessage result = RoutineDAO.post(request.getParameter("dbName"), gson.fromJson(json, Routine.class));
 
 			response.getWriter().write(new Gson().toJson(result));
 			response.getWriter().close();
@@ -60,7 +61,7 @@ public class RoutineController extends HttpServlet {
 				json = br.readLine();
 			Gson gson = new GsonBuilder().create();
 
-			boolean result = RoutineDAO.put(request.getParameter("dbName"), gson.fromJson(json, Routine.class));
+			ErrorMessage result = RoutineDAO.put(request.getParameter("dbName"), gson.fromJson(json, Routine.class));
 
 			response.getWriter().write(new Gson().toJson(result));
 			response.getWriter().close();

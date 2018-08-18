@@ -14,6 +14,7 @@ public class OrderAndroid {
 	String items;
 	int status;
 	String statusValue;
+	java.sql.Date date;
 	
 	public OrderAndroid(String id, int status) {
 		this.id = id;
@@ -36,7 +37,7 @@ public class OrderAndroid {
 	}
 
 	public OrderAndroid(String id, String email, String shopName, String firstName, String lastName, String streetAdd,
-			String country, String city, String postalCode, String totalPrice, String items, int status, String statusValue) {
+			String country, String city, String postalCode, String totalPrice, String items, int status, String statusValue, java.sql.Date date) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -51,6 +52,7 @@ public class OrderAndroid {
 		this.items = items;
 		this.status = status;
 		this.statusValue = statusValue;
+		this.date = date;
 	}
 
 	public String getEmail() {
@@ -155,6 +157,15 @@ public class OrderAndroid {
 
 	public void setStatusValue(String statusValue) {
 		this.statusValue = statusValue;
+	}
+
+	
+	public java.sql.Date getDate() {
+		return date;
+	}
+
+	public void setDate(java.sql.Date date) {
+		this.date = date;
 	}
 
 	@Override

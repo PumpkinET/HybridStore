@@ -6,40 +6,26 @@
     android:layout_marginTop="5dp">
 
     <RelativeLayout
-        android:id="@+id/itemSwitcher"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFF">
 
         <ImageView
-            android:id="@+id/historyImage"
+            android:id="@+id/cart_Thumbnail"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="fitCenter"
             app:srcCompat="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/cardDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="14dp"
-            android:layout_marginStart="14dp"
-            android:layout_toEndOf="@+id/historyImage"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_toRightOf="@+id/historyImage"
-            android:layout_toStartOf="@+id/imageView"
-            android:singleLine="false"
-            android:text="TextView"
-            android:textColor="@android:color/black" />
-
-        <TextView
-            android:id="@+id/cardTitle"
+            android:id="@+id/cart_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/cardDescription"
             android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/cardDescription"
+            android:layout_marginLeft="14dp"
+            android:layout_marginStart="14dp"
+            android:layout_toEndOf="@+id/cart_Thumbnail"
+            android:layout_toRightOf="@+id/cart_Thumbnail"
             android:text="TextView"
             android:textAlignment="center"
             android:textColor="@android:color/black"
@@ -47,7 +33,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/cardTitle2"
+            android:id="@+id/cart_Price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -60,7 +46,6 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

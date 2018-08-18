@@ -1,6 +1,5 @@
 package com.demo.hybridstore.com.hybridstore.adapters;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +15,19 @@ import java.util.ArrayList;
 
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder> {
+
     private ArrayList<Cart> mCardList;
     private OnItemClickListener mListener;
     private OnItemLongClickListener mListener2;
 
+    public CartAdapter(ArrayList<Cart> cardList) {
+        mCardList = cardList;
+    }
+
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
+
     public interface OnItemLongClickListener {
         boolean onItemLongClick(int position);
     }
@@ -34,6 +39,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         mListener2 = listener;
     }
+
+
     public static class CardViewHolder extends RecyclerView.ViewHolder {
         public TextView mTitle;
         public ImageView mImageView;
@@ -41,9 +48,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder
 
         public CardViewHolder(View itemView, final OnItemClickListener listener, final OnItemLongClickListener listener2) {
             super(itemView);
-            mTitle = itemView.findViewById(R.id.cardTitle);
-            mImageView = itemView.findViewById(R.id.historyImage);
-            mPrice = itemView.findViewById(R.id.cardTitle2);
+
+            mTitle = itemView.findViewById(R.id.cart_Title);
+            mImageView = itemView.findViewById(R.id.cart_Thumbnail);
+            mPrice = itemView.findViewById(R.id.cart_Price);
 
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -60,14 +68,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder
             });
 
             itemView.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View view) {
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
-
                         }
                     }
                 }
@@ -75,8 +81,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder
         }
     }
 
-    public CartAdapter(ArrayList<Cart> cardList) {
-        mCardList = cardList;
+    @Override
+    public int getItemCount() {
+        return mCardList.size();
     }
 
     @Override
@@ -90,15 +97,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder
     public void onBindViewHolder(CardViewHolder holder, int position) {
         Cart currentItem = mCardList.get(position);
 
-        int color = Color.parseColor(currentItem.getColor());
-
         holder.mTitle.setText(currentItem.getTitle());
         Picasso.get().load(currentItem.getImageResource()).into(holder.mImageView);
-        holder.mPrice.setText(currentItem.getPrice() + "");
-    }
-
-    @Override
-    public int getItemCount() {
-        return mCardList.size();
+        holder.mPrice.setText(currentItem.getPrice() + "₪");
     }
 }

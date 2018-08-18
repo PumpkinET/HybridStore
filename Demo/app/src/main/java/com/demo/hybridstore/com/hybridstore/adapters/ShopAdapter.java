@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.demo.hybridstore.MainActivity;
 import com.hybridstore.app.R;
 import com.demo.hybridstore.com.hybridstore.com.demo.fragments.TargetShopFragment;
 import com.demo.hybridstore.com.hybridstore.model.Shop;
@@ -46,24 +45,28 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Shop shop = filList.get(position);
         if (convertView == null) {
             final LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             convertView = layoutInflater.inflate(R.layout.adapter_shop, null);
         }
-        final ImageView imageView = (ImageView) convertView.findViewById(R.id.shopThumbnail);
-        final TextView shopSubTitles = (TextView) convertView.findViewById(R.id.shopSubTitles);
-        Picasso.get().load(shop.getShopThumbnail()).into(imageView);
-        shopSubTitles.setText(shop.getShopName() + "\n" + shop.getShopDescription());
-        ImageButton info = (ImageButton) convertView.findViewById(R.id.shopInformation);
-        info.setOnClickListener(new View.OnClickListener() {
+        final Shop shop = filList.get(position);
+        final ImageView mShopThumbnail = (ImageView) convertView.findViewById(R.id.shop_Thumbnail);
+        final TextView mShopSubtitles = (TextView) convertView.findViewById(R.id.shop_Subtitles);
+        final ImageButton mShopInfo = (ImageButton) convertView.findViewById(R.id.shop_Information);
+        final ImageButton mShopHome = (ImageButton) convertView.findViewById(R.id.shop_Home);
+        final ImageButton mShopLocation = (ImageButton) convertView.findViewById(R.id.shop_Location);
+
+        mShopSubtitles.setText(shop.getShopName() + "\n" + shop.getShopDescription());
+        Picasso.get().load(shop.getShopThumbnail()).into(mShopThumbnail);
+
+        mShopInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shopSubTitles.setText(shop.getShopName() + "\n" + shop.getShopDescription());
+                mShopSubtitles.setText(shop.getShopName() + "\n" + shop.getShopDescription());
             }
         });
-        ImageButton home = (ImageButton) convertView.findViewById(R.id.shopHome);
-        home.setOnClickListener(new View.OnClickListener() {
+
+        mShopHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TargetShopFragment fragment = new TargetShopFragment();
@@ -76,8 +79,7 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
             }
         });
 
-        ImageButton location = (ImageButton) convertView.findViewById(R.id.shopLocation);
-        location.setOnClickListener(new View.OnClickListener() {
+        mShopLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Uri gmmIntentUri = Uri.parse("google.streetview:cbll=46.414382,10.013988");
@@ -105,7 +107,6 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
                 results.values = resultsData;
                 return results;
             }
-
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 filList = (ArrayList<Shop>) results.values;
@@ -113,5 +114,4 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
             }
         };
     }
-
 }

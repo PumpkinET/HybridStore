@@ -1,10 +1,5 @@
 package com.demo.hybridstore.com.hybridstore.com.demo.fragments;
 
-/**
- * Created by Dell Latitude on 11/05/2018.
- */
-
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,6 +34,7 @@ public class ShopsFragment extends Fragment {
     GridView gridview;
     ShopAdapter shopsAdapter;
     String category;
+
     public ShopsFragment() {
     }
 
@@ -54,7 +50,7 @@ public class ShopsFragment extends Fragment {
         ((MainActivity) getActivity()).updateMenu(R.id.nav_shops);
         new ShopAsycner().execute();
         gridview = (GridView) rootView.findViewById(R.id.shopsGridView);
-        EditText filter_shops = (EditText)rootView.findViewById(R.id.filter_shops);
+        EditText filter_shops = (EditText) rootView.findViewById(R.id.filter_shops);
         filter_shops.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -81,10 +77,10 @@ public class ShopsFragment extends Fragment {
             BufferedReader reader = null;
             try {
                 URL url;
-                if(category == null)
+                if (category == null)
                     url = new URL("http://" + Config.ip + ":8080/appBackend/ShopController");
                 else
-                    url = new URL("http://" + Config.ip + ":8080/appBackend/ShopController?category="+category);
+                    url = new URL("http://" + Config.ip + ":8080/appBackend/ShopController?category=" + category);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
 

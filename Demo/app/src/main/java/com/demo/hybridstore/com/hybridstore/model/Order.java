@@ -4,7 +4,6 @@ public class Order {
     private String shopThumbnail;
     private String shopIp;
     private String finalPrice;
-
     private String streetAdd;
     private String country;
     private String city;

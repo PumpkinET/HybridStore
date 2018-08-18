@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/categoryThumbnail"
+        android:id="@+id/category_Thumbnail"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_alignParentEnd="true"
@@ -13,10 +13,10 @@
         android:scaleType="centerCrop" />
 
     <TextView
-        android:id="@+id/categoryName"
+        android:id="@+id/category_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/categoryThumbnail"
+        android:layout_below="@+id/category_Thumbnail"
         android:layout_centerHorizontal="true"
         android:text="TextView"
         android:textColor="@android:color/black"

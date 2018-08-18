@@ -96,10 +96,9 @@ public class MainActivity extends AppCompatActivity
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(getSupportFragmentManager().getBackStackEntryCount() > 0) {
+        } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
-        }
-        else {
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Are you sure you want to exit?")
                     .setCancelable(false)
@@ -197,6 +196,7 @@ public class MainActivity extends AppCompatActivity
         ImageView img = navigationView.getHeaderView(0).findViewById(R.id.profileAvatar);
         img.setImageResource(R.drawable.ic_menu_login);
     }
+
     public void updateMenu(int id) {
         navigationView.setCheckedItem(id);
     }

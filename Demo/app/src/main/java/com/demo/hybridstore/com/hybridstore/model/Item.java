@@ -18,11 +18,11 @@ public class Item {
         this.price = price;
         this.color = "#FFFFFF";
     }
-    public String getId() { return this.id; };
-    public String getColor() {
-        return this.color;
+
+    public void resetColor() {
+        this.color = "#FFFFFF";
     }
-    public void resetColor() { this.color = "#FFFFFF" ; }
+
     public void switchColor() {
         if (this.color.equals("#FFFFFF")) {
             this.color = "#bdc3c7";
@@ -32,6 +32,14 @@ public class Item {
             this.color = "#FFFFFF";
             CartActivity.removeFromCart(new Cart(this.id, this.title, this.image, this.price));
         }
+    }
+
+    public String getId() {
+        return this.id;
+    };
+
+    public String getColor() {
+        return this.color;
     }
 
     public String getTitle() {

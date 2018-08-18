@@ -1,4 +1,5 @@
 var lastRow = 1;
+filter = [];
 
 function getAll() {
     try {
@@ -8,7 +9,17 @@ function getAll() {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
-                render(obj);
+                for (var i = 0; i < obj.length; i++) {
+                    filter.push({
+                        title: "[" + obj[i].targetuser + "] " + obj[i].title,
+                        start: obj[i].startDate,
+                        end: obj[i].endDate
+                    });
+                }
+                render();
+            }
+            else if (xhr.status === 0) {
+                alert('Server is offline!');
             }
         }
         xhr.send();
@@ -17,16 +28,7 @@ function getAll() {
     }
 }
 
-function render(obj) {
-    var filter = [];
-    for (var i = 0; i < obj.length; i++) {
-        filter.push({
-            title: obj[i].title,
-            start: obj[i].startDate,
-            end: obj[i].endDate
-        });
-    }
-
+function render() {
     $(document).ready(function () {
         $('#calendar').fullCalendar({
             header: {
@@ -34,25 +36,10 @@ function render(obj) {
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
-            defaultDate: '2018-03-12',
-            navLinks: true, // can click day/week names to navigate views
-            selectable: true,
+            navLinks: true,
+            selectable: false,
             selectHelper: true,
-            select: function (start, end) {
-                var title = prompt('Event Title:');
-                var eventData;
-                if (title) {
-                    eventData = {
-                        title: title,
-                        start: start,
-                        end: end
-                    };
-                    $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-                }
-                $('#calendar').fullCalendar('unselect');
-
-            },
-            editable: true,
+            editable: false,
             eventLimit: true,
             events: filter
         });
@@ -75,6 +62,17 @@ function addDate() {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
+                if (obj.result == true) {
+                    filter.push({
+                        title: "[" + $('#add-targetuser').val() + "] " + $('#add-title').val(),
+                        start: $('#add-start-date').val(),
+                        end: $('#add-end-date').val()
+                    });
+                }
+                $('#error').html(obj.errorMessage);
+            }
+            else if (xhr.status === 0) {
+                $('#error').html('Server is offline!');
             }
         }
 
@@ -83,3 +81,38 @@ function addDate() {
         alert("Request failed");
     }
 }
+
+function getUsersList() {
+    try {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "http://localhost:8080/Server/UserGradesController?dbName=" + sessionStorage.getItem('storename'), true);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var obj = JSON.parse(xhr.responseText);
+                var admin = "";
+                var all = "";
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i].grade != 0) {
+                        admin += "<option value='" + obj[i].username + "'>" + obj[i].username + "</option>";
+                    }
+                    all += "<option value='" + obj[i].username + "'>" + obj[i].username + "</option>";
+                }
+
+                $('#add-adminuser').append(admin);
+                $('#add-targetuser').append(all);
+            }
+            else if (xhr.status === 0) {
+                $('#error').html('Server is offline!');
+            }
+        }
+        xhr.send();
+    } catch (exception) {
+        alert("Request failed");
+    }
+}
+
+$(document).ready(function () {
+    document.getElementById('add-start-date').valueAsDate = new Date();
+    document.getElementById('add-end-date').valueAsDate = new Date();
+});

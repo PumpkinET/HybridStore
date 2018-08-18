@@ -13,7 +13,6 @@ public class Categories {
     public String getCategoryName() {
         return categoryName;
     }
-
     public String getCategoryThumbnail() {
         return categoryThumbnail;
     }
