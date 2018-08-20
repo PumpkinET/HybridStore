@@ -7,13 +7,11 @@ import java.io.IOException;
 
 public class Config {
 	static boolean read = false;
-
 	public static boolean parseConfig() {
 		if (read == false) {
 			String fileName = "C:\\config.ini";
 			String line = null;
 			try {
-				System.out.println("HEY");
 				FileReader fileReader = new FileReader(fileName);
 				BufferedReader bufferedReader = new BufferedReader(fileReader);
 				while ((line = bufferedReader.readLine()) != null) {
@@ -37,5 +35,4 @@ public class Config {
 		}
 		return true;
 	}
-
 }

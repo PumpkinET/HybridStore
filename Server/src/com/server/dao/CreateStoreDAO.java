@@ -1,74 +1,36 @@
 package com.server.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.server.model.CreateStore;
+import com.server.util.MySQLUtil;
 
 public class CreateStoreDAO {
-	public static String createSchema(String dbName) {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String userName = "root";
-			String password = "4a5awhat";
-			String url = "jdbc:mysql://localhost:3306/";
-			Connection connection = DriverManager.getConnection(url, userName, password);
-			String sql = "CREATE DATABASE " + dbName;
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(sql);
-			statement.close();
-			connection.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	private String dbName;
+	private Connection connection;
+	
+	public String getDbName() {
 		return dbName;
 	}
-
-	public static void createDefaultTables(String dbName) {
-		String routine = "CREATE TABLE routine (" + "id INT(11) NOT NULL AUTO_INCREMENT," + "adminuser VARCHAR(45),"
-				+ "targetuser VARCHAR(45)," + "title VARCHAR(45)," + "startDate VARCHAR(45)," + "endDate VARCHAR(45),"
-				+ "PRIMARY KEY(id))";
-
-		String users = "CREATE TABLE users (" + "username varchar(45) NOT NULL, "
-				+ "password varchar(45) DEFAULT NULL, " + "email varchar(45) DEFAULT NULL, "
-				+ "grade int(11) DEFAULT NULL, " + "name varchar(45) DEFAULT NULL, " + "age int(11) DEFAULT NULL, "
-				+ "address varchar(500) DEFAULT NULL, " + "id varchar(45) DEFAULT NULL, " + "PRIMARY KEY (username))";
-
-		String grades = "CREATE TABLE GRADES (id int(11) NOT NULL, value varchar(45) DEFAULT NULL, PRIMARY KEY (id))";
-		String grades_values = "INSERT INTO GRADES(ID, VALUE) VALUES(0, 'employee'),(1, 'adminstrator'),(2, 'owner')";
-		String admin = "INSERT INTO USERS(USERNAME, PASSWORD, GRADE) VALUES('Admin', 'Admin', 2)";
-
-		try {
-			String userName = "root";
-			String password = "4a5awhat";
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://localhost:3306/" + dbName;
-			Connection connection = DriverManager.getConnection(url, userName, password);
-
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(routine);
-//			statement.close();
-
-//			statement = connection.createStatement();
-			statement.executeUpdate(users);
-//			statement.close();
-			
-//			statement = connection.createStatement();
-			statement.executeUpdate(grades);
-			statement.executeUpdate(grades_values);
-//			statement.close();
-			
-//			statement = connection.createStatement();
-			statement.executeUpdate(admin);
-			statement.close();
-
-			connection.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	
+	public Connection getConnection() throws ClassNotFoundException, SQLException {
+		setConnection(getDbName());
+		return connection;
 	}
-
+	
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
+	}
+	
+	public void setConnection(String dbName) throws ClassNotFoundException, SQLException {
+		connection = MySQLUtil.getConnection(dbName);
+	}
+	
+	public CreateStoreDAO() {
+	}
+	
 	public static String fieldType(int target) {
 		String str = null;
 		switch (target) {
@@ -87,34 +49,68 @@ public class CreateStoreDAO {
 		}
 		return str;
 	}
-
-	public static void createItemsTable(CreateStore store) {
-
-		createSchema(store.getStoreName());
-		createDefaultTables(store.getStoreName());
-
-		String item = "CREATE TABLE ITEM (";
-		for (int i = 0; i < store.getFields().length; i++) {
-			item += store.getFields()[i].getName() + fieldType(store.getFields()[i].getType()) + " NOT NULL" + ",";
-		}
-
-		item += "PRIMARY KEY (id))";
-
+	
+	public String createSchema(String dbName) {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String userName = "root";
-			String password = "4a5awhat";
-			String url = "jdbc:mysql://localhost:3306/" + store.getStoreName();
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection connection = DriverManager.getConnection(url, userName, password);
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(item);
-			statement.close();
+			Statement stmt = getConnection().createStatement();
+			stmt.executeUpdate("CREATE DATABASE " + dbName);
+			stmt.close();
+			getConnection().close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dbName;
+	}
 
-			connection.close();
+	public void createDefaultTables() {
+		String routine = "CREATE TABLE routine (" + "id INT(11) NOT NULL AUTO_INCREMENT," + "adminuser VARCHAR(45),"
+				+ "targetuser VARCHAR(45)," + "title VARCHAR(45)," + "startDate VARCHAR(45)," + "endDate VARCHAR(45),"
+				+ "PRIMARY KEY(id))";
+
+		String users = "CREATE TABLE users (" + "username varchar(45) NOT NULL, "
+				+ "password varchar(45) DEFAULT NULL, " + "email varchar(45) DEFAULT NULL, "
+				+ "grade int(11) DEFAULT NULL, " + "name varchar(45) DEFAULT NULL, " + "age int(11) DEFAULT NULL, "
+				+ "address varchar(500) DEFAULT NULL, " + "id varchar(45) DEFAULT NULL, " + "PRIMARY KEY (username))";
+
+		String grades = "CREATE TABLE GRADES (id int(11) NOT NULL, value varchar(45) DEFAULT NULL, PRIMARY KEY (id))";
+		String grades_values = "INSERT INTO GRADES(ID, VALUE) VALUES(0, 'employee'),(1, 'adminstrator'),(2, 'owner')";
+		String admin = "INSERT INTO USERS(USERNAME, PASSWORD, GRADE) VALUES('Admin', 'Admin', 2)";
+		
+		try {
+			Statement stmt = getConnection().createStatement();
+			stmt.executeUpdate(routine);
+			stmt.executeUpdate(users);
+			stmt.executeUpdate(grades);
+			stmt.executeUpdate(grades_values);
+			stmt.executeUpdate(admin);
+			stmt.close();
+			getConnection().close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	public void createItemsTable(CreateStore store)  {
+		this.setDbName("");
+		createSchema(store.getStoreName());
+		
+		this.setDbName(store.getStoreName());
+		createDefaultTables();
+		String item = "CREATE TABLE ITEM (";
+		
+		for (int i = 0; i < store.getFields().length; i++)
+			item += store.getFields()[i].getName() + fieldType(store.getFields()[i].getType()) + " NOT NULL" + ",";
+
+		item += "PRIMARY KEY (id))";
+
+		try {
+			Statement stmt =  getConnection().createStatement();
+			stmt.executeUpdate(item);
+			
+			stmt.close();
+			getConnection().close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

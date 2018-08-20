@@ -14,19 +14,36 @@ import com.server.dao.GradesDAO;
 @WebServlet("/GradesController")
 public class GradesController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private GradesDAO gradesDAO;
 	public GradesController() {
 		super();
+		gradesDAO = new GradesDAO();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		if (request.getParameter("dbName") != null) {
-			response.setContentType("application/json");
-			response.getWriter().write(new Gson().toJson(GradesDAO.getAll(request.getParameter("dbName"))));
+		response.setContentType("application/json");
+		String dbName = request.getParameter("dbName") ;
+		if (dbName != null) {
+			gradesDAO.setDbName(dbName);
+			response.getWriter().write(new Gson().toJson(gradesDAO.getAll()));
 			response.getWriter().close();
 		}
 	}
+	
+	@Override
+	protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		//setAccessControlHeaders(response);
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
 
+	private void setAccessControlHeaders(HttpServletResponse response) {
+		response.setHeader("Access-Control-Allow-Origin", "http://*:*");
+		response.setHeader("Access-Control-Allow-Methods", "GET");
+		response.setHeader("Access-Control-Allow-Methods", "POST");
+		response.setHeader("Access-Control-Allow-Methods", "PUT");
+		response.setHeader("Access-Control-Allow-Methods", "DELETE");
+	}
 }

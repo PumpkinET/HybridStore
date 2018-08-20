@@ -17,9 +17,10 @@ import com.server.dao.AuthDAO;
 @WebServlet("/SignupController")
 public class SignupController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private AuthDAO authDAO;
 	public SignupController() {
 		super();
+		authDAO = new AuthDAO();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -31,7 +32,7 @@ public class SignupController extends HttpServlet {
 		if (reader != null)
 			json = reader.readLine();
 		Gson gson = new GsonBuilder().create();
-		AuthDAO.register(gson.fromJson(json, RegisterAndroid.class));
+		authDAO.register(gson.fromJson(json, RegisterAndroid.class));
 	}
 
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
@@ -43,7 +44,7 @@ public class SignupController extends HttpServlet {
 		if (reader != null)
 			json = reader.readLine();
 		Gson gson = new GsonBuilder().create();
-		AuthDAO.update(gson.fromJson(json, RegisterAndroid.class));
+		authDAO.update(gson.fromJson(json, RegisterAndroid.class));
 	}
 
 }

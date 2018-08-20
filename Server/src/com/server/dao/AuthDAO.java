@@ -1,32 +1,51 @@
 package com.server.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.server.model.Login;
-import com.server.util.Config;
 import com.server.util.MySQLUtil;
 
 public class AuthDAO {
-	public static boolean login(String dbName, Login login) {
+	private String dbName;
+	private Connection connection;
+	
+	public String getDbName() {
+		return dbName;
+	}
+	
+	public Connection getConnection() throws ClassNotFoundException, SQLException {
+		setConnection(getDbName());
+		return connection;
+	}
+	
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
+	}
+	
+	public void setConnection(String dbName) throws ClassNotFoundException, SQLException {
+		connection = MySQLUtil.getConnection(dbName);
+	}
+	
+	public AuthDAO() {
+	}
+	
+	public boolean login(Login login) {
 		int count = 0;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Config.parseConfig();
-			String url = "jdbc:mysql://localhost:3306/" + dbName;
-			Connection con = DriverManager.getConnection(url, MySQLUtil.username, MySQLUtil.password);
-			Statement stmt = con.createStatement();
+			Statement stmt = getConnection().createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT USERNAME, PASSWORD FROM USERS WHERE USERNAME='"
 					+ login.getUsername() + "' AND PASSWORD='" + login.getPassword() + "'");
 
 			while (rs.next())
 				count++;
 
-			con.close();
+			stmt.close();
+			getConnection().close();
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		return count == 1;
 	}

@@ -19,9 +19,10 @@ import com.server.util.SessionUtil;
 @WebServlet("/OrderController")
 public class OrderController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private OrderDAO orderDAO;
 	public OrderController() {
 		super();
+		orderDAO = new OrderDAO();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -31,7 +32,7 @@ public class OrderController extends HttpServlet {
 		String session = request.getParameter("session");
 		if (SessionUtil.sessions.get(session).getEmail() != null) {
 			response.getWriter()
-					.write(new Gson().toJson(OrderDAO.getOrder(SessionUtil.sessions.get(session).getEmail())));
+					.write(new Gson().toJson(orderDAO.getOrder(SessionUtil.sessions.get(session).getEmail())));
 			response.getWriter().close();
 		}
 	}
@@ -44,7 +45,7 @@ public class OrderController extends HttpServlet {
 		if (br != null)
 			json = br.readLine();
 		Gson gson = new GsonBuilder().create();
-		OrderDAO.register_order(gson.fromJson(json, OrderAndroid.class));
+		orderDAO.register_order(gson.fromJson(json, OrderAndroid.class));
 	}
 
 }

@@ -18,9 +18,10 @@ import com.server.dao.OrderDAO;
 @WebServlet("/OrdersController")
 public class OrdersController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private OrderDAO orderDAO;
 	public OrdersController() {
 		super();
+		orderDAO = new OrderDAO();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -29,14 +30,14 @@ public class OrdersController extends HttpServlet {
 		response.setContentType("application/json");
 		if (request.getParameter("shopName") != null) {
 			if (request.getParameter("startDate") != null && request.getParameter("endDate") != null) {
-				response.getWriter().write(new Gson().toJson(OrderDAO.getOrderByShop(request.getParameter("shopName"),
+				response.getWriter().write(new Gson().toJson(orderDAO.getOrderByShop(request.getParameter("shopName"),
 						request.getParameter("startDate"), request.getParameter("endDate"))));
 			} else if (request.getParameter("startDate") != null) {
-				response.getWriter().write(new Gson().toJson(OrderDAO.getOrderByShop(request.getParameter("shopName"),
+				response.getWriter().write(new Gson().toJson(orderDAO.getOrderByShop(request.getParameter("shopName"),
 						request.getParameter("startDate"), null)));
 			} else {
 				response.getWriter().write(
-						new Gson().toJson(OrderDAO.getOrderByShop(request.getParameter("shopName"), null, null)));
+						new Gson().toJson(orderDAO.getOrderByShop(request.getParameter("shopName"), null, null)));
 			}
 			response.getWriter().close();
 		}
@@ -52,7 +53,7 @@ public class OrdersController extends HttpServlet {
 			json = br.readLine();
 		Gson gson = new GsonBuilder().create();
 		if (request.getParameter("shopName") != null) {
-			boolean result = OrderDAO.put(request.getParameter("dbName"), gson.fromJson(json, OrderAndroid.class));
+			boolean result = orderDAO.put(request.getParameter("dbName"), gson.fromJson(json, OrderAndroid.class));
 			response.getWriter().write(new Gson().toJson(result));
 			response.getWriter().close();
 		}

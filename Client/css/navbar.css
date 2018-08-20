@@ -2,3 +2,6 @@
 li:hover {
     font-weight: bold;
 }
+.permission {
+    cursor: pointer;
+}

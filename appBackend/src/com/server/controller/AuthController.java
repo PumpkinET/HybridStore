@@ -20,21 +20,23 @@ import com.server.util.SessionUtil;
 @WebServlet("/AuthController")
 public class AuthController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private AuthDAO authDAO;
 	public AuthController() {
 		super();
+		authDAO = new AuthDAO();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.setContentType("application/json");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		String json = "";
 		if (reader != null)
 			json = reader.readLine();
 		Gson gson = new GsonBuilder().create();
 		LoginAndroid login = gson.fromJson(json, LoginAndroid.class);
-		Login loginObj = AuthDAO.login(login);
+		Login loginObj = authDAO.login(login);
 		if (loginObj == null) {
 			response.setStatus(403);
 		} else {

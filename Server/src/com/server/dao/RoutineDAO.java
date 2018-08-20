@@ -1,9 +1,9 @@
 package com.server.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,39 +11,51 @@ import java.util.List;
 import com.server.model.CRUDMessages;
 import com.server.model.ErrorMessage;
 import com.server.model.Routine;
-import com.server.util.Config;
 import com.server.util.MySQLUtil;
 
 public class RoutineDAO {
-
-	public static List<Routine> getAll(String dbName) {
+	private String dbName;
+	private Connection connection;
+	
+	public String getDbName() {
+		return dbName;
+	}
+	
+	public Connection getConnection() throws ClassNotFoundException, SQLException {
+		setConnection(getDbName());
+		return connection;
+	}
+	
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
+	}
+	
+	public void setConnection(String dbName) throws ClassNotFoundException, SQLException {
+		connection = MySQLUtil.getConnection(dbName);
+	}
+	
+	public RoutineDAO() {
+	}
+	public List<Routine> getAll() {
 		List<Routine> temp = new ArrayList<Routine>();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Config.parseConfig();
-			String url = "jdbc:mysql://localhost:3306/" + dbName;
-			Connection con = DriverManager.getConnection(url, MySQLUtil.username, MySQLUtil.password);
-			Statement stmt = con.createStatement();
+			Statement stmt = getConnection().createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM ROUTINE");
 			while (rs.next())
 				temp.add(new Routine(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6)));
-			con.close();
+			stmt.close();
+			getConnection().close();
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		return temp;
 	}
 
-	public static ErrorMessage post(String dbName, Routine routine) {
+	public ErrorMessage post(Routine routine) {
 		ErrorMessage result = new ErrorMessage(false, "");
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Config.parseConfig();
-			String url = "jdbc:mysql://localhost:3306/" + dbName;
-			Connection con = DriverManager.getConnection(url, MySQLUtil.username, MySQLUtil.password);
-
-			PreparedStatement stmt = con.prepareStatement(
+			PreparedStatement stmt = getConnection().prepareStatement(
 					"INSERT INTO ROUTINE (ADMINUSER,TARGETUSER,TITLE, STARTDATE,ENDDATE) VALUES (?,?,?,?,?)");
 
 			stmt.setString(1, routine.getAdminuser());
@@ -56,22 +68,19 @@ public class RoutineDAO {
 			result.setErrorMessage(CRUDMessages.add);
 			
 			stmt.close();
-			con.close();
+			stmt.close();
+			getConnection().close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			result.setErrorMessage(e.toString());
 		}
 		return result;
 	}
 
-	public static ErrorMessage put(String dbName, Routine routine) {
+	public ErrorMessage put(Routine routine) {
 		ErrorMessage result = new ErrorMessage(false, "");
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Config.parseConfig();
-			String url = "jdbc:mysql://localhost:3306/" + dbName;
-			Connection con = DriverManager.getConnection(url, MySQLUtil.username, MySQLUtil.password);
-
-			PreparedStatement stmt = con.prepareStatement(
+			PreparedStatement stmt = getConnection().prepareStatement(
 					"UPDATE ROUTINE SET ADMINUSER=?, TARGETUSER=?, TITLE=?, START=?, END=? WHERE ROUTINE=?");
 
 			stmt.setString(1, routine.getAdminuser());
@@ -84,8 +93,9 @@ public class RoutineDAO {
 			result.setErrorMessage(CRUDMessages.update);
 			
 			stmt.close();
-			con.close();
+			getConnection().close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			result.setErrorMessage(e.toString());
 		}
 		return result;

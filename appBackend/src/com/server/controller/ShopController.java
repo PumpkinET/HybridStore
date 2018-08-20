@@ -18,9 +18,10 @@ import com.server.model.Shop;
 @WebServlet("/ShopController")
 public class ShopController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private ShopDAO shopDAO;
 	public ShopController() {
 		super();
+		shopDAO = new ShopDAO();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -29,9 +30,9 @@ public class ShopController extends HttpServlet {
 		response.setContentType("application/json");
 		String cat = request.getParameter("category");
 		if (cat == null)
-			response.getWriter().write(new Gson().toJson(ShopDAO.getAll("All")));
+			response.getWriter().write(new Gson().toJson(shopDAO.getAll("All")));
 		else
-			response.getWriter().write(new Gson().toJson(ShopDAO.getAll(cat)));
+			response.getWriter().write(new Gson().toJson(shopDAO.getAll(cat)));
 		response.getWriter().close();
 	}
 
@@ -52,7 +53,7 @@ public class ShopController extends HttpServlet {
 		shop.setShopIp(shop.getShopIp() + "/ItemsController?dbName=" + shop.getShopName() + "&filter=true");
 		shop.setShopCategory(shop.getShopCategory());
 
-		ShopDAO.createStore(shop);
+		shopDAO.createStore(shop);
 	}
 
 }

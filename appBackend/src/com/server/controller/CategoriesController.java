@@ -13,16 +13,17 @@ import com.server.dao.CategoriesDAO;
 @WebServlet("/CategoriesController")
 public class CategoriesController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private CategoriesDAO categoriesDAO;
 	public CategoriesController() {
 		super();
+		categoriesDAO = new CategoriesDAO();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.setContentType("application/json");
-		response.getWriter().write(new Gson().toJson(CategoriesDAO.getAll()));
+		response.getWriter().write(new Gson().toJson(categoriesDAO.getAll()));
 		response.getWriter().close();
 	}
 

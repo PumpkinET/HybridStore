@@ -33,7 +33,7 @@
 							<a class="nav-link active currentNav" href="items.html">Items</a>
 							<span class="sr-only">(current)</span>
 						</li>
-						<i class='material-icons permission' data-toggle="modal" data-target="#exampleModal" sytle="color:white">add_box</i>
+						<i class='material-icons permission' data-toggle="modal" data-target="#addItemModal" sytle="color:white">add_box</i>
 						<li class="nav-item">
 							<a class="nav-link" href="users.html">Users
 							</a>
@@ -42,7 +42,7 @@
 							<a class="nav-link" href="orders.html">Orders
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item reportNav">
 							<a class="nav-link" href="reports.html">Reports</a>
 						</li>
 						<li class="nav-item">
@@ -69,11 +69,11 @@
 		</tbody>
 	</table>
 
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Add routine</h5>
+					<h5 class="modal-title" id="addItemModalLabel">Add Item</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -92,8 +92,6 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary" onClick='addRow()'>Add</button>
-					<button type="button" class="btn btn-primary" onClick='editRow()'>Update</button>
-					<button type="button" class="btn btn-primary" onClick='deleteRow()'>Delete</button>	
 				</div>
 				<div class="modal-footer">
 					<h6 id="error"></h6>
@@ -101,6 +99,39 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="editItemLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editItemLabel">Edit Item</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="table">
+						<thead class="thead-dark" id="thead_edit">
+							<tr>
+								<th scope="col">Edit Item</th>
+							</tr>
+						</thead>
+						<tbody id="tbody_edit">
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" onClick='editRow()'>Update</button>
+					<button type="button" class="btn btn-primary" onClick='deleteRow()' data-dismiss="modal">Delete</button>	
+				</div>
+				<div class="modal-footer">
+					<h6 id="error_edit"></h6>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	    crossorigin="anonymous"></script>

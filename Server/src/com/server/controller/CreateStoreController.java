@@ -26,12 +26,11 @@ import net.sf.json.JSONObject;
 public class CreateStoreController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	private CreateStoreDAO createStoreDAO;
+
 	public CreateStoreController() {
 		super();
-	}
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+		createStoreDAO = new CreateStoreDAO();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -66,7 +65,21 @@ public class CreateStoreController extends HttpServlet {
 		conn.connect();
 		int statusCode = conn.getResponseCode();
 
-		CreateStoreDAO.createItemsTable(gson.fromJson(json, CreateStore.class));
+		createStoreDAO.createItemsTable(store);
 	}
 
+	@Override
+	protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		//setAccessControlHeaders(response);
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void setAccessControlHeaders(HttpServletResponse response) {
+		response.setHeader("Access-Control-Allow-Origin", "http://*:*");
+		response.setHeader("Access-Control-Allow-Methods", "GET");
+		response.setHeader("Access-Control-Allow-Methods", "POST");
+		response.setHeader("Access-Control-Allow-Methods", "PUT");
+		response.setHeader("Access-Control-Allow-Methods", "DELETE");
+	}
 }

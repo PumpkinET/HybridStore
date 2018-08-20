@@ -78,9 +78,10 @@ $(document).ready(function () {
     });
 
     function createStore() {
+        $('#error').html("");
         try {
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "http://localhost:8080/Server/CreateStoreController", true);
+            xhr.open("POST", "http://10.0.0.21:8080/Server/CreateStoreController", true);
             data.storeName = $('#InputName').val();
             data.ownerName = $('#InputOwner').val();
             data.thumbnail = $('#InputThumbnail').val();
@@ -104,6 +105,7 @@ $(document).ready(function () {
 });
 
 function getCategories() {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "http://localhost:8080/appBackend/CategoriesController", true);
@@ -114,7 +116,6 @@ function getCategories() {
                 for (var i = 0; i < obj.length; i++) {
                     $("#exampleFormControlSelect1").append("<option>" + obj[i].categoryName + "</option>");
                 }
-                lastRow = i;
             }
         }
         xhr.send();

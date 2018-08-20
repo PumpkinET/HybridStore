@@ -1,34 +1,51 @@
 package com.server.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.server.model.Grades;
-import com.server.util.Config;
 import com.server.util.MySQLUtil;
 
 public class GradesDAO {
-	public static ArrayList<Grades> getAll(String dbName) {
+	private String dbName;
+	private Connection connection;
+	
+	public String getDbName() {
+		return dbName;
+	}
+	
+	public Connection getConnection() throws ClassNotFoundException, SQLException {
+		setConnection(getDbName());
+		return connection;
+	}
+	
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
+	}
+	
+	public void setConnection(String dbName) throws ClassNotFoundException, SQLException {
+		connection = MySQLUtil.getConnection(dbName);
+	}
+	
+	public GradesDAO() {
+	}
+	
+	public ArrayList<Grades> getAll() {
 		ArrayList<Grades> temp = new ArrayList<Grades>();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Config.parseConfig();
-			String url = "jdbc:mysql://localhost:3306/" + dbName;
-			Connection con = DriverManager.getConnection(url, MySQLUtil.username, MySQLUtil.password);
-			Statement stmt = con.createStatement();
+			Statement stmt = getConnection().createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM GRADES");
 			while (rs.next())
 				temp.add(new Grades(rs.getInt(1), rs.getString(2)));
 
 			stmt.close();
-			con.close();
+			getConnection().close();
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		return temp;
 	}
-
 }

@@ -3,6 +3,7 @@ var doc = new jsPDF();
 var tempIndex;
 
 function getAll() {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "http://localhost:8080/appBackend/OrdersController?shopName=" + sessionStorage.getItem('storename'), true);
@@ -38,6 +39,7 @@ function getAll() {
 }
 
 function editRow() {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
         xhr.open("PUT", "http://localhost:8080/appBackend/OrdersController?shopName=" + sessionStorage.getItem('storename'), true);
@@ -67,6 +69,7 @@ function editRow() {
 }
 
 function getItems(doc, itemsString) {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename') +"&filter=true&items="+itemsString, true);
@@ -92,8 +95,6 @@ function getItems(doc, itemsString) {
     }
 }
 function invoice() {
-    
-
     doc.setFontType("bold");
     doc.text(105, 10, 'Company name : ' + $('#add-invoice-company').val(), null, null, 'center');
     doc.text(105, 20, 'Invoice number : ' + $('#add-invoice-number').val(), null, null, 'center');
@@ -110,7 +111,6 @@ function invoice() {
     
     var itemsString = $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(10) span:nth-child(1)').text();
     getItems(doc, itemsString);
-    
  
 }
 
@@ -120,7 +120,5 @@ $(document).ready(function () {
         $('#add-invoice-company').val(sessionStorage.getItem('storename'));
         $('#add-id').val($('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(1) span').text());
         $('#add-status').val($('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(11) span:nth-child(1)').text());
-    
-        });
-
+    });
 });

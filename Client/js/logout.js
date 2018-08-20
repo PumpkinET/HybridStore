@@ -12,4 +12,7 @@ $(document).ready(function () {
     if(user.grade == 0) {
         $(".permission").hide();
     }
+    if(user.grade != 2) {
+        $(".reportNav").hide();
+    }
 });

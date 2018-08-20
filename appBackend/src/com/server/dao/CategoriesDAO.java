@@ -1,8 +1,8 @@
 package com.server.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,19 +11,40 @@ import com.server.model.Category;
 import com.server.util.MySQLUtil;
 
 public class CategoriesDAO {
-	public static List<Category> getAll() {
+	private String dbName;
+	private Connection connection;
+	
+	public String getDbName() {
+		return dbName;
+	}
+	
+	public Connection getConnection() throws ClassNotFoundException, SQLException {
+		setConnection();
+		return connection;
+	}
+	
+	public void setConnection() throws ClassNotFoundException, SQLException {
+		connection = MySQLUtil.getConnection();
+	}
+	
+	public CategoriesDAO() {
+		try {
+			connection = MySQLUtil.getConnection();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public List<Category> getAll() {
 		List<Category> temp = new ArrayList<Category>();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(MySQLUtil.URL, MySQLUtil.Username, MySQLUtil.Password);
-			Statement stmt = con.createStatement();
+			Statement stmt = getConnection().createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM CATEGORIES");
 			while (rs.next())
 				temp.add(new Category(rs.getString(1), rs.getString(2)));
 			stmt.close();
-			con.close();
+			getConnection().close();
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		return temp;
 	}

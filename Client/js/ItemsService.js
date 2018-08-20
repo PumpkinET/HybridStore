@@ -11,6 +11,7 @@ var dynamicData = [];
 var tempIndex;
 
 function getAll() {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename'), true);
@@ -22,6 +23,7 @@ function getAll() {
                 for (var i = 0; i < obj.columns.length; i++) {
                     dynamicData.push(new AddItem(obj.columns[i], '?'));
                     $("#tbody_add").append("<tr><td><input type='text' class='form-control' id='add-" + obj.columns[i] + "' placeholder='" + obj.columns[i] + "'></td></tr>");
+                    $("#tbody_edit").append("<tr><td><input type='text' class='form-control' id='edit-" + obj.columns[i] + "' placeholder='" + obj.columns[i] + "'></td></tr>");
                 }
                 for (var i = 0; i < obj.columns.length; i++) {
                     $("#thead_list tr").append("<th scope='col'>" + obj.columns[i] + "</th>");
@@ -44,7 +46,7 @@ function getAll() {
                             str += "<td><span>" + obj.items[i][j] + "</span></td>";
                         }
                     }
-                    str += "<td><i class='material-icons permission' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td></tr>";
+                    str += "<td><i class='material-icons permission' data-toggle='modal' data-target='#editItemModal'>mode_edit</i></td></tr>";
                     $("#tbody_list").append(str);
                 }
             }
@@ -59,12 +61,13 @@ function getAll() {
 }
 
 function editRow() {
+    $('#error_edit').html("");
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("PUT", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename'), true);
+        xhr.open("PUT", "http://localhost:8080/Server/ItemsController?session="+ sessionStorage.getItem('session')+"&dbName=" + sessionStorage.getItem('storename'), true);
         var data = [];
         for (var i = 0; i < dynamicData.length; i++) {
-            data.push(new AddItem(dynamicData[i].column, $("#add-" + dynamicData[i].column).val()));
+            data.push(new AddItem(dynamicData[i].column, $("#edit-" + dynamicData[i].column).val()));
         }
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
@@ -74,10 +77,13 @@ function editRow() {
                         $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(' + (i + 1) + ')').html('<span>' + data[i].value + "</span>");
                     }
                 }
-                $('#error').html(obj.errorMessage);
+                $('#error_edit').html(obj.errorMessage);
+            }
+            else if (xhr.status === 401) {
+                alert('Unauthorized user!');
             }
             else if (xhr.status === 0) {
-                $('#error').html('Server is offline!');
+                $('#error_edit').html('Server is offline!');
             }
         }
 
@@ -89,19 +95,23 @@ function editRow() {
 
 
 function deleteRow() {
+    $('#error_edit').html("");
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("DELETE", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename') + "&item=" + $('#add-id').val(), true);
+        xhr.open("DELETE", "http://localhost:8080/Server/ItemsController?session="+ sessionStorage.getItem('session')+"&dbName=" + sessionStorage.getItem('storename') + "&item=" + $('#edit-id').val(), true);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
                 if (obj.result == true) {
                     $('.targetRow:nth-child(' + tempIndex + ')').hide();
                 }
-                $('#error').html(obj.errorMessage);
+                $('#error_edit').html(obj.errorMessage);
+            }
+            else if (xhr.status === 401) {
+                alert('Unauthorized user!');
             }
             else if (xhr.status === 0) {
-                $('#error').html('Server is offline!');
+                $('#error_edit').html('Server is offline!');
             }
         }
         xhr.send();
@@ -111,9 +121,10 @@ function deleteRow() {
 }
 
 function addRow() {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename'), true);
+        xhr.open("POST", "http://localhost:8080/Server/ItemsController?session="+ sessionStorage.getItem('session')+"&dbName=" + sessionStorage.getItem('storename'), true);
 
         for (var i = 0; i < dynamicData.length; i++) {
             dynamicData[i].value = $("#add-" + dynamicData[i].column).val();
@@ -133,10 +144,13 @@ function addRow() {
                             str += "<td><span>" + dynamicData[i].value + "</span></td>";
                         }
                     }
-                    str += "<td><i class='material-icons permission' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td>";
+                    str += "<td><i class='material-icons permission' data-toggle='modal' data-target='#editItemModal'>mode_edit</i></td>";
                     $("#tbody_list").append(str);
                 }
                 $('#error').html(obj.errorMessage);
+            }
+            else if (xhr.status === 401) {
+                alert('Unauthorized user!');
             }
             else if (xhr.status === 0) {
                 $('#error').html('Server is offline!');
@@ -151,16 +165,14 @@ function addRow() {
 
 $(document).ready(function () {
     $("#tbody_list .targetRow").click(function () {
-        console.log($(this).index() + 1);
+        $('#error_edit').html("");
         tempIndex = $(this).index() + 1;
 
         for (var i = 0; i < dynamicData.length; i++) {
-            if (dynamicData[i].column == "image") {
-                $("#add-" + dynamicData[i].column).val($("#tbody_list .targetRow:nth-child(" + tempIndex + ") td:nth-child(" + (i + 1) + ") img").attr('src'));
-
-            } else {
-                $("#add-" + dynamicData[i].column).val($("#tbody_list .targetRow:nth-child(" + tempIndex + ") td:nth-child(" + (i + 1) + ") span").text());
-            }
+            if (dynamicData[i].column == "image")
+                $("#edit-" + dynamicData[i].column).val($("#tbody_list .targetRow:nth-child(" + tempIndex + ") td:nth-child(" + (i + 1) + ") img").attr('src'));
+            else
+                $("#edit-" + dynamicData[i].column).val($("#tbody_list .targetRow:nth-child(" + tempIndex + ") td:nth-child(" + (i + 1) + ") span").text());
         }
     });
 });

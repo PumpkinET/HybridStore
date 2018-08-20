@@ -38,25 +38,51 @@
 			</nav>
 		</navbar>
 	</header>
-	<form action="javascript:void(0);">
+	<form action="javascript:void(0);" class="needs-validation" novalidate>
 		<fieldset>
 			<legend>Login info</legend>
 			<div class="form-group">
-				<input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter username">
+				<input required pattern="[A-Za-z]{3}" type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter username">
 				<small id="usernameHelp" class="form-text text-muted">Please ask your manager for an account!</small>
+				<div class="invalid-feedback">
+					Please choose a username.
+				</div>
 			</div>
 			<div class="form-group">
-				<input type="password" class="form-control" id="password" aria-describedby="passwordHelp" placeholder="Enter password">
+				<input required pattern="[A-Za-z]{3}" type="password" class="form-control" id="password" aria-describedby="passwordHelp"
+				    placeholder="Enter password">
 				<small id="passwordHelp" class="form-text text-muted">Remember to change your password from while to while :D</small>
 			</div>
 			<div class="form-group">
-				<input type="storename" class="form-control" id="storename" aria-describedby="storenameHelp" placeholder="Enter store name">
+				<input required pattern="[A-Za-z]{3}" type="storename" class="form-control" id="storename" aria-describedby="storenameHelp"
+				    placeholder="Enter store name">
 				<small id="storenamedHelp" class="form-text text-muted">Help us to know your store database</small>
 			</div>
 		</fieldset>
-		<button type="submit" class="btn btn-primary" onClick='login()'>Login</button>
+		<button type="submit" class="btn btn-primary">Login</button>
 		<h6 id="error"></h6>
 	</form>
+
+	<!-- <script>
+		// Example starter JavaScript for disabling form submissions if there are invalid fields
+		(function () {
+			'use strict';
+			window.addEventListener('load', function () {
+				// Fetch all the forms we want to apply custom Bootstrap validation styles to
+				var forms = document.getElementsByClassName('needs-validation');
+				// Loop over them and prevent submission
+				var validation = Array.prototype.filter.call(forms, function (form) {
+					form.addEventListener('submit', function (event) {
+						if (form.checkValidity() === false) {
+							event.preventDefault();
+							event.stopPropagation();
+						}
+						form.classList.add('was-validated');
+					}, false);
+				});
+			}, false);
+		})();
+	</script> -->
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	    crossorigin="anonymous"></script>

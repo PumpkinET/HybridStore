@@ -2,6 +2,7 @@ var lastRow = 1;
 filter = [];
 
 function getAll() {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "http://localhost:8080/Server/RoutineController?dbName=" + sessionStorage.getItem('storename'), true);
@@ -47,9 +48,10 @@ function render() {
 }
 
 function addDate() {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:8080/Server/RoutineController?dbName=" + sessionStorage.getItem('storename'), true);
+        xhr.open("POST", "http://localhost:8080/Server/RoutineController?session="+ sessionStorage.getItem('session')+"&dbName=" + sessionStorage.getItem('storename'), true);
 
         var data = JSON.stringify({
             "adminuser": $('#add-adminuser').val(),
@@ -71,6 +73,9 @@ function addDate() {
                 }
                 $('#error').html(obj.errorMessage);
             }
+            else if (xhr.status === 401) {
+                alert('Unauthorized user!');
+            }
             else if (xhr.status === 0) {
                 $('#error').html('Server is offline!');
             }
@@ -83,6 +88,7 @@ function addDate() {
 }
 
 function getUsersList() {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "http://localhost:8080/Server/UserGradesController?dbName=" + sessionStorage.getItem('storename'), true);

@@ -36,12 +36,12 @@
 								<span class="sr-only">(current)</span>
 							</a>
 						</li>
-						<i class='material-icons permission' data-toggle="modal" data-target="#exampleModal" sytle="color:white">add_box</i>
+						<i class='material-icons permission' data-toggle="modal" data-target="#addModal" sytle="color:white">add_box</i>
 						<li class="nav-item">
 							<a class="nav-link" href="orders.html">Orders
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item reportNav">
 							<a class="nav-link" href="reports.html">Reports</a>
 						</li>
 						<li class="nav-item">
@@ -77,11 +77,11 @@
 		</tbody>
 	</table>
 
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Add user</h5>
+					<h5 class="modal-title" id="addModalLabel">Add user</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -144,11 +144,85 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary" onClick='addRow()'>Add</button>
-					<button type="button" class="btn btn-primary" onClick='editRow()'>Update</button>
-					<button type="button" class="btn btn-primary" onClick='deleteRow()'>Delete</button>
 				</div>
 				<div class="modal-footer">
 					<h6 id="error"></h6>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editModalLabel">Edit user</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="table table-hover">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">Edit User</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="edit-username" placeholder="username">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="edit-password" placeholder="password">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="edit-email" placeholder="email">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="form-group">
+										<label for="edit-grade">User Permission</label>
+										<select class="form-control" id="edit-grade">
+										</select>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="edit-name" placeholder="name">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="edit-age" placeholder="age">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="edit-address" placeholder="address">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" class="form-control" id="edit-id" placeholder="id">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" onClick='editRow()'>Update</button>
+					<button type="button" class="btn btn-primary" onClick='deleteRow()' data-dismiss="modal">Delete</button>
+				</div>
+				<div class="modal-footer">
+					<h6 id="error_edit"></h6>
 				</div>
 			</div>
 		</div>

@@ -3,7 +3,6 @@ package com.server.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,69 +14,105 @@ import com.google.gson.GsonBuilder;
 import com.server.dao.UsersDAO;
 import com.server.model.ErrorMessage;
 import com.server.model.Users;
+import com.server.util.SessionUtil;
 
 @WebServlet("/UsersController/*")
 public class UsersController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private UsersDAO usersDAO;
 
 	public UsersController() {
 		super();
+		usersDAO = new UsersDAO();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		if (request.getParameter("dbName") != null) {
-			response.setContentType("application/json");
-			response.getWriter().write(new Gson().toJson(UsersDAO.getAll(request.getParameter("dbName"))));
+		response.setContentType("application/json");
+		String dbName = request.getParameter("dbName");
+		if (dbName != null) {
+			usersDAO.setDbName(dbName);
+			response.getWriter().write(new Gson().toJson(usersDAO.getAll()));
 			response.getWriter().close();
 		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (request.getParameter("dbName") != null) {
-			response.addHeader("Access-Control-Allow-Origin", "*");
-			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-			String json = "";
-			if (br != null)
-				json = br.readLine();
-			Gson gson = new GsonBuilder().create();
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.setContentType("application/json");
+		String dbName = request.getParameter("dbName");
+		String session = request.getParameter("session");
+		if (session != null && SessionUtil.adminSessions.get(session) != null) {
+			if (dbName != null) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+				String json = "";
+				if (br != null)
+					json = br.readLine();
+				Gson gson = new GsonBuilder().create();
 
-			ErrorMessage result = UsersDAO.post(request.getParameter("dbName"), gson.fromJson(json, Users.class));
+				ErrorMessage result = usersDAO.post(gson.fromJson(json, Users.class));
 
-			response.getWriter().write(new Gson().toJson(result));
-			response.getWriter().close();
-		}
+				response.getWriter().write(new Gson().toJson(result));
+				response.getWriter().close();
+			}
+		}	else response.setStatus(401);
 	}
 
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		if (request.getParameter("dbName") != null) {
-			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-			String json = "";
-			if (br != null)
-				json = br.readLine();
-			Gson gson = new GsonBuilder().create();
+		response.setContentType("application/json");
+		String dbName = request.getParameter("dbName");
+		String session = request.getParameter("session");
+		if (session != null && SessionUtil.adminSessions.get(session) != null) {
+			if (dbName != null) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+				String json = "";
+				if (br != null)
+					json = br.readLine();
+				Gson gson = new GsonBuilder().create();
 
-			ErrorMessage result = UsersDAO.put(request.getParameter("dbName"), gson.fromJson(json, Users.class));
+				ErrorMessage result = usersDAO.put(gson.fromJson(json, Users.class));
 
-			response.getWriter().write(new Gson().toJson(result));
-			response.getWriter().close();
-		}
+				response.getWriter().write(new Gson().toJson(result));
+				response.getWriter().close();
+			}
+		} else response.setStatus(401);
 	}
 
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		if (request.getParameter("dbName") != null && request.getParameter("user") != null) {
-			
-			ErrorMessage result = UsersDAO.delete(request.getParameter("dbName"), request.getParameter("user"));
+		response.setContentType("application/json");
+		String dbName = request.getParameter("dbName");
+		String session = request.getParameter("session");
+		if (session != null && SessionUtil.adminSessions.get(session) != null) {
+			if (dbName != null) {
+				String user = request.getParameter("user");
+				if (user != null) {
+					ErrorMessage result = usersDAO.delete(user);
 
-			response.getWriter().write(new Gson().toJson(result));
-			response.getWriter().close();
-		}
+					response.getWriter().write(new Gson().toJson(result));
+					response.getWriter().close();
+				}
+			}
+		}else response.setStatus(401);
 	}
 
+	@Override
+	protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// setAccessControlHeaders(response);
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	private void setAccessControlHeaders(HttpServletResponse response) {
+		response.setHeader("Access-Control-Allow-Origin", "http://*:*");
+		response.setHeader("Access-Control-Allow-Methods", "GET");
+		response.setHeader("Access-Control-Allow-Methods", "POST");
+		response.setHeader("Access-Control-Allow-Methods", "PUT");
+		response.setHeader("Access-Control-Allow-Methods", "DELETE");
+	}
 }

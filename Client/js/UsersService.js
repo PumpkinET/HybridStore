@@ -3,6 +3,7 @@
 var tempIndex;
 
 function getAll() {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "http://localhost:8080/Server/UsersController?dbName=" + sessionStorage.getItem('storename'), true);
@@ -20,7 +21,7 @@ function getAll() {
                         "<td><span>" + obj[i].age + "</span></td>" +
                         "<td><span>" + obj[i].address + "</span></td>" +
                         "<td><span>" + obj[i].id + "</span></td>" +
-                        "<td><i class='material-icons permission' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td></tr>");
+                        "<td><i class='material-icons permission' data-toggle='modal' data-target='#editModal'>mode_edit</i></td></tr>");
                 }
             }
             else if (xhr.status === 0) {
@@ -34,9 +35,10 @@ function getAll() {
 }
 
 function deleteRow() {
+    $('#error_edit').html("");
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("DELETE", "http://localhost:8080/Server/UsersController?dbName=" + sessionStorage.getItem('storename') + "&user=" + $('#add-username').val(), true);
+        xhr.open("DELETE", "http://localhost:8080/Server/UsersController?session="+ sessionStorage.getItem('session')+"&dbName=" + sessionStorage.getItem('storename') + "&user=" + $('#edit-username').val(), true);
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
@@ -44,10 +46,13 @@ function deleteRow() {
                 if (obj.result == true) {
                     $('.targetRow:nth-child(' + tempIndex + ')').hide();
                 }
-                $('#error').html(obj.errorMessage);
+                $('#error_edit').html(obj.errorMessage);
+            }
+            else if (xhr.status === 401) {
+                alert('Unauthorized user!');
             }
             else if (xhr.status === 0) {
-                $('#error').html('Server is offline!');
+                $('#error_edit').html('Server is offline!');
             }
         }
         xhr.send();
@@ -57,9 +62,10 @@ function deleteRow() {
 }
 
 function addRow() {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:8080/Server/UsersController?dbName=" + sessionStorage.getItem('storename'), true);
+        xhr.open("POST", "http://localhost:8080/Server/UsersController?session="+ sessionStorage.getItem('session')+"&dbName=" + sessionStorage.getItem('storename'), true);
 
         var data = JSON.stringify({
             "username": $('#add-username').val(),
@@ -87,9 +93,12 @@ function addRow() {
                         "<td><span>" + res.age + "</span></td>" +
                         "<td><span>" + res.address + "</span></td>" +
                         "<td><span>" + res.id + "</span></td>" +
-                        "<td><i class='material-icons permission' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td></tr>");
+                        "<td><i class='material-icons permission' data-toggle='modal' data-target='#editModal'>mode_edit</i></td></tr>");
                 }
                 $('#error').html(obj.errorMessage);
+            }
+            else if (xhr.status === 401) {
+                alert('Unauthorized user!');
             }
             else if (xhr.status === 0) {
                 $('#error').html('Server is offline!');
@@ -103,19 +112,20 @@ function addRow() {
 }
 
 function editRow() {
+    $('#error_edit').html("");
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("PUT", "http://localhost:8080/Server/UsersController?dbName=" + sessionStorage.getItem('storename'), true);
+        xhr.open("PUT", "http://localhost:8080/Server/UsersController?session="+ sessionStorage.getItem('session')+"&dbName=" + sessionStorage.getItem('storename'), true);
 
         var data = JSON.stringify({
-            "username": $('#add-username').val(),
-            "password": $('#add-password').val(),
-            "email": $('#add-email').val(),
-            "grade": $('#add-grade').val(),
-            "name": $('#add-name').val(),
-            "age": $('#add-age').val(),
-            "address": $('#add-address').val(),
-            "id": $('#add-id').val()
+            "username": $('#edit-username').val(),
+            "password": $('#edit-password').val(),
+            "email": $('#edit-email').val(),
+            "grade": $('#edit-grade').val(),
+            "name": $('#edit-name').val(),
+            "age": $('#edit-age').val(),
+            "address": $('#edit-address').val(),
+            "id": $('#edit-id').val()
         });
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
@@ -131,10 +141,13 @@ function editRow() {
                     $('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(7)').html('<span>' + res.address + "</span>");
                     $('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(8)').html('<span>' + res.id + "</span>");
                 }
-                $('#error').html(obj.errorMessage);
+                $('#error_edit').html(obj.errorMessage);
+            }
+            else if (xhr.status === 401) {
+                alert('Unauthorized user!');
             }
             else if (xhr.status === 0) {
-                $('#error').html('Server is offline!');
+                $('#error_edit').html('Server is offline!');
             }
         }
         xhr.send(data);
@@ -144,6 +157,7 @@ function editRow() {
 }
 
 function getGrades() {
+    $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "http://localhost:8080/Server/GradesController?dbName=" + sessionStorage.getItem('storename'), true);
@@ -156,6 +170,7 @@ function getGrades() {
                     str += "<option value='" + obj[i].id + "'>" + obj[i].value + "</option>";
 
                 $('#add-grade').append(str);
+                $('#edit-grade').append(str);
             }
             else if (xhr.status === 0) {
                 $('#error').html('Server is offline!');
@@ -169,13 +184,13 @@ function getGrades() {
 $(document).ready(function () {
     $("#tbody .targetRow").click(function () {
         tempIndex = $(this).index() + 1;
-        $('#add-username').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(1) span').text());
-        $('#add-password').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(2) span').text());
-        $('#add-email').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(3) span').text());
-        $('#add-grade').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(4) span:nth-child(1)').text());
-        $('#add-name').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(5) span').text());
-        $('#add-age').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(6) span').text());
-        $('#add-address').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(7) span').text());
-        $('#add-id').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(8) span').text());
+        $('#edit-username').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(1) span').text());
+        $('#edit-password').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(2) span').text());
+        $('#edit-email').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(3) span').text());
+        $('#edit-grade').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(4) span:nth-child(1)').text());
+        $('#edit-name').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(5) span').text());
+        $('#edit-age').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(6) span').text());
+        $('#edit-address').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(7) span').text());
+        $('#edit-id').val($('#tbody .targetRow:nth-child(' + tempIndex + ') td:nth-child(8) span').text());
     });
 });

@@ -13,6 +13,20 @@ public class Order {
 	private int	status;
 	private java.sql.Date date;
 	public Order(String shopName, String shopThumbnail, String shopIp, String finalPrice, String streetAdd,
+			String country, String city, String postalcode, String items, int status) {
+		super();
+		this.shopName = shopName;
+		this.shopThumbnail = shopThumbnail;
+		this.shopIp = shopIp;
+		this.finalPrice = finalPrice;
+		this.streetAdd = streetAdd;
+		this.country = country;
+		this.city = city;
+		this.postalcode = postalcode;
+		this.items = items;
+		this.status = status;
+	}
+	public Order(String shopName, String shopThumbnail, String shopIp, String finalPrice, String streetAdd,
 			String country, String city, String postalcode, String items, int status, java.sql.Date date) {
 		super();
 		this.shopName = shopName;
