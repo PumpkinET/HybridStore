@@ -14,28 +14,32 @@ import com.server.model.Routine;
 import com.server.util.MySQLUtil;
 
 public class RoutineDAO {
-	private String dbName;
-	private Connection connection;
-	
+	private String dbName;// database name
+	private Connection connection;// sql connection
+
 	public String getDbName() {
 		return dbName;
 	}
-	
+
 	public Connection getConnection() throws ClassNotFoundException, SQLException {
 		setConnection(getDbName());
 		return connection;
 	}
-	
+
 	public void setDbName(String dbName) {
 		this.dbName = dbName;
 	}
-	
+
 	public void setConnection(String dbName) throws ClassNotFoundException, SQLException {
 		connection = MySQLUtil.getConnection(dbName);
 	}
-	
+
 	public RoutineDAO() {
 	}
+
+	/**
+	 * @return array list of all routine dates in database
+	 */
 	public List<Routine> getAll() {
 		List<Routine> temp = new ArrayList<Routine>();
 		try {
@@ -52,6 +56,11 @@ public class RoutineDAO {
 		return temp;
 	}
 
+	/**
+	 * @param routine
+	 *            to specify what routine to insert into the database
+	 * @return error message with results
+	 */
 	public ErrorMessage post(Routine routine) {
 		ErrorMessage result = new ErrorMessage(false, "");
 		try {
@@ -66,7 +75,7 @@ public class RoutineDAO {
 
 			result.setResult(stmt.executeUpdate() == 1);
 			result.setErrorMessage(CRUDMessages.add);
-			
+
 			stmt.close();
 			stmt.close();
 			getConnection().close();
@@ -77,6 +86,11 @@ public class RoutineDAO {
 		return result;
 	}
 
+	/**
+	 * @param routine
+	 *            to specify which routine to update from the database
+	 * @return error message with results
+	 */
 	public ErrorMessage put(Routine routine) {
 		ErrorMessage result = new ErrorMessage(false, "");
 		try {
@@ -88,10 +102,10 @@ public class RoutineDAO {
 			stmt.setString(3, routine.getTitle());
 			stmt.setString(4, routine.getStartDate());
 			stmt.setString(5, routine.getEndDate());
-			
+
 			result.setResult(stmt.executeUpdate() == 1);
 			result.setErrorMessage(CRUDMessages.update);
-			
+
 			stmt.close();
 			getConnection().close();
 		} catch (Exception e) {

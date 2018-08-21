@@ -15,6 +15,11 @@
 </head>
 
 <body>
+	<!-- 
+		Nav bar : 
+		Login
+		Create Store (current)
+	-->
 	<header>
 		<navbar>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -42,29 +47,40 @@
 			</nav>
 		</navbar>
 	</header>
-	<form action="javascript:void(0);">
+	<!-- 
+		Create store form :
+		store name
+		store owner
+		store thubmnail
+		store description
+		store ip
+		store category
+		custom sql fields
+		sql field type 
+	-->
+	<form name="createStoreForm" action="javascript:void(0);">
 		<fieldset>
 			<legend>Create store</legend>
 			<div class="form-group">
-				<input type="text" class="form-control" id="InputName" aria-describedby="nameHelp" placeholder="Enter store name">
+				<input name="name" type="text" class="form-control" id="InputName" aria-describedby="nameHelp" placeholder="Enter store name">
 				<small id="nameHelp" class="form-text text-muted">Store name
 					<span>(must be unique and creative)</span>
 				</small>
 			</div>
 			<div class="form-group">
-				<input type="text" class="form-control" id="InputOwner" aria-describedby="ownerHelp" placeholder="Enter owner name">
+				<input name="owner" type="text" class="form-control" id="InputOwner" aria-describedby="ownerHelp" placeholder="Enter owner name">
 				<small id="ownerHelp" class="form-text text-muted">Owner name</small>
 			</div>
 			<div class="form-group">
-				<input type="text" class="form-control" id="InputThumbnail" aria-describedby="thumbnailHelp" placeholder="Enter store thumbnail url">
+				<input name="thumbnail" type="text" class="form-control" id="InputThumbnail" aria-describedby="thumbnailHelp" placeholder="Enter store thumbnail url">
 				<small id="thumbnailHelp" class="form-text text-muted">Store Thumbnail</small>
 			</div>
 			<div class="form-group">
-				<input type="text" class="form-control" id="InputDescription" aria-describedby="descriptionHelp" placeholder="Enter store description">
+				<input name="description" type="text" class="form-control" id="InputDescription" aria-describedby="descriptionHelp" placeholder="Enter store description">
 				<small id="descriptionHelp" class="form-text text-muted">Store Description</small>
 			</div>
 			<div class="form-group">
-				<input type="text" class="form-control" id="InputIP" aria-describedby="ipHelp" placeholder="Enter ip address">
+				<input name="ip" type="text" class="form-control" id="InputIP" aria-describedby="ipHelp" placeholder="Enter ip address">
 				<small id="ipHelp" class="form-text text-muted">Contact your programmer for more information</small>
 			</div>
 			<div class="form-group">
@@ -98,7 +114,7 @@
 		<button type="submit" class="btn btn-primary" id="createStore">Create store</button>
 		<h6 id="error"></h6>
 	</form>
-	<script src="js/CreateStoreService.js"></script>
+	<script src="js/CreateStoreService.js"></script><!-- Create store service -->
 	<script>
 		window.addEventListener("load", getCategories(), false);
 	</script>

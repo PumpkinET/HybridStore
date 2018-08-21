@@ -20,6 +20,14 @@
 </head>
 
 <body>
+	<!-- 
+		Nav bar : 
+		Items
+		Users
+		Orders
+		Reports
+		Routine (current)
+	-->
 	<header>
 		<navbar>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -51,7 +59,7 @@
 							<a class="nav-link" href="routine.html">Routine</a>
 							<span class="sr-only">(current)</span>
 						</li>
-						<i class='material-icons permission' data-toggle="modal" data-target="#exampleModal" sytle="color:white">add_box</i>
+						<i class='material-icons permission' data-toggle="modal" data-target="#addModal" sytle="color:white">add_box</i>
 					</ul>
 					<ul class="navbar-nav">
 						<li class="nav-item">
@@ -62,14 +70,15 @@
 			</nav>
 		</navbar>
 	</header>
-	
+
 	<div id="chart_div"></div>
 
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<!-- Modal to add routine -->
+	<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Add routine</h5>
+					<h5 class="modal-title" id="addModalLabel">Add routine</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -123,7 +132,7 @@
 					<button type="button" class="btn btn-primary" onClick='addDate()'>Add</button>
 				</div>
 				<div class="modal-footer">
-					<h6 id="error"></h6>
+					<h6 id="error"></h6><!-- result message -->
 				</div>
 			</div>
 		</div>
@@ -133,7 +142,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
 	    crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
-		crossorigin="anonymous"></script>
+	    crossorigin="anonymous"></script>
 	<script src="js/logout.js"></script>
 	<script src="js/RoutineService.js"></script>
 	<script>

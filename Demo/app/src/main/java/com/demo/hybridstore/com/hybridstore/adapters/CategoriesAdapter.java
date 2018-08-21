@@ -47,15 +47,19 @@ public class CategoriesAdapter extends BaseAdapter implements Filterable {
             convertView = layoutInflater.inflate(R.layout.adapter_categories, null);
         }
         final Categories category = filList.get(position);
+
+        //initialize view ids
         final ImageView mCategoryThumbnail = (ImageView) convertView.findViewById(R.id.category_Thumbnail);
         final TextView mCategoryTitle = (TextView) convertView.findViewById(R.id.category_Title);
 
+        //set data to view
         Picasso.get().load(category.getCategoryThumbnail()).into(mCategoryThumbnail);
         mCategoryTitle.setText(category.getCategoryName());
 
         mCategoryThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //navigate to target shop
                 ShopsFragment fragment = new ShopsFragment();
                 fragment.setTargetCategory(category.getCategoryName());
                 android.support.v4.app.FragmentTransaction fragmentTransaction =
@@ -69,6 +73,7 @@ public class CategoriesAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public Filter getFilter() {
+        //filter results (search)
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {

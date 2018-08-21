@@ -15,6 +15,14 @@
 </head>
 
 <body>
+	<!-- 
+		Nav bar : 
+		Items
+		Users
+		Orders (current)
+		Reports
+		Routine
+	-->
 	<header>
 		<navbar>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -76,7 +84,7 @@
 		<tbody id="tbody_list">
 		</tbody>
 	</table>
-
+	<!-- Modal to update order status -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -139,7 +147,7 @@
 					<button type="button" class="btn btn-primary" onClick='invoice()'>Invoice</button>
 				</div>
 				<div class="modal-footer">
-					<h6 id="error"></h6>
+					<h6 id="error"></h6><!-- result message -->
 				</div>
 			</div>
 		</div>

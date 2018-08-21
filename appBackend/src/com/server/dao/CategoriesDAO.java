@@ -11,8 +11,8 @@ import com.server.model.Category;
 import com.server.util.MySQLUtil;
 
 public class CategoriesDAO {
-	private String dbName;
-	private Connection connection;
+	private String dbName;// database name
+	private Connection connection;// sql connection
 	
 	public String getDbName() {
 		return dbName;
@@ -29,11 +29,16 @@ public class CategoriesDAO {
 	
 	public CategoriesDAO() {
 		try {
-			connection = MySQLUtil.getConnection();
+			connection = MySQLUtil.getConnection();//initialize db connection
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 
+	 * @return array list of all categories in database
+	 */
 	public List<Category> getAll() {
 		List<Category> temp = new ArrayList<Category>();
 		try {

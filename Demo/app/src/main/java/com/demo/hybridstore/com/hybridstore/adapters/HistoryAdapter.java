@@ -46,6 +46,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.CardView
         public CardViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
 
+            //initialize view ids
             mSelected = itemView.findViewById(R.id.history_ItemSwitcher);
             mTitle = itemView.findViewById(R.id.history_Title);
             mImageView = itemView.findViewById(R.id.history_Thumbnail);
@@ -56,13 +57,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.CardView
             mPostalCode = itemView.findViewById(R.id.history_PostalCode);
             mShippingStatus = itemView.findViewById(R.id.history_ShippingStatus);
 
+            //on click listener
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
+                            listener.onItemClick(position);//current position
                         }
                     }
                 }
@@ -85,6 +87,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.CardView
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
         Order currentItem = mCardList.get(position);
+
+        //set data to view
 
         if (currentItem.getStatus() == 0) {
             holder.mSelected.setBackgroundColor(Color.parseColor("#e74c3c"));

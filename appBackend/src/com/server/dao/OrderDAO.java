@@ -1,6 +1,5 @@
 package com.server.dao;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,12 +9,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.server.android.OrderAndroid;
+import com.server.model.CRUDMessages;
+import com.server.model.ErrorMessage;
 import com.server.model.Order;
 import com.server.util.MySQLUtil;
 
 public class OrderDAO {
-	private String dbName;
-	private Connection connection;
+	private String dbName;// database name
+	private Connection connection;// sql connection
 	
 	public String getDbName() {
 		return dbName;
@@ -32,11 +33,20 @@ public class OrderDAO {
 	
 	public OrderDAO() {
 		try {
-			connection = MySQLUtil.getConnection();
+			connection = MySQLUtil.getConnection();//initialize db connection
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * 
+	 * @param shopName
+	 * @param startYear
+	 * @param endYear
+	 * @return case 1 : if startYear and endYear found then filter results in between
+	 * @return case 2 : if only startYear found, then filter result to the year
+	 * @return case 3 : return all orders to this shop
+	 */
 	public ArrayList<OrderAndroid> getOrderByShop(String shopName, String startYear, String endYear) {
 		ArrayList<OrderAndroid> orders = new ArrayList<OrderAndroid>();
 		try {
@@ -71,6 +81,11 @@ public class OrderDAO {
 		}
 		return orders;
 	}
+	
+	/**
+	 * @param email
+	 * @return all orders registered by email
+	 */
 	public ArrayList<Order> getOrder(String email) {
 		ArrayList<Order> orders = new ArrayList<Order>();
 		try {
@@ -91,6 +106,12 @@ public class OrderDAO {
 		return orders;
 	}
 
+	/**
+	 * update order status 
+	 * @param dbName
+	 * @param order
+	 * @return success or not
+	 */
 	public boolean put(String dbName, OrderAndroid order) {
 		boolean result = false;
 		try {
@@ -109,11 +130,17 @@ public class OrderDAO {
 		return result;
 	}
 
-	public void register_order(OrderAndroid order) throws IOException {
+	/**
+	 * register new order
+	 * @param order
+	 * @return error message with results
+	 */
+	public ErrorMessage register_order(OrderAndroid order) {
+		ErrorMessage result = new ErrorMessage(false, "");
 		try {
 			PreparedStatement stmt = getConnection().prepareStatement(
 					"INSERT INTO ORDERS(EMAIL, SHOPNAME, FIRSTNAME, LASTNAME, STREET_ADR, COUNTRY, CITY, POSTALCODE, TOTALPRICE, ITEMS, DATE) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
-
+			System.out.println(order.toString());
 			stmt.setString(1, order.getEmail());
 			stmt.setString(2, order.getShopName());
 			stmt.setString(3, order.getFirstName());
@@ -127,13 +154,17 @@ public class OrderDAO {
 			java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 			
 			stmt.setDate(11, date);
-			stmt.executeUpdate();
+			
+			result.setResult(stmt.executeUpdate() == 1);
+			result.setErrorMessage(CRUDMessages.add);
 
 			stmt.close();
 			getConnection().close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			result.setErrorMessage(e.toString());
 		}
+		return result;
 	}
 }

@@ -50,12 +50,15 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
             convertView = layoutInflater.inflate(R.layout.adapter_shop, null);
         }
         final Shop shop = filList.get(position);
+
+        //initialize view ids
         final ImageView mShopThumbnail = (ImageView) convertView.findViewById(R.id.shop_Thumbnail);
         final TextView mShopSubtitles = (TextView) convertView.findViewById(R.id.shop_Subtitles);
         final ImageButton mShopInfo = (ImageButton) convertView.findViewById(R.id.shop_Information);
         final ImageButton mShopHome = (ImageButton) convertView.findViewById(R.id.shop_Home);
         final ImageButton mShopLocation = (ImageButton) convertView.findViewById(R.id.shop_Location);
 
+        //set data to view
         mShopSubtitles.setText(shop.getShopName() + "\n" + shop.getShopDescription());
         Picasso.get().load(shop.getShopThumbnail()).into(mShopThumbnail);
 
@@ -66,6 +69,7 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
             }
         });
 
+        //open target shop
         mShopHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +83,7 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
             }
         });
 
+        //open google maps
         mShopLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +98,7 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public Filter getFilter() {
+        //filter results (search)
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {

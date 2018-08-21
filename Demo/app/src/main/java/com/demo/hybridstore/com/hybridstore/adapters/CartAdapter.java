@@ -49,31 +49,33 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder
         public CardViewHolder(View itemView, final OnItemClickListener listener, final OnItemLongClickListener listener2) {
             super(itemView);
 
+            //initialize view ids
             mTitle = itemView.findViewById(R.id.cart_Title);
             mImageView = itemView.findViewById(R.id.cart_Thumbnail);
             mPrice = itemView.findViewById(R.id.cart_Price);
 
-
+            //on long click listener
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
                     if (listener2 != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener2.onItemLongClick(position);
+                            listener2.onItemLongClick(position);//current position
                         }
                     }
                     return true;
                 }
             });
 
+            //on click listener
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
+                            listener.onItemClick(position);//current position
                         }
                     }
                 }
@@ -97,6 +99,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder
     public void onBindViewHolder(CardViewHolder holder, int position) {
         Cart currentItem = mCardList.get(position);
 
+        //set data to view
         holder.mTitle.setText(currentItem.getTitle());
         Picasso.get().load(currentItem.getImageResource()).into(holder.mImageView);
         holder.mPrice.setText(currentItem.getPrice() + "₪");

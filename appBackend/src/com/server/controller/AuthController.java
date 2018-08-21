@@ -21,27 +21,36 @@ import com.server.util.SessionUtil;
 public class AuthController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private AuthDAO authDAO;
+
 	public AuthController() {
 		super();
+		// initialize daos
 		authDAO = new AuthDAO();
 	}
 
+	/**
+	 * post username and password information to login 
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
+		response.setContentType("application/json");//specify return content
+		
+		//read buffer and convert it to the correct model (class)
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		String json = "";
 		if (reader != null)
 			json = reader.readLine();
 		Gson gson = new GsonBuilder().create();
 		LoginAndroid login = gson.fromJson(json, LoginAndroid.class);
+		
 		Login loginObj = authDAO.login(login);
 		if (loginObj == null) {
-			response.setStatus(403);
+			response.setStatus(403);// HTTP.FORBDDEN status code
 		} else {
 			String session = request.getSession().getId();
-			Login secured = new Login(loginObj.getEmail(), loginObj.getPassword(), loginObj.getAvatar(), loginObj.getName(), session);
+			Login secured = new Login(loginObj.getEmail(), loginObj.getPassword(), loginObj.getAvatar(),
+					loginObj.getName(), session);
 			SessionUtil.sessions.put(session, secured);
 			response.getWriter().write(new Gson().toJson(secured));
 			response.getWriter().close();

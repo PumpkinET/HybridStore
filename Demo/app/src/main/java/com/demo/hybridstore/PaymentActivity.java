@@ -15,6 +15,7 @@ import com.hybridstore.app.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -46,10 +47,10 @@ public class PaymentActivity extends AppCompatActivity {
 
         email.setText(Auth.email);
         Bundle b = getIntent().getExtras();
-        final float id = b.getFloat("finalPrice");
+        final float price = b.getFloat("finalPrice");
         final String shopName = b.getString("shopName");
-        eShopName.setText(shopName + "₪");
-        totalPrice.setText(id + "");
+        eShopName.setText(shopName);
+        totalPrice.setText(price + "₪");
 
         for(int i = 0; i<CartActivity.card.size(); i++) {
             items += CartActivity.card.get(i).getId()+ ",";
@@ -68,7 +69,7 @@ public class PaymentActivity extends AppCompatActivity {
                             country.getText().toString(),
                             city.getText().toString(),
                             postalCode.getText().toString(),
-                            id+"",
+                            price+"",
                             items
                     );
             }
@@ -83,13 +84,8 @@ public class PaymentActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            BufferedReader reader = null;
-            BufferedWriter writer = null;
             try {
-                URL url = new URL("http://" + Config.ip + ":8080/appBackend/OrderController");
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("POST");
-
+                URL url = new URL("http://" + Config.ip + ":8080/appBackend/OrderController?session="+Auth.session);
                 JSONObject jObj = new JSONObject();
                 jObj.put("email",        params[0]);
                 jObj.put("shopName",     params[1]);
@@ -101,12 +97,18 @@ public class PaymentActivity extends AppCompatActivity {
                 jObj.put("postalCode",   params[7]);
                 jObj.put("totalPrice",   params[8]);
                 jObj.put("items",        params[9]);
-                OutputStream os = urlConnection.getOutputStream();
-                writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setDoOutput(true);
+                urlConnection.setDoInput(true);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setFixedLengthStreamingMode(jObj.toString().getBytes().length);
+                urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
                 writer.write(jObj.toString());
                 writer.flush();
                 writer.close();
-
+                out.close();
                 urlConnection.connect();
                 int statusCode = urlConnection.getResponseCode();
             } catch (IOException e) {

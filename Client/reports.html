@@ -15,6 +15,14 @@
 </head>
 
 <body>
+	<!-- 
+		Nav bar : 
+		Items
+		Users
+		Orders
+		Reports (current)
+		Routine
+	-->
 	<header>
 		<navbar>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -56,6 +64,7 @@
 			</nav>
 		</navbar>
 	</header>
+	<!-- Form to filter pie report by dates -->
 	<form action="javascript:void(0);">
 		<fieldset>
 			<legend>Total Items per order(s)</legend>
@@ -71,6 +80,7 @@
 		<button type="submit" class="btn btn-primary" onClick='pie()'>Filter</button>
 	</form>
 	<div id="pie_div"></div>
+	<!-- Form to filter line report by dates -->
 	<form action="javascript:void(0);">
 		<fieldset>
 			<legend>Total Items per order(s)</legend>

@@ -24,31 +24,42 @@ public class RoutineController extends HttpServlet {
 
 	public RoutineController() {
 		super();
+		//initialize daos
 		routineDAO = new RoutineDAO();
 	}
-
+	/**
+	 * get routine 
+	 * parameter dbName : specify database name
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
+		response.setContentType("application/json");//specify return content
+		
 		String dbName = request.getParameter("dbName");
 		if (dbName != null) {
-			routineDAO.setDbName(dbName);
+			routineDAO.setDbName(dbName);//initialize db connection
+			
 			response.getWriter().write(new Gson().toJson(routineDAO.getAll()));
 			response.getWriter().close();
 		}
-		else response.setStatus(401);
+		else response.setStatus(401);//HTTP.UNAUTHORIZED status
 	}
-
+	/**
+	 * parameter session : specify session to identify current user
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
-		String dbName = request.getParameter("dbName");
+		response.setContentType("application/json");//specify return content
+		
 		String session = request.getParameter("session");
 		if (session != null && SessionUtil.adminSessions.get(session) != null) {
+			String dbName = SessionUtil.adminSessions.get(session).getDbName();
 			if (dbName != null) {
-				routineDAO.setDbName(dbName);
+				routineDAO.setDbName(dbName);//initialize db connection
+				
+				//read buffer and convert it to the correct model (class)
 				BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 				String json = "";
 				if (br != null)
@@ -61,18 +72,23 @@ public class RoutineController extends HttpServlet {
 				response.getWriter().close();
 			}
 		}
-		else response.setStatus(401);
+		else response.setStatus(401);//HTTP.UNAUTHORIZED status
 	}
-
+	/**
+	 * parameter session : specify session to identify current user
+	 */
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
-		String dbName = request.getParameter("dbName");
+		response.setContentType("application/json");//specify return content
+		
 		String session = request.getParameter("session");
 		if (session != null && SessionUtil.adminSessions.get(session) != null) {
+			String dbName = SessionUtil.adminSessions.get(session).getDbName();
 			if (dbName != null) {
-				routineDAO.setDbName(dbName);
+				routineDAO.setDbName(dbName);//initialize db connection
+				
+				//read buffer and convert it to the correct model (class)
 				BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 				String json = "";
 				if (br != null)
@@ -85,14 +101,14 @@ public class RoutineController extends HttpServlet {
 				response.getWriter().close();
 			}
 		}
-		else response.setStatus(401);
+		else response.setStatus(401);//HTTP.UNAUTHORIZED status
 	}
 
 	@Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// setAccessControlHeaders(response);
-		response.setStatus(HttpServletResponse.SC_OK);
+		setAccessControlHeaders(response);
+		response.setStatus(HttpServletResponse.SC_OK);//HTTP.OK status
 	}
 
 	private void setAccessControlHeaders(HttpServletResponse response) {

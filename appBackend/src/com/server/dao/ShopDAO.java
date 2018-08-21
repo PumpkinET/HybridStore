@@ -12,8 +12,8 @@ import com.server.model.Shop;
 import com.server.util.MySQLUtil;
 
 public class ShopDAO {
-	private String dbName;
-	private Connection connection;
+	private String dbName;// database name
+	private Connection connection;// sql connection
 	
 	public String getDbName() {
 		return dbName;
@@ -30,11 +30,16 @@ public class ShopDAO {
 	
 	public ShopDAO() {
 		try {
-			connection = MySQLUtil.getConnection();
+			connection = MySQLUtil.getConnection();//initialize db connection
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * @param category
+	 * @return array list of filtered items by category
+	 */
 	public List<Shop> getAll(String category) {
 		List<Shop> temp = new ArrayList<Shop>();
 		try {

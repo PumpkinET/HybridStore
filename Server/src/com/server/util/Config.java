@@ -6,7 +6,17 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Config {
+	/*
+	 * this class is used to parse jdbc information from config.ini
+	 * file struct : 
+	 * URL;jdbc:mysql://localhost:3306/
+	 * username;root
+	 * password;4a5awhat
+	 */
 	static boolean read = false;
+	/*
+	 * single ton design pattern (read once)
+	 */
 	public static boolean parseConfig() {
 		if (read == false) {
 			String fileName = "C:\\config.ini";

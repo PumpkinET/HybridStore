@@ -19,15 +19,22 @@ import com.server.model.Shop;
 public class ShopController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ShopDAO shopDAO;
+
 	public ShopController() {
 		super();
+		// initialize daos
 		shopDAO = new ShopDAO();
 	}
 
+	/**
+	 * get categories
+	 * parameter category : specify category
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
+		response.setContentType("application/json");//specify return content
+		
 		String cat = request.getParameter("category");
 		if (cat == null)
 			response.getWriter().write(new Gson().toJson(shopDAO.getAll("All")));
@@ -36,6 +43,9 @@ public class ShopController extends HttpServlet {
 		response.getWriter().close();
 	}
 
+	/**
+	 * create new store
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 

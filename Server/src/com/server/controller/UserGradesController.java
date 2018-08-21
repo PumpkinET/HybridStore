@@ -17,16 +17,22 @@ public class UserGradesController extends HttpServlet {
 	private UsersDAO usersDAO;
 	public UserGradesController() {
 		super();
+		//initialize daos
 		usersDAO = new UsersDAO();
 	}
-
+	/**
+	 * get all usersname with different grades
+	 * parameter dbName : specify database name
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
+		response.setContentType("application/json");//specify return content
+		
 		String dbName = request.getParameter("dbName");
 		if (dbName != null) {
-			usersDAO.setDbName(dbName);
+			usersDAO.setDbName(dbName);//initialize db connection
+			
 			response.getWriter().write(new Gson().toJson(usersDAO.getUsersList()));
 			response.getWriter().close();
 		}
@@ -35,8 +41,8 @@ public class UserGradesController extends HttpServlet {
 	@Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//setAccessControlHeaders(response);
-		response.setStatus(HttpServletResponse.SC_OK);
+		setAccessControlHeaders(response);
+		response.setStatus(HttpServletResponse.SC_OK);//HTTP.OK status
 	}
 
 	private void setAccessControlHeaders(HttpServletResponse response) {

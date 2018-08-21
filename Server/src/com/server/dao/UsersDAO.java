@@ -15,8 +15,8 @@ import com.server.model.Users;
 import com.server.util.MySQLUtil;
 
 public class UsersDAO {
-	private String dbName;
-	private Connection connection;
+	private String dbName;// database name
+	private Connection connection;// sql connection
 
 	public String getDbName() {
 		return dbName;
@@ -38,6 +38,11 @@ public class UsersDAO {
 	public UsersDAO() {
 	}
 
+	/**
+	 * @param username
+	 *            to specify which user to select in the database
+	 * @return object of user details
+	 */
 	public Users get(String username) {
 		Users temp = null;
 		try {
@@ -57,6 +62,9 @@ public class UsersDAO {
 		return temp;
 	}
 
+	/**
+	 * @return list of all the users in the database
+	 */
 	public List<Users> getAll() {
 		List<Users> temp = new ArrayList<Users>();
 		try {
@@ -74,6 +82,11 @@ public class UsersDAO {
 		return temp;
 	}
 
+	/**
+	 * @param user
+	 *            to specify what user to insert into the database
+	 * @return error message with results
+	 */
 	public ErrorMessage post(Users user) {
 		ErrorMessage result = new ErrorMessage(false, "");
 		try {
@@ -101,6 +114,11 @@ public class UsersDAO {
 		return result;
 	}
 
+	/**
+	 * @param user
+	 *            to specify which user to update in the database
+	 * @return error message with results
+	 */
 	public ErrorMessage put(Users user) {
 		ErrorMessage result = new ErrorMessage(false, "");
 		try {
@@ -128,6 +146,11 @@ public class UsersDAO {
 		return result;
 	}
 
+	/**
+	 * @param username
+	 *            to specify which user to delete from the database
+	 * @return error message with results
+	 */
 	public ErrorMessage delete(String username) {
 		ErrorMessage result = new ErrorMessage(false, "");
 		try {
@@ -146,6 +169,10 @@ public class UsersDAO {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @return array list of all the users select only username and grade
+	 */
 	public ArrayList<UserGrades> getUsersList() {
 		ArrayList<UserGrades> users = new ArrayList<UserGrades>();
 		try {

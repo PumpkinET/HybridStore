@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $("#logout").click(function () {
-        sessionStorage.removeItem("user_info");
+        sessionStorage.removeItem("user_info");//remove details
         window.location = "index.html";
     });
     if (sessionStorage.getItem("user_info") == null) {
@@ -10,9 +10,9 @@ $(document).ready(function () {
 
     var user = JSON.parse(sessionStorage.getItem('user_info'));
     if(user.grade == 0) {
-        $(".permission").hide();
+        $(".permission").hide();//hide create, add and edit functions to the regular user
     }
     if(user.grade != 2) {
-        $(".reportNav").hide();
+        $(".reportNav").hide();//hide report for regular and adminstrator user
     }
 });

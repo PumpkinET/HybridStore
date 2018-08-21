@@ -1,6 +1,20 @@
-var lastRow = 1;
 filter = [];
 
+function validateAddRoutine() {
+    let res = true;
+    var check = $("#add-title").val()
+    if (check == "") {
+        $('#error').append("<div>Title must be filled out</div>");
+        res = false;
+    }
+    return res;
+}
+
+/**
+ * this function is used to get all the routine dates
+ * status 200 : get success
+ * status 0 : offline server
+ */
 function getAll() {
     $('#error').html("");
     try {
@@ -18,8 +32,7 @@ function getAll() {
                     });
                 }
                 render();
-            }
-            else if (xhr.status === 0) {
+            } else if (xhr.status === 0) {
                 alert('Server is offline!');
             }
         }
@@ -29,6 +42,9 @@ function getAll() {
     }
 }
 
+/**
+ * this function is used to render the calendar
+ */
 function render() {
     $(document).ready(function () {
         $('#calendar').fullCalendar({
@@ -47,46 +63,57 @@ function render() {
     });
 }
 
+/**
+ * this function is used to add date
+ * status 200 : add success
+ * status 401 : unauthorized user
+ * status 0 : offline server
+ */
 function addDate() {
     $('#error').html("");
-    try {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:8080/Server/RoutineController?session="+ sessionStorage.getItem('session')+"&dbName=" + sessionStorage.getItem('storename'), true);
+    if (validateAddRoutine() == true) {
+        try {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:8080/Server/RoutineController?session=" + sessionStorage.getItem('session'), true);
 
-        var data = JSON.stringify({
-            "adminuser": $('#add-adminuser').val(),
-            "targetuser": $('#add-targetuser').val(),
-            "title": $('#add-title').val(),
-            "startDate": $('#add-start-date').val(),
-            "endDate": $('#add-end-date').val()
-        });
+            var data = JSON.stringify({
+                "adminuser": $('#add-adminuser').val(),
+                "targetuser": $('#add-targetuser').val(),
+                "title": $('#add-title').val(),
+                "startDate": $('#add-start-date').val(),
+                "endDate": $('#add-end-date').val()
+            });
 
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var obj = JSON.parse(xhr.responseText);
-                if (obj.result == true) {
-                    filter.push({
-                        title: "[" + $('#add-targetuser').val() + "] " + $('#add-title').val(),
-                        start: $('#add-start-date').val(),
-                        end: $('#add-end-date').val()
-                    });
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var obj = JSON.parse(xhr.responseText);
+                    if (obj.result == true) {
+                        filter.push({
+                            title: "[" + $('#add-targetuser').val() + "] " + $('#add-title').val(),
+                            start: $('#add-start-date').val(),
+                            end: $('#add-end-date').val()
+                        });
+                    }
+                    $('#error').html(obj.errorMessage);
+                } else if (xhr.status === 401) {
+                    alert('Unauthorized user!');
+                } else if (xhr.status === 0) {
+                    $('#error').html('Server is offline!');
                 }
-                $('#error').html(obj.errorMessage);
             }
-            else if (xhr.status === 401) {
-                alert('Unauthorized user!');
-            }
-            else if (xhr.status === 0) {
-                $('#error').html('Server is offline!');
-            }
-        }
 
-        xhr.send(data);
-    } catch (exception) {
-        alert("Request failed");
+            xhr.send(data);
+        } catch (exception) {
+            alert("Request failed");
+        }
     }
 }
 
+/**
+ * this function is used to get all the users in the store (username, grade)
+ * status 200 : get success
+ * status 0 : offline server
+ */
 function getUsersList() {
     $('#error').html("");
     try {
@@ -107,8 +134,7 @@ function getUsersList() {
 
                 $('#add-adminuser').append(admin);
                 $('#add-targetuser').append(all);
-            }
-            else if (xhr.status === 0) {
+            } else if (xhr.status === 0) {
                 $('#error').html('Server is offline!');
             }
         }

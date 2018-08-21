@@ -2,6 +2,26 @@
 var doc = new jsPDF();
 var tempIndex;
 
+function validateInvoice() {
+    let res = true;
+    var check = $("#add-invoice-company").val()
+    if (check == "") {
+        $('#error').append("<div>Invoice company must be filled out</div>");
+        res = false;
+    }
+    var check = $("#add-invoice-number").val()
+    if (check == "") {
+        $('#error').append("<div>Invoice number must be filled out</div>");
+        res = false;
+    }
+    return res;
+}
+
+/**
+ * this function is used to get all orders from application database
+ * status 200 : get success
+ * status 0 : offline server
+ */
 function getAll() {
     $('#error').html("");
     try {
@@ -27,8 +47,7 @@ function getAll() {
                         "<td><span>" + obj[i].date + "</span></td>" +
                         "<td><i class='material-icons' data-toggle='modal' data-target='#exampleModal'>mode_edit</i></td></tr></tr>");
                 }
-            }
-            else if (xhr.status === 0) {
+            } else if (xhr.status === 0) {
                 alert('Server is offline!');
             }
         }
@@ -38,6 +57,11 @@ function getAll() {
     }
 }
 
+/**
+ * this function is used to edit order (update statuts)
+ * status 200 : edit success
+ * status 0 : offline server
+ */
 function editRow() {
     $('#error').html("");
     try {
@@ -56,8 +80,7 @@ function editRow() {
                     $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(11)').html('<span>' + $('#add-status option:selected').text() + "</span>");
                     $('#error').html("Succesfully updated!");
                 }
-            }
-            else if (xhr.status === 0) {
+            } else if (xhr.status === 0) {
                 $('#error').html('Server is offline!');
             }
         }
@@ -68,11 +91,19 @@ function editRow() {
     }
 }
 
+/**
+ * this function is used to get items selection details
+ * used to generate invoice
+ * doc parameter : pdf document
+ * itemsString parameter : items selection
+ * status 200 : get success
+ * status 0 : offline server
+ */
 function getItems(doc, itemsString) {
     $('#error').html("");
     try {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename') +"&filter=true&items="+itemsString, true);
+        xhr.open("GET", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename') + "&filter=true&items=" + itemsString, true);
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
@@ -80,12 +111,11 @@ function getItems(doc, itemsString) {
                 var obj = JSON.parse(xhr.responseText);
                 for (var i = 0; i < obj.length; i++) {
                     doc.text(20, lastY, obj[i].title);
-                    doc.text(200, lastY, obj[i].price,null, null, 'right');
-                    lastY+= 10;
+                    doc.text(200, lastY, obj[i].price, null, null, 'right');
+                    lastY += 10;
                 }
-                doc.save($('#add-invoice-company').val() + "-" +$('#add-invoice-number').val());
-            }
-            else if (xhr.status === 0) {
+                doc.save($('#add-invoice-company').val() + "-" + $('#add-invoice-number').val());
+            } else if (xhr.status === 0) {
                 alert('Server is offline!');
             }
         }
@@ -94,24 +124,29 @@ function getItems(doc, itemsString) {
         alert("Request failed");
     }
 }
+/**
+ * this function is used to generate invoice pdf
+ */
 function invoice() {
-    doc.setFontType("bold");
-    doc.text(105, 10, 'Company name : ' + $('#add-invoice-company').val(), null, null, 'center');
-    doc.text(105, 20, 'Invoice number : ' + $('#add-invoice-number').val(), null, null, 'center');
-    doc.setFontType("normal");
-    doc.text(105, 30, ('Email : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(2) span').text()), null, null, 'center');
-    doc.text(105, 40, ('First name : ' +$('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(3) span').text()), null, null, 'center');
-    doc.text(105, 50, ('Last name : ' +$('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(4) span').text()), null, null, 'center');
-    doc.text(105, 60, ('Street address : ' +$('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(5) span').text()), null, null, 'center');
-    doc.text(105, 70, ('Country : ' +$('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(6) span').text()), null, null, 'center');
-    doc.text(105, 80, ('City : ' +$('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(7) span').text()), null, null, 'center');
-    doc.text(105, 90, ('Postal code : ' +$('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(8) span').text()), null, null, 'center');
-    doc.setFontType("bold");
-    doc.text(105, 100, ('Total price : ' +$('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(9) span').text() + " N.I.S."), null, null, 'center');
-    
-    var itemsString = $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(10) span:nth-child(1)').text();
-    getItems(doc, itemsString);
- 
+    $('#error').html('');
+    if (validateInvoice() == true) {
+        doc.setFontType("bold");
+        doc.text(105, 10, 'Company name : ' + $('#add-invoice-company').val(), null, null, 'center');
+        doc.text(105, 20, 'Invoice number : ' + $('#add-invoice-number').val(), null, null, 'center');
+        doc.setFontType("normal");
+        doc.text(105, 30, ('Email : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(2) span').text()), null, null, 'center');
+        doc.text(105, 40, ('First name : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(3) span').text()), null, null, 'center');
+        doc.text(105, 50, ('Last name : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(4) span').text()), null, null, 'center');
+        doc.text(105, 60, ('Street address : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(5) span').text()), null, null, 'center');
+        doc.text(105, 70, ('Country : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(6) span').text()), null, null, 'center');
+        doc.text(105, 80, ('City : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(7) span').text()), null, null, 'center');
+        doc.text(105, 90, ('Postal code : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(8) span').text()), null, null, 'center');
+        doc.setFontType("bold");
+        doc.text(105, 100, ('Total price : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(9) span').text() + " N.I.S."), null, null, 'center');
+
+        var itemsString = $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(10) span:nth-child(1)').text();
+        getItems(doc, itemsString);
+    }
 }
 
 $(document).ready(function () {

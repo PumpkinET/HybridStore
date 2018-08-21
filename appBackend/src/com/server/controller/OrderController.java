@@ -20,32 +20,53 @@ import com.server.util.SessionUtil;
 public class OrderController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private OrderDAO orderDAO;
+
 	public OrderController() {
 		super();
+		// initialize daos
 		orderDAO = new OrderDAO();
 	}
 
+	/**
+	 * get all orders by session
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
+		response.setContentType("application/json");// specify return content
+
 		String session = request.getParameter("session");
-		if (SessionUtil.sessions.get(session).getEmail() != null) {
+		if (session != null && SessionUtil.sessions.get(session) != null) {
 			response.getWriter()
 					.write(new Gson().toJson(orderDAO.getOrder(SessionUtil.sessions.get(session).getEmail())));
 			response.getWriter().close();
-		}
+		} else
+			response.setStatus(401);// HTTP.UNAUTHORIZED status
 	}
 
+	/**
+	 * post new order
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-		String json = "";
-		if (br != null)
-			json = br.readLine();
-		Gson gson = new GsonBuilder().create();
-		orderDAO.register_order(gson.fromJson(json, OrderAndroid.class));
+		response.setContentType("application/json");// specify return content
+
+		String session = request.getParameter("session");
+		System.out.println(session);
+		if (session != null && SessionUtil.sessions.get(session) != null) {
+			
+			// read buffer and convert it to the correct model (class)
+			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+			String json = "";
+			if (br != null)
+				json = br.readLine(); 
+			Gson gson = new GsonBuilder().create();  
+			OrderAndroid order = gson.fromJson(json, OrderAndroid.class);
+			System.out.println(order.toString());
+			orderDAO.register_order(gson.fromJson(json, OrderAndroid.class));
+		} else
+			response.setStatus(401);// HTTP.UNAUTHORIZED status  
 	}
 
 }

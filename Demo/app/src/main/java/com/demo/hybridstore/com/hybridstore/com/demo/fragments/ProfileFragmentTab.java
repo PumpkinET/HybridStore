@@ -130,7 +130,7 @@ public class ProfileFragmentTab extends Fragment {
                 jsonObject.put("imageString", encodedImage);
 
                 String data = jsonObject.toString();
-                URL url = new URL("http://" + Config.ip + ":8080/appBackend/SignupController");
+                URL url = new URL("http://" + Config.ip + ":8080/appBackend/SignupController?session=" + Auth.session);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);
                 connection.setDoInput(true);

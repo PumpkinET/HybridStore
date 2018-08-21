@@ -16,6 +16,14 @@
 </head>
 
 <body>
+	<!-- 
+		Nav bar : 
+		Items (current)
+		Users
+		Orders
+		Reports
+		Routine
+	-->
 	<header>
 		<navbar>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -68,7 +76,7 @@
 
 		</tbody>
 	</table>
-
+	<!-- Modal to add item -->
 	<div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -94,12 +102,12 @@
 					<button type="button" class="btn btn-primary" onClick='addRow()'>Add</button>
 				</div>
 				<div class="modal-footer">
-					<h6 id="error"></h6>
+					<h6 id="error"></h6><!-- result message -->
 				</div>
 			</div>
 		</div>
 	</div>
-
+	<!-- Modal to edit item -->
 	<div class="modal fade" id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="editItemLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -123,10 +131,10 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary" onClick='editRow()'>Update</button>
-					<button type="button" class="btn btn-primary" onClick='deleteRow()' data-dismiss="modal">Delete</button>	
+					<button type="button" class="btn btn-primary" onClick='deleteRow()' data-dismiss="modal">Delete</button>
 				</div>
 				<div class="modal-footer">
-					<h6 id="error_edit"></h6>
+					<h6 id="error_edit"></h6><!-- result message -->
 				</div>
 			</div>
 		</div>

@@ -1,10 +1,5 @@
 package com.demo.hybridstore.com.hybridstore.com.demo.fragments;
 
-/**
- * Created by Dell Latitude on 11/05/2018.
- */
-
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -55,6 +50,7 @@ public class CategoriesFragment extends Fragment {
         new CategoriesAsyncer().execute();
         gridview = (GridView) rootView.findViewById(R.id.categoriesGridView);
         EditText filter_categories = (EditText) rootView.findViewById(R.id.filter_categories);
+
         filter_categories.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -78,7 +74,6 @@ public class CategoriesFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             BufferedReader reader = null;
-            BufferedWriter writer = null;
             try {
                 URL url = new URL("http://" + Config.ip + ":8080/appBackend/CategoriesController");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

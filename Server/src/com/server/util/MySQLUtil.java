@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MySQLUtil {
+	/*
+	 * this class is used to open and get SQL connection
+	 */
 	private static Connection connection = null;
 	public static String URL;
 	public static String username;

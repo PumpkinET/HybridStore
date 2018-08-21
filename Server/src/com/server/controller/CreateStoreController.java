@@ -30,12 +30,17 @@ public class CreateStoreController extends HttpServlet {
 
 	public CreateStoreController() {
 		super();
+		// initialize daos
 		createStoreDAO = new CreateStoreDAO();
 	}
 
+	/**
+	 * post new store
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		// read buffer and convert it to the correct model (class)
 		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		String json = "";
 		if (br != null)
@@ -43,6 +48,7 @@ public class CreateStoreController extends HttpServlet {
 		Gson gson = new GsonBuilder().create();
 		CreateStore store = gson.fromJson(json, CreateStore.class);
 
+		// register store in application server
 		URL url = new URL("http://10.0.0.21:8080/appBackend/ShopController");
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("POST");
@@ -64,15 +70,16 @@ public class CreateStoreController extends HttpServlet {
 
 		conn.connect();
 		int statusCode = conn.getResponseCode();
-
-		createStoreDAO.createItemsTable(store);
+		if (statusCode == 200) {// HTTP.OK
+			createStoreDAO.createItemsTable(store);
+		}
 	}
 
 	@Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//setAccessControlHeaders(response);
-		response.setStatus(HttpServletResponse.SC_OK);
+		setAccessControlHeaders(response);
+		response.setStatus(HttpServletResponse.SC_OK);// HTTP.OK status
 	}
 
 	private void setAccessControlHeaders(HttpServletResponse response) {

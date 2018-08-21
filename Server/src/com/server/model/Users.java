@@ -11,6 +11,8 @@ public class Users {
 	String id;
 	String value;
 	String session;
+	String dbName;
+	
 	public Users(String username, String password, String email, int grade, String name, int age, String address,
 			String id) {
 		super();
@@ -113,6 +115,12 @@ public class Users {
 	}
 	public void setSession(String session) {
 		this.session = session;
+	}
+	public String getDbName() {
+		return dbName;
+	}
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
 	}
 	@Override
 	public String toString() {

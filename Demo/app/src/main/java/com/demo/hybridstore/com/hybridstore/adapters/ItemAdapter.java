@@ -51,34 +51,35 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CardViewHolder
         public CardViewHolder(View itemView, final OnItemClickListener listener, final OnItemLongClickListener listener2) {
             super(itemView);
 
+            //initialize view ids
             mSelected = itemView.findViewById(R.id.item_Switcher);
             mTitle = itemView.findViewById(R.id.item_Title);
             mImageView = itemView.findViewById(R.id.item_Thumbnail);
             mDescription = itemView.findViewById(R.id.item_Description);
             mPrice = itemView.findViewById(R.id.item_Price);
 
-
+            //on long click listener
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
                     if (listener2 != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener2.onItemLongClick(position);
+                            listener2.onItemLongClick(position);//current position
                         }
                     }
                     return true;
                 }
             });
 
+            //on click listener
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-
+                            listener.onItemClick(position);//current position
                         }
                     }
                 }
@@ -102,6 +103,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.CardViewHolder
     public void onBindViewHolder(CardViewHolder holder, int position) {
         Item currentItem = mCardList.get(position);
 
+        //set data to view
         if (currentItem.getColor() != null) {
             int color = Color.parseColor(currentItem.getColor());
             holder.mSelected.setBackgroundColor(color);

@@ -23,29 +23,40 @@ public class UsersController extends HttpServlet {
 
 	public UsersController() {
 		super();
+		//initialize daos
 		usersDAO = new UsersDAO();
 	}
-
+	/**
+	 * get all users
+	 * parameter dbName : specify database name
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
+		response.setContentType("application/json");//specify return content
+		
 		String dbName = request.getParameter("dbName");
 		if (dbName != null) {
-			usersDAO.setDbName(dbName);
+			usersDAO.setDbName(dbName);//initialize db connection
+			
 			response.getWriter().write(new Gson().toJson(usersDAO.getAll()));
 			response.getWriter().close();
 		}
 	}
-
+	/**
+	 * parameter session : specify session to identify current user
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
-		String dbName = request.getParameter("dbName");
+		response.setContentType("application/json");//specify return content
 		String session = request.getParameter("session");
 		if (session != null && SessionUtil.adminSessions.get(session) != null) {
+			String dbName = SessionUtil.adminSessions.get(session).getDbName();
 			if (dbName != null) {
+				usersDAO.setDbName(dbName);//initialize db connection
+
+				//read buffer and convert it to the correct model (class)
 				BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 				String json = "";
 				if (br != null)
@@ -57,17 +68,23 @@ public class UsersController extends HttpServlet {
 				response.getWriter().write(new Gson().toJson(result));
 				response.getWriter().close();
 			}
-		}	else response.setStatus(401);
+		}	else response.setStatus(401);//HTTP.UNAUTHORIZED status
 	}
-
+	/**
+	 * parameter session : specify session to identify current user
+	 */
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
-		String dbName = request.getParameter("dbName");
+		response.setContentType("application/json");//specify return content
+		
 		String session = request.getParameter("session");
 		if (session != null && SessionUtil.adminSessions.get(session) != null) {
+			String dbName = SessionUtil.adminSessions.get(session).getDbName();
 			if (dbName != null) {
+				usersDAO.setDbName(dbName);//initialize db connection
+				
+				//read buffer and convert it to the correct model (class)
 				BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 				String json = "";
 				if (br != null)
@@ -79,33 +96,38 @@ public class UsersController extends HttpServlet {
 				response.getWriter().write(new Gson().toJson(result));
 				response.getWriter().close();
 			}
-		} else response.setStatus(401);
+		} else response.setStatus(401);//HTTP.UNAUTHORIZED status
 	}
-
+	/**
+	 * parameter session : specify session to identify current user
+	 * parameter item : specify which item to delete
+	 */
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
-		String dbName = request.getParameter("dbName");
+		response.setContentType("application/json");//specify return content
+		
 		String session = request.getParameter("session");
 		if (session != null && SessionUtil.adminSessions.get(session) != null) {
+			String dbName = SessionUtil.adminSessions.get(session).getDbName();
 			if (dbName != null) {
+				usersDAO.setDbName(dbName);//initialize db connection
+				
 				String user = request.getParameter("user");
 				if (user != null) {
 					ErrorMessage result = usersDAO.delete(user);
-
 					response.getWriter().write(new Gson().toJson(result));
 					response.getWriter().close();
 				}
 			}
-		}else response.setStatus(401);
+		}else response.setStatus(401);//HTTP.UNAUTHORIZED status
 	}
 
 	@Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// setAccessControlHeaders(response);
-		response.setStatus(HttpServletResponse.SC_OK);
+		setAccessControlHeaders(response);
+		response.setStatus(HttpServletResponse.SC_OK);//HTTP.OK status
 	}
 
 	private void setAccessControlHeaders(HttpServletResponse response) {

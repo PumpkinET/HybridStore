@@ -19,53 +19,69 @@ import com.server.model.Users;
 import com.server.util.SessionUtil;
 
 @WebServlet("/AuthController")
+
 public class AuthController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
 	private AuthDAO authDAO;
 	private UsersDAO usersDAO;
+
 	public AuthController() {
 		super();
+		// initialize daos
 		authDAO = new AuthDAO();
 		usersDAO = new UsersDAO();
 	}
+
+	/**
+	 * post username and password information to login 
+	 * parameter dbName : specify database name
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setContentType("application/json");
+		response.setContentType("application/json");// specify return content
 		String dbName = request.getParameter("dbName");
 		if (dbName != null) {
-			authDAO.setDbName(dbName); 
-			usersDAO.setDbName(dbName);
+			authDAO.setDbName(dbName);// initialize db connection
+			usersDAO.setDbName(dbName);// initialize db connection
+
+			// read buffer and convert it to the correct model (class)
 			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 			String json = "";
 			if (br != null)
 				json = br.readLine();
 			Gson gson = new GsonBuilder().create();
 			Login login = gson.fromJson(json, Login.class);
+
 			boolean result = authDAO.login(login);
 			if (result == false)
-				response.setStatus(403);
+				response.setStatus(403);// HTTP.FORBDDEN status code
 			else {
-				
+
 				String session = request.getSession().getId();
 				Users user = usersDAO.get(login.getUsername());
-				
-				if(user.getGrade() != 0)
+
+				if (user.getGrade() != 0)// save admin/owner session
 					SessionUtil.adminSessions.put(session, user);
-				
-				SessionUtil.sessions.put(session, user);
+
+				SessionUtil.sessions.put(session, user);// save user session
 				user.setSession(session);
-				response.getWriter().write(new Gson().toJson(user));
+				user.setDbName(dbName);//store database name for future requests
+				response.getWriter().write(new Gson().toJson(user));// return profile object with session details
 				response.getWriter().close();
 			}
 		}
 	}
-	
+
+	/**
+	 * set HTTP options
+	 */
 	@Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//setAccessControlHeaders(response);
-		response.setStatus(HttpServletResponse.SC_OK);
+		setAccessControlHeaders(response);
+		response.setStatus(HttpServletResponse.SC_OK);// HTTP.OK status
 	}
 
 	private void setAccessControlHeaders(HttpServletResponse response) {
