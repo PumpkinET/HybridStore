@@ -61,6 +61,7 @@ public class LoginFragment extends Fragment {
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(validate(username, password) == true)
                 new LoginAsyncer().execute(username.getText().toString(), password.getText().toString());
             }
         });
@@ -75,6 +76,21 @@ public class LoginFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    public boolean validate(EditText email, EditText password) {
+        boolean res = true;
+        if (email.getText().toString().length() == 0) {
+            email.setError("Email must be filled out");
+            email.requestFocus();
+            res = false;
+        }
+        if (password.getText().toString().length() == 0) {
+            password.setError("Password must be filled out");
+            password.requestFocus();
+            res = false;
+        }
+        return res;
     }
 
     public class LoginAsyncer extends AsyncTask<String, Void, String> {

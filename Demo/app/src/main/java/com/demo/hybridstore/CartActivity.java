@@ -6,10 +6,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.demo.hybridstore.com.hybridstore.adapters.CartAdapter;
+import com.demo.hybridstore.com.hybridstore.com.demo.fragments.TargetShopFragment;
 import com.demo.hybridstore.com.hybridstore.model.Auth;
 import com.demo.hybridstore.com.hybridstore.model.Cart;
 import com.hybridstore.app.R;
@@ -46,8 +48,9 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(int position) {
                 totalPriceValue -= card.get(position).getPrice();
-                card.remove(position);
-                mAdapter.notifyDataSetChanged();
+                removeFromCart(card.get(position));
+                //card.remove(position);
+                //mAdapter.notifyDataSetChanged();
                 return true;
             }
         });
@@ -89,6 +92,12 @@ public class CartActivity extends AppCompatActivity {
     }
 
     public static void removeFromCart(Cart cart) {
+        for (int i = 0; i < TargetShopFragment.card.size(); i++) {
+            if (TargetShopFragment.card.get(i).getId() == cart.getId()) {
+                TargetShopFragment.card.get(i).resetColor();
+            }
+        }
+        TargetShopFragment.mAdapter.notifyDataSetChanged();
         for (int i = 0; i < card.size(); i++) {
             if (card.get(i).getTitle().equals(cart.getTitle())) {
                 card.remove(i);

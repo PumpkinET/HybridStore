@@ -86,12 +86,28 @@ public class ProfileFragmentTab extends Fragment {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ProfileAsyncer().execute(password.getText().toString(), name.getText().toString());
+                if(validate(password, name) == true)
+                    new ProfileAsyncer().execute(password.getText().toString(), name.getText().toString());
             }
         });
 
         return rootView;
 
+    }
+
+    public boolean validate(EditText password, EditText name) {
+        boolean res = true;
+        if (password.getText().toString().length() == 0) {
+            password.setError("Password must be filled out");
+            password.requestFocus();
+            res = false;
+        }
+        if (name.getText().toString().length() == 0) {
+            name.setError("Name must be filled out");
+            name.requestFocus();
+            res = false;
+        }
+        return res;
     }
 
     @Override

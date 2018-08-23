@@ -1,6 +1,8 @@
 package com.demo.hybridstore.com.hybridstore.model;
 
 
+import com.demo.hybridstore.CartActivity;
+
 public class Cart {
     private String id;
     private String title;

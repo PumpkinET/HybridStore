@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demo.hybridstore.CartActivity;
+import com.demo.hybridstore.com.hybridstore.model.Cart;
 import com.hybridstore.app.R;
 import com.demo.hybridstore.com.hybridstore.adapters.ItemAdapter;
 import com.demo.hybridstore.com.hybridstore.model.Item;
@@ -37,12 +38,12 @@ import java.util.Arrays;
 public class TargetShopFragment extends Fragment {
 
     private RecyclerView mRecycleView;
-    private ItemAdapter mAdapter;
+    public static ItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View mViewCard;
     View rootView;
     Shop shop;
-
+    public static ArrayList<Item> card;
     public TargetShopFragment() {
     }
 
@@ -138,8 +139,8 @@ public class TargetShopFragment extends Fragment {
             mRecycleView = rootView.findViewById(R.id.recycleviewer);
             mRecycleView.setHasFixedSize(true);
             mLayoutManager = new LinearLayoutManager(rootView.getContext());
+            TargetShopFragment.card = new ArrayList<Item>(Arrays.asList(item));
 
-            final ArrayList<Item> card = new ArrayList<Item>(Arrays.asList(item));
             for (int i = 0; i < card.size(); i++) {
                 card.get(i).resetColor();
             }

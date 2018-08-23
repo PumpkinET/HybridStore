@@ -72,13 +72,33 @@ public class SignupFragment extends Fragment {
         bSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new RegisterAsyncer().execute(email.getText().toString(), password.getText().toString(), name.getText().toString());
+                if(validate(email, password, name) == true)
+                    new RegisterAsyncer().execute(email.getText().toString(), password.getText().toString(), name.getText().toString());
             }
         });
 
         return rootView;
     }
 
+    public boolean validate(EditText email, EditText password, EditText name) {
+        boolean res = true;
+        if (email.getText().toString().length() == 0) {
+            email.setError("Email must be filled out");
+            email.requestFocus();
+            res = false;
+        }
+        if (password.getText().toString().length() == 0) {
+            password.setError("Password must be filled out");
+            password.requestFocus();
+            res = false;
+        }
+        if (name.getText().toString().length() == 0) {
+            name.setError("Name must be filled out");
+            name.requestFocus();
+            res = false;
+        }
+        return res;
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {

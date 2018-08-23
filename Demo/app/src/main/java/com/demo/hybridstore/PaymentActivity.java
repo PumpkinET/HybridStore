@@ -59,25 +59,56 @@ public class PaymentActivity extends AppCompatActivity {
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                    new OrderAsyncer().execute(
-                            email.getText().toString(),
-                            shopName,
-                            firstname.getText().toString(),
-                            lasttime.getText().toString(),
-                            streetadd.getText().toString(),
-                            country.getText().toString(),
-                            city.getText().toString(),
-                            postalCode.getText().toString(),
-                            price+"",
-                            items
-                    );
+                    if(validate(firstname, lasttime, streetadd, country, city, postalCode) == true)
+                        new OrderAsyncer().execute(
+                                email.getText().toString(),
+                                shopName,
+                                firstname.getText().toString(),
+                                lasttime.getText().toString(),
+                                streetadd.getText().toString(),
+                                country.getText().toString(),
+                                city.getText().toString(),
+                                postalCode.getText().toString(),
+                                price+"",
+                                items
+                        );
             }
         });
-
-
     }
-
+    public boolean validate(EditText firstName, EditText lastName, EditText streetAdd, EditText country, EditText city, EditText postalCode) {
+        boolean res = true;
+        if(firstName.getText().toString().length() == 0) {
+            firstName.setError("First name must be filled out");
+            firstName.requestFocus();
+            res = false;
+        }
+        if(lastName.getText().toString().length() == 0) {
+            lastName.setError("Last name must be filled out");
+            lastName.requestFocus();
+            res = false;
+        }
+        if(streetAdd.getText().toString().length() == 0) {
+            streetAdd.setError("Street Address must be filled out");
+            streetAdd.requestFocus();
+            res = false;
+        }
+        if(country.getText().toString().length() == 0) {
+            country.setError("Country must be filled out");
+            country.requestFocus();
+            res = false;
+        }
+        if(city.getText().toString().length() == 0) {
+            city.setError("City must be filled out");
+            city.requestFocus();
+            res = false;
+        }
+        if(postalCode.getText().toString().length() == 0) {
+            postalCode.setError("Postal code must be filled out");
+            postalCode.requestFocus();
+            res = false;
+        }
+        return res;
+    }
     public class OrderAsyncer extends AsyncTask<String, Void, String> {
         public void onPreExecute() {
         }
