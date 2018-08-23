@@ -51,7 +51,7 @@ public class ShopDAO {
 				rs = stmt.executeQuery("SELECT * FROM SHOP WHERE CATEGORY='" + category + "'");
 			while (rs.next())
 				temp.add(new Shop(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getString(6)));
+						rs.getString(6), rs.getString(7), rs.getString(8)));
 			stmt.close();
 			getConnection().close();
 		} catch (Exception e) {

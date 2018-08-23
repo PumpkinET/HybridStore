@@ -61,7 +61,9 @@ public class CreateStoreController extends HttpServlet {
 		jObj.put("shopDescription", store.getDescription());
 		jObj.put("shopIp", store.getIp());
 		jObj.put("shopCategory", store.getCategory());
-
+		jObj.put("shopPhone", store.getPhone());
+		jObj.put("shopAddress", store.getAddress());
+		
 		OutputStream os = conn.getOutputStream();
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 		writer.write(jObj.toString());

@@ -6,6 +6,11 @@ $(document).ready(function () {
     document.getElementById('add-end-date').valueAsDate = new Date();
 });
 
+/**
+ * this function is used to generate pie chart based on filter date
+ * status 200 : get success
+ * status 0 : offline server
+ */
 function pie() {
     var start = $('#add-start-date').val();
     var end = $('#add-end-date').val();
@@ -122,7 +127,11 @@ function pie() {
         }
     }
 }
-
+/**
+ * this function is used to generate line chart based on target year
+ * status 200 : get success
+ * status 0 : offline server
+ */
 function line() {
     google.charts.load('current', {
         packages: ['corechart']

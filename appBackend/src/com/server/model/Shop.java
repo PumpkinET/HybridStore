@@ -7,9 +7,11 @@ public class Shop {
 	private String shopDescription;
 	private String shopIp;
 	private String shopCategory;
-
+	private String shopPhone;
+	private String shopAddress;
+	
 	public Shop(String shopName, String shopOwner, String shopThumbnail, String shopDescription, String shopIp,
-			String shopCategory) {
+			String shopCategory, String shopPhone, String shopAddress) {
 		super();
 		this.shopName = shopName;
 		this.shopOwner = shopOwner;
@@ -17,6 +19,8 @@ public class Shop {
 		this.shopDescription = shopDescription;
 		this.shopIp = shopIp;
 		this.shopCategory = shopCategory;
+		this.shopPhone = shopPhone;
+		this.shopAddress = shopAddress;
 	}
 
 	public String getShopName() {
@@ -67,10 +71,26 @@ public class Shop {
 		this.shopIp = shopIp;
 	}
 
+	public String getShopPhone() {
+		return shopPhone;
+	}
+
+	public void setShopPhone(String shopPhone) {
+		this.shopPhone = shopPhone;
+	}
+
+	public String getShopAddress() {
+		return shopAddress;
+	}
+
+	public void setShopAddress(String shopAddress) {
+		this.shopAddress = shopAddress;
+	}
+
 	@Override
 	public String toString() {
 		return "Shop [shopName=" + shopName + ", shopOwner=" + shopOwner + ", shopThumbnail=" + shopThumbnail
-				+ ", shopDescription=" + shopDescription + ", shopIp=" + shopIp + "]";
+				+ ", shopDescription=" + shopDescription + ", shopIp=" + shopIp + ", shopCategory=" + shopCategory
+				+ ", shopPhone=" + shopPhone + ", shopAddress=" + shopAddress + "]";
 	}
-
 }

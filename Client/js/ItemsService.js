@@ -1,7 +1,5 @@
 'use strict';
 
-
-
 class AddItem {
     constructor(column, value) {
         this.column = column;

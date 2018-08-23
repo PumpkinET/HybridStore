@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CategoriesFragment extends Fragment {
-
     View rootView;
     GridView gridview;
     CategoriesAdapter categoriesAdapter;

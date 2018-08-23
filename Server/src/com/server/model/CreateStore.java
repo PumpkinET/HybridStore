@@ -10,9 +10,11 @@ public class CreateStore {
 	private String ip;
 	private String category;
 	private Fields[] fields;
-
+	private String phone;
+	private String address;
+	
 	public CreateStore(String storeName, String ownerName, String thumbnail, String description, String ip,
-			String category, Fields[] fields) {
+			String category, Fields[] fields, String phone, String address) {
 		super();
 		this.storeName = storeName;
 		this.ownerName = ownerName;
@@ -21,6 +23,8 @@ public class CreateStore {
 		this.ip = ip;
 		this.category = category;
 		this.fields = fields;
+		this.phone = phone;
+		this.address = address;
 	}
 
 	public String getStoreName() {
@@ -79,11 +83,28 @@ public class CreateStore {
 		this.fields = fields;
 	}
 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	@Override
 	public String toString() {
 		return "CreateStore [storeName=" + storeName + ", ownerName=" + ownerName + ", thumbnail=" + thumbnail
 				+ ", description=" + description + ", ip=" + ip + ", category=" + category + ", fields="
-				+ Arrays.toString(fields) + "]";
+				+ Arrays.toString(fields) + ", phone=" + phone + ", address=" + address + "]";
 	}
 
+	
 }

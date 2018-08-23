@@ -27,10 +27,20 @@ function validateForm() {
         $('#error').append("<div>IP must be filled out</div>");
         res = false;
     }
+    var check = document.forms["createStoreForm"]["phone"].value;
+    if (check == "") {
+        $('#error').append("<div>Phone must be filled out</div>");
+        res = false;
+    }
+    var check = document.forms["createStoreForm"]["shopaddress"].value;
+    if (check == "") {
+        $('#error').append("<div>Shop address must be filled out</div>");
+        res = false;
+    }
     return res;
 }
 class CreateStore {
-    constructor(storeName, ownerName, thumbnail, description, ip, category, fields = []) {
+    constructor(storeName, ownerName, thumbnail, description, ip, category, fields = [], phone, address) {
         this.storeName = storeName;
         this.ownerName = ownerName;
         this.thumbnail = thumbnail;
@@ -38,6 +48,8 @@ class CreateStore {
         this.ip = ip;
         this.category = category;
         this.fields = fields;
+        this.phone = phone;
+        this.address = address;
     }
 }
 $(document).ready(function () {
@@ -87,12 +99,6 @@ $(document).ready(function () {
      */
     function addField() {
         if (fieldInput != null) {
-            // if ($('#primaryKey').is(":checked")) {
-            //     $('form ul').append("<li class='list-group-item'><span class='material-icons left'>vpn_key</span>" + fieldInput + "<span class='badge badge-danger badge-pill right'>X</span></li>");
-            //     $('#primaryKey').prop('checked', false);
-            //     $('#primaryKeyDiv').hide();
-            //      data.push(new CreateStore($('#InputName').val(), $('#InputOwner').val(), fieldInput, $('#fieldType').val(), true));
-            // } else {
             $('form ul').append("<li class='list-group-item'>" + fieldInput + " <span class='badge badge-danger badge-pill right'>X</span></li>");
             data.fields.push({
                 name: fieldInput,
@@ -130,6 +136,8 @@ $(document).ready(function () {
                 data.thumbnail = $('#InputThumbnail').val();
                 data.description = $('#InputDescription').val();
                 data.ip = $('#InputIP').val();
+                data.phone = $('#InputPhone').val();
+                data.shopAddress = $('#InputShopAddress').val();
                 data.category = $('#exampleFormControlSelect1').val();
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {

@@ -51,11 +51,12 @@
             android:gravity="center" />
 
         <ImageButton
+            android:id="@+id/shop_PhoneNumber"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_columnWeight="1"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/ic_menu_star"
+            android:background="@drawable/ic_menu_call"
             android:gravity="center" />
 
         <TextView
@@ -88,7 +89,7 @@
             android:layout_columnWeight="1"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:text="Favorite" />
+            android:text="Call" />
 
     </GridLayout>
 

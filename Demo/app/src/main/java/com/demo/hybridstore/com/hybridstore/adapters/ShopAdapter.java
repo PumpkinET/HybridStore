@@ -1,9 +1,14 @@
 package com.demo.hybridstore.com.hybridstore.adapters;
 
+import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +62,7 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
         final ImageButton mShopInfo = (ImageButton) convertView.findViewById(R.id.shop_Information);
         final ImageButton mShopHome = (ImageButton) convertView.findViewById(R.id.shop_Home);
         final ImageButton mShopLocation = (ImageButton) convertView.findViewById(R.id.shop_Location);
+        final ImageButton mShopPhoneNumber = (ImageButton) convertView.findViewById(R.id.shop_PhoneNumber);
 
         //set data to view
         mShopSubtitles.setText(shop.getShopName() + "\n" + shop.getShopDescription());
@@ -84,15 +90,39 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
         });
 
         //open google maps
+        //open waze
         mShopLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri gmmIntentUri = Uri.parse("google.streetview:cbll=46.414382,10.013988");
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                v.getContext().startActivity(mapIntent);
+//                Uri gmmIntentUri = Uri.parse("google.streetview:cbll=32.705933,35.325703");
+//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//                mapIntent.setPackage("com.google.android.apps.maps");
+//                v.getContext().startActivity(mapIntent);
+                try
+                {
+                    String url = "https://waze.com/ul?q="+shop.getShopAddress();
+                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( url ) );
+                    v.getContext().startActivity( intent );
+                }
+                catch ( ActivityNotFoundException ex  )
+                {
+                    // If Waze is not installed, open it in Google Play:
+                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "market://details?id=com.waze" ) );
+                    v.getContext().startActivity(intent);
+                }
             }
         });
+
+        //open call activity
+        mShopPhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:"+shop.getShopPhone()));
+                v.getContext().startActivity(callIntent);
+            }
+        });
+
         return convertView;
     }
 
