@@ -32,6 +32,7 @@ public class ShopsFragment extends Fragment {
 
     View rootView;
     GridView gridview;
+    EditText filter_shops;
     ShopAdapter shopsAdapter;
     String category;
 
@@ -46,11 +47,17 @@ public class ShopsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_shops, container, false);
+
+        //update side menu and title
         getActivity().setTitle("Shops");
         ((MainActivity) getActivity()).updateMenu(R.id.nav_shops);
+
         new ShopAsycner().execute();
+
+        //initialize view ids
         gridview = (GridView) rootView.findViewById(R.id.shopsGridView);
-        EditText filter_shops = (EditText) rootView.findViewById(R.id.filter_shops);
+        filter_shops = (EditText) rootView.findViewById(R.id.filter_shops);
+
         filter_shops.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -70,7 +77,11 @@ public class ShopsFragment extends Fragment {
         return rootView;
     }
 
-
+    /**
+     * this function is used to shops
+     * status 200 : get success
+     * status 0 : offline server
+     */
     public class ShopAsycner extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {

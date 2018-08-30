@@ -14,9 +14,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.demo.hybridstore.AddressActivity;
+import com.demo.hybridstore.MainActivity;
 import com.demo.hybridstore.com.hybridstore.model.Auth;
 import com.demo.hybridstore.com.hybridstore.model.Config;
+import com.demo.hybridstore.com.hybridstore.model.ErrorMessage;
 import com.demo.hybridstore.com.hybridstore.model.Login;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -48,8 +52,8 @@ public class ProfileFragmentTab extends Fragment {
     String encodedImage;
     JSONObject jsonObject;
     Uri selectedImage;
-    EditText email, password, name;
-    Button update;
+    EditText email, password;
+    Button update, shippingaddress;
 
     public ProfileFragmentTab() {
     }
@@ -60,21 +64,20 @@ public class ProfileFragmentTab extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_profile_tab, container, false);
 
+        //initialize view ids
         img = (ImageView) rootView.findViewById(R.id.updateProfileAvatar);
         email = (EditText) rootView.findViewById(R.id.updateProfileEmail);
         password = (EditText) rootView.findViewById(R.id.updateProfilePassword);
-        name = (EditText) rootView.findViewById(R.id.updateProfileName);
+        shippingaddress = (Button) rootView.findViewById(R.id.updateProfileShippingAddress);
         update = (Button) rootView.findViewById(R.id.updateProfileButton);
 
-        Picasso
-                .get()
+        Picasso.get()
                 .load(Auth.avatar)
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .into(img);
 
         email.setText(Auth.email);
         password.setText(Auth.password);
-        name.setText(Auth.name);
 
         img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,8 +89,15 @@ public class ProfileFragmentTab extends Fragment {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validate(password, name) == true)
-                    new ProfileAsyncer().execute(password.getText().toString(), name.getText().toString());
+                if (validate(password) == true)
+                    new ProfileAsyncer().execute(password.getText().toString());
+            }
+        });
+        shippingaddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddressActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -95,21 +105,17 @@ public class ProfileFragmentTab extends Fragment {
 
     }
 
-    public boolean validate(EditText password, EditText name) {
+    public boolean validate(EditText password) {
         boolean res = true;
         if (password.getText().toString().length() == 0) {
             password.setError("Password must be filled out");
             password.requestFocus();
             res = false;
         }
-        if (name.getText().toString().length() == 0) {
-            name.setError("Name must be filled out");
-            name.requestFocus();
-            res = false;
-        }
         return res;
     }
 
+    //open gallery activity to select photo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -132,12 +138,19 @@ public class ProfileFragmentTab extends Fragment {
         }
     }
 
+    /**
+     * this function is used to update profile
+     * status 200 : update success
+     * status 401 : unauthorized user
+     * status 0 : offline server
+     */
     public class ProfileAsyncer extends AsyncTask<String, String, String> {
         public void onPreExecute() {
         }
 
         @Override
         protected String doInBackground(String... params) {
+            BufferedReader reader = null;
             try {
                 jsonObject = new JSONObject();
                 jsonObject.put("email", Auth.email);
@@ -163,6 +176,11 @@ public class ProfileFragmentTab extends Fragment {
 
                 int statusCode = connection.getResponseCode();
                 if (statusCode == 200) {
+                    InputStream stream = connection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(stream));
+                    return reader.readLine();
+                } else if (statusCode == 401) {
+                    return "401";
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -174,7 +192,22 @@ public class ProfileFragmentTab extends Fragment {
 
         @Override
         public void onPostExecute(String result) {
+            if (result != null) {
+                if (result.equals("401")) {
+                    Toast.makeText(getActivity(), "Login first!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Gson gs = new GsonBuilder().create();
+                    ErrorMessage res = gs.fromJson(result, ErrorMessage.class);
+                    if (res.isResult() == true) {
+                        Toast.makeText(getActivity(), res.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                        //reset cart
+                        //erja3 la bara
+                    } else {
+                        Toast.makeText(getActivity(), res.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
         }
-    }
 
+    }
 }

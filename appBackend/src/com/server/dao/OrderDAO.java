@@ -56,24 +56,24 @@ public class OrderDAO {
 			if(startYear != null && endYear != null)
 			{
 				rs = stmt.executeQuery(
-						"SELECT ORDERS.ID, ORDERS.EMAIL, ORDERS.SHOPNAME, ORDERS.FIRSTNAME, ORDERS.LASTNAME, ORDERS.STREET_ADR, ORDERS.COUNTRY, ORDERS.CITY, ORDERS.POSTALCODE, ORDERS.TOTALPRICE, ORDERS.ITEMS, ORDERS.STATUS, STATUS.VALUE, ORDERS.DATE FROM ORDERS INNER JOIN STATUS ON ORDERS.STATUS = STATUS.ID  WHERE SHOPNAME='"
+						"SELECT ORDERS.ID, ORDERS.EMAIL, ORDERS.SHOPNAME, ORDERS.FULLNAME, ORDERS.STREET_ADR, ORDERS.COUNTRY, ORDERS.CITY, ORDERS.POSTALCODE, ORDERS.TOTALPRICE, ORDERS.ITEMS, ORDERS.STATUS, STATUS.VALUE, ORDERS.DATE, ORDERS.PHONENUMBER FROM ORDERS INNER JOIN STATUS ON ORDERS.STATUS = STATUS.ID  WHERE SHOPNAME='"
 								+ shopName + "' AND ORDERS.DATE BETWEEN '" + startYear + "' AND '" + endYear +"'");
 			}
 			else if(startYear != null && endYear == null) {
 				rs = stmt.executeQuery(
-						"SELECT ORDERS.ID, ORDERS.EMAIL, ORDERS.SHOPNAME, ORDERS.FIRSTNAME, ORDERS.LASTNAME, ORDERS.STREET_ADR, ORDERS.COUNTRY, ORDERS.CITY, ORDERS.POSTALCODE, ORDERS.TOTALPRICE, ORDERS.ITEMS, ORDERS.STATUS, STATUS.VALUE, ORDERS.DATE FROM ORDERS INNER JOIN STATUS ON ORDERS.STATUS = STATUS.ID  WHERE SHOPNAME='"
+						"SELECT ORDERS.ID, ORDERS.EMAIL, ORDERS.SHOPNAME, ORDERS.FULLNAME, ORDERS.STREET_ADR, ORDERS.COUNTRY, ORDERS.CITY, ORDERS.POSTALCODE, ORDERS.TOTALPRICE, ORDERS.ITEMS, ORDERS.STATUS, STATUS.VALUE, ORDERS.DATE, ORDERS.PHONENUMBER FROM ORDERS INNER JOIN STATUS ON ORDERS.STATUS = STATUS.ID  WHERE SHOPNAME='"
 								+ shopName + "' AND ORDERS.DATE BETWEEN '" + startYear + "-1-1' AND '" + startYear +"-12-31'");
 			}
 			else
 				rs = stmt.executeQuery(
-						"SELECT ORDERS.ID, ORDERS.EMAIL, ORDERS.SHOPNAME, ORDERS.FIRSTNAME, ORDERS.LASTNAME, ORDERS.STREET_ADR, ORDERS.COUNTRY, ORDERS.CITY, ORDERS.POSTALCODE, ORDERS.TOTALPRICE, ORDERS.ITEMS, ORDERS.STATUS, STATUS.VALUE, ORDERS.DATE FROM ORDERS INNER JOIN STATUS ON ORDERS.STATUS = STATUS.ID  WHERE SHOPNAME='"
+						"SELECT ORDERS.ID, ORDERS.EMAIL, ORDERS.SHOPNAME, ORDERS.FULLNAME, ORDERS.STREET_ADR, ORDERS.COUNTRY, ORDERS.CITY, ORDERS.POSTALCODE, ORDERS.TOTALPRICE, ORDERS.ITEMS, ORDERS.STATUS, STATUS.VALUE, ORDERS.DATE, ORDERS.PHONENUMBER FROM ORDERS INNER JOIN STATUS ON ORDERS.STATUS = STATUS.ID  WHERE SHOPNAME='"
 								+ shopName + "'");
 				
 				
 			while (rs.next()) {
-				orders.add(new OrderAndroid(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
-						rs.getString(10), rs.getString(11), rs.getInt(12), rs.getString(13), rs.getDate(14)));
+				orders.add(new OrderAndroid(rs.getString(1), rs.getString(2), rs.getString(3),
+						rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
+						rs.getFloat(9), rs.getString(10), rs.getInt(11), rs.getString(12), rs.getDate(13), rs.getString(14)));
 			}
 			getConnection().close();
 		} catch (Exception e) {
@@ -91,13 +91,13 @@ public class OrderDAO {
 		try {
 			Statement stmt = getConnection().createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT SHOP.SHOPNAME, SHOP.SHOPTHUMBNAIL, SHOP.SHOPIP, ORDERS.TOTALPRICE, ORDERS.STREET_ADR, ORDERS.COUNTRY, ORDERS.CITY, ORDERS.POSTALCODE, ORDERS.ITEMS, ORDERS.STATUS  FROM ORDERS INNER JOIN SHOP ON  ORDERS.SHOPNAME = SHOP.SHOPNAME WHERE ORDERS.EMAIL='"
+					"SELECT SHOP.SHOPNAME, SHOP.SHOPTHUMBNAIL, SHOP.SHOPIP, ORDERS.TOTALPRICE, ORDERS.STREET_ADR, ORDERS.COUNTRY, ORDERS.CITY, ORDERS.POSTALCODE, ORDERS.ITEMS, ORDERS.STATUS, ORDERS.PHONENUMBER  FROM ORDERS INNER JOIN SHOP ON  ORDERS.SHOPNAME = SHOP.SHOPNAME WHERE ORDERS.EMAIL='"
 							+ email + "'");
 
 			while (rs.next()) {
 				orders.add(
-						new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-								rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getInt(10)));
+						new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getFloat(4), rs.getString(5),
+								rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getInt(10), rs.getString(11)));
 			}
 			getConnection().close();
 		} catch (Exception e) {
@@ -139,21 +139,20 @@ public class OrderDAO {
 		ErrorMessage result = new ErrorMessage(false, "");
 		try {
 			PreparedStatement stmt = getConnection().prepareStatement(
-					"INSERT INTO ORDERS(EMAIL, SHOPNAME, FIRSTNAME, LASTNAME, STREET_ADR, COUNTRY, CITY, POSTALCODE, TOTALPRICE, ITEMS, DATE) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+					"INSERT INTO ORDERS(EMAIL, SHOPNAME, FULLNAME, STREET_ADR, COUNTRY, CITY, POSTALCODE, TOTALPRICE, ITEMS, DATE, PHONENUMBER) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
 			System.out.println(order.toString());
 			stmt.setString(1, order.getEmail());
 			stmt.setString(2, order.getShopName());
-			stmt.setString(3, order.getFirstName());
-			stmt.setString(4, order.getLastName());
-			stmt.setString(5, order.getStreetAdd());
-			stmt.setString(6, order.getCountry());
-			stmt.setString(7, order.getCity());
-			stmt.setString(8, order.getPostalCode());
-			stmt.setString(9, order.getTotalPrice());
-			stmt.setString(10, order.getItems());
+			stmt.setString(3, order.getFullName());
+			stmt.setString(4, order.getStreetAdd());
+			stmt.setString(5, order.getCountry());
+			stmt.setString(6, order.getCity());
+			stmt.setString(7, order.getPostalCode());
+			stmt.setFloat(8, order.getTotalPrice());
+			stmt.setString(9, order.getItems());
 			java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-			
-			stmt.setDate(11, date);
+			stmt.setDate(10, date);
+			stmt.setString(11, order.getPhoneNumber());
 			
 			result.setResult(stmt.executeUpdate() == 1);
 			result.setErrorMessage(CRUDMessages.add);

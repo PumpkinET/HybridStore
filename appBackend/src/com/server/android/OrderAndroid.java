@@ -1,49 +1,52 @@
 package com.server.android;
 
+import java.sql.Date;
+
 public class OrderAndroid {
 	String id;
 	String email;
 	String shopName;
-	String firstName;
-	String lastName;
+	String fullName;
 	String streetAdd;
 	String country;
 	String city;
 	String postalCode;
-	String totalPrice;
+	float totalPrice;
 	String items;
 	int status;
 	String statusValue;
 	java.sql.Date date;
+	String phoneNumber;
 	
 	public OrderAndroid(String id, int status) {
 		this.id = id;
 		this.status = status;
 	}
 	
-	public OrderAndroid(String email, String shopName, String firstName, String lastName, String streetAdd,
-			String country, String city, String postalCode, String totalPrice, String items) {
+	public OrderAndroid(String id, String email, String shopName, String fullName, String streetAdd,
+			String country, String city, String postalCode, float totalPrice, String items, String phoneNumber) {
 		super();
+		this.id = id;
 		this.email = email;
 		this.shopName = shopName;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.fullName = fullName;
 		this.streetAdd = streetAdd;
 		this.country = country;
 		this.city = city;
 		this.postalCode = postalCode;
 		this.totalPrice = totalPrice;
 		this.items = items;
+		this.phoneNumber = phoneNumber;
 	}
 
-	public OrderAndroid(String id, String email, String shopName, String firstName, String lastName, String streetAdd,
-			String country, String city, String postalCode, String totalPrice, String items, int status, String statusValue, java.sql.Date date) {
+	public OrderAndroid(String id, String email, String shopName, String fullName, String streetAdd,
+			String country, String city, String postalCode, float totalPrice, String items, int status,
+			String statusValue, Date date, String phoneNumber) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.shopName = shopName;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.fullName = fullName;
 		this.streetAdd = streetAdd;
 		this.country = country;
 		this.city = city;
@@ -53,7 +56,9 @@ public class OrderAndroid {
 		this.status = status;
 		this.statusValue = statusValue;
 		this.date = date;
+		this.phoneNumber = phoneNumber;
 	}
+
 
 	public String getEmail() {
 		return email;
@@ -70,21 +75,14 @@ public class OrderAndroid {
 	public void setShopName(String shopName) {
 		this.shopName = shopName;
 	}
+	
 
-	public String getFirstName() {
-		return firstName;
+	public String getFullName() {
+		return fullName;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public String getStreetAdd() {
@@ -127,11 +125,11 @@ public class OrderAndroid {
 		this.items = items;
 	}
 
-	public String getTotalPrice() {
+	public float getTotalPrice() {
 		return totalPrice;
 	}
 
-	public void setTotalPrice(String totalPrice) {
+	public void setTotalPrice(float totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 
@@ -168,11 +166,19 @@ public class OrderAndroid {
 		this.date = date;
 	}
 
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 	@Override
 	public String toString() {
-		return "OrderAndroid [id=" + id + ", email=" + email + ", shopName=" + shopName + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", streetAdd=" + streetAdd + ", country=" + country + ", city=" + city
-				+ ", postalCode=" + postalCode + ", totalPrice=" + totalPrice + ", items=" + items + ", status="
-				+ status + ", statusValue=" + statusValue + "]";
+		return "OrderAndroid [id=" + id + ", email=" + email + ", shopName=" + shopName + ", fullName=" + fullName
+				+ ", streetAdd=" + streetAdd + ", country=" + country + ", city=" + city + ", postalCode=" + postalCode
+				+ ", totalPrice=" + totalPrice + ", items=" + items + ", status=" + status + ", statusValue="
+				+ statusValue + ", date=" + date + ", phoneNumber=" + phoneNumber + "]";
 	}
 }

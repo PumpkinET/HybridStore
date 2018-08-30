@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.demo.hybridstore.ItemsActivity;
 import com.demo.hybridstore.com.hybridstore.adapters.HistoryAdapter;
@@ -52,6 +53,12 @@ public class HistoryFragmentTab extends Fragment {
 
     }
 
+    /**
+     * this function is used to get orders by user session
+     * status 200 : get success
+     * status 401 : unauthorized user
+     * status 0 : offline server
+     */
     public class OrderAsyncer extends AsyncTask<String, Void, String> {
         public void onPreExecute() {
         }
@@ -71,6 +78,9 @@ public class HistoryFragmentTab extends Fragment {
                     reader = new BufferedReader(new InputStreamReader(stream));
                     return reader.readLine();
                 }
+                else if(statusCode == 401) {
+                    return "401";
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -79,22 +89,28 @@ public class HistoryFragmentTab extends Fragment {
 
         @Override
         public void onPostExecute(String result) {
-            Gson gs = new GsonBuilder().create();
-            final Order[] order = gs.fromJson(result, Order[].class);
+            if (result != null) {
+                if (result.equals("401")) {
+                    Toast.makeText(rootView.getContext(), "Login first!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Gson gs = new GsonBuilder().create();
+                    final Order[] order = gs.fromJson(result, Order[].class);
 
-            mAdapter = new HistoryAdapter(new ArrayList<Order>(Arrays.asList(order)));
-            mRecycleView.setAdapter(mAdapter);
-            mRecycleView.setLayoutManager(mLayoutManager);
+                    mAdapter = new HistoryAdapter(new ArrayList<Order>(Arrays.asList(order)));
+                    mRecycleView.setAdapter(mAdapter);
+                    mRecycleView.setLayoutManager(mLayoutManager);
 
-            mAdapter.setOnItemClickListener(new HistoryAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-                    Intent i = new Intent(getActivity(), ItemsActivity.class);
-                    i.putExtra("shopUrl", order[position].getShopIp());
-                    i.putExtra("items", order[position].getItems());
-                    startActivity(i);
+                    mAdapter.setOnItemClickListener(new HistoryAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            Intent i = new Intent(getActivity(), ItemsActivity.class);
+                            i.putExtra("shopUrl", order[position].getShopIp());
+                            i.putExtra("items", order[position].getItems());
+                            startActivity(i);
+                        }
+                    });
                 }
-            });
+            }
         }
     }
 }

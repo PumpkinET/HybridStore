@@ -20,12 +20,10 @@ import com.demo.hybridstore.com.hybridstore.model.Login;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -37,7 +35,7 @@ import java.net.URL;
 public class LoginFragment extends Fragment {
 
     View rootView;
-    EditText username, password;
+    EditText email, password;
     Button bLogin;
     TextView txtSignup;
 
@@ -49,20 +47,22 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_login, container, false);
+
+        //update side menu and title
         getActivity().setTitle("Login");
         ((MainActivity) getActivity()).updateMenu(R.id.nav_login);
 
-        username = (EditText) rootView.findViewById(R.id.editText_username);
+        //initialize view ids
+        email = (EditText) rootView.findViewById(R.id.editText_email);
         password = (EditText) rootView.findViewById(R.id.editView_password);
         bLogin = (Button) rootView.findViewById(R.id.button_login);
         txtSignup = (TextView) rootView.findViewById(R.id.textView_SignUp);
 
-
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validate(username, password) == true)
-                new LoginAsyncer().execute(username.getText().toString(), password.getText().toString());
+                if(validate(email, password) == true)
+                new LoginAsyncer().execute(email.getText().toString(), password.getText().toString());
             }
         });
         txtSignup.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +80,7 @@ public class LoginFragment extends Fragment {
 
     public boolean validate(EditText email, EditText password) {
         boolean res = true;
-        if (email.getText().toString().length() == 0) {
+        if (email.getText().toString().length() == 0 || !android.util.Patterns.EMAIL_ADDRESS.matcher(email.getText().toString()).matches()) {
             email.setError("Email must be filled out");
             email.requestFocus();
             res = false;
@@ -93,6 +93,12 @@ public class LoginFragment extends Fragment {
         return res;
     }
 
+    /**
+     * this function is used to login and save session
+     * status 200 : login success
+     * status 403 : login failed
+     * status 0 : offline server
+     */
     public class LoginAsyncer extends AsyncTask<String, Void, String> {
         public void onPreExecute() {
             password.setText("");
@@ -143,8 +149,13 @@ public class LoginFragment extends Fragment {
                 Auth.password = login.getPassword();
                 Auth.avatar = login.getAvatar();
                 Auth.name = login.getName();
+                Auth.fullname = login.getFullname();
+                Auth.streetAdd = login.getStreetAdd();
+                Auth.country = login.getCountry();
+                Auth.city = login.getCity();
+                Auth.postalCode = login.getPostalCode();
+                Auth.phonenumber = login.getPhonenumber();
                 Auth.session = login.getSession();
-
                 Log.d("session", login.getSession());
                 ((MainActivity) getActivity()).loginMenu(login.getName(), login.getEmail(), login.getAvatar());
                 CategoriesFragment fragment = new CategoriesFragment();

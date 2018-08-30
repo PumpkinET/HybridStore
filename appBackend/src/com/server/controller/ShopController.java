@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.server.dao.ShopDAO;
+import com.server.model.ErrorMessage;
 import com.server.model.Shop;
 
 @WebServlet("/ShopController")
@@ -36,7 +37,10 @@ public class ShopController extends HttpServlet {
 		response.setContentType("application/json");//specify return content
 		
 		String cat = request.getParameter("category");
-		if (cat == null)
+		String target = request.getParameter("target");
+		if(target != null) 
+			response.getWriter().write(new Gson().toJson(shopDAO.get(target)));
+		else if (cat == null)
 			response.getWriter().write(new Gson().toJson(shopDAO.getAll("All")));
 		else
 			response.getWriter().write(new Gson().toJson(shopDAO.getAll(cat)));
@@ -55,15 +59,30 @@ public class ShopController extends HttpServlet {
 			json = br.readLine();
 		Gson gson = new GsonBuilder().create();
 		Shop shop = gson.fromJson(json, Shop.class);
-
-		shop.setShopName(shop.getShopName());
-		shop.setShopOwner(shop.getShopOwner());
-		shop.setShopThumbnail(shop.getShopThumbnail());
-		shop.setShopDescription(shop.getShopDescription());
 		shop.setShopIp(shop.getShopIp() + "/ItemsController?dbName=" + shop.getShopName() + "&filter=true");
-		shop.setShopCategory(shop.getShopCategory());
+		
+		ErrorMessage result = shopDAO.createStore(shop);
+		response.getWriter().write(new Gson().toJson(result));
+		response.getWriter().close();
+	}
+	
+	/**
+	 * update store
+	 */
+	protected void doPut(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-		shopDAO.createStore(shop);
+		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+		String json = "";
+		if (br != null)
+			json = br.readLine();
+		Gson gson = new GsonBuilder().create();
+		Shop shop = gson.fromJson(json, Shop.class);
+
+		System.out.println(shop.toString());
+		ErrorMessage result = shopDAO.update(shop);
+		response.getWriter().write(new Gson().toJson(result));
+		response.getWriter().close();
 	}
 
 }

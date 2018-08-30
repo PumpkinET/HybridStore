@@ -2,11 +2,18 @@
 
 function validateForm() {
     let res = true;
+    var regex = new RegExp("^[a-zA-Z0-9]*$");
+
     var check = document.forms["createStoreForm"]["name"].value;
     if (check == "") {
         $('#error').append("<div>Name must be filled out</div>");
         res = false;
+    } 
+     if (regex.test(check) == false) {
+        $('#error').append("<div>No spaces are allowed, only numbers and letters are allowed in store name</div>");
+        return false;
     }
+
     var check = document.forms["createStoreForm"]["owner"].value;
     if (check == "") {
         $('#error').append("<div>Owner must be filled out</div>");
@@ -59,38 +66,45 @@ $(document).ready(function () {
 
     $('#addField').on('click', addField);
 
-    /* append basic fields  (id, title, image, description, price)*/
+    /* append basic fields  (id, title, image, description, price, quantity)*/
     $('form ul').append("<li class='list-group-item'><span class='material-icons left'>vpn_key</span>ID</li>");
     data.fields.push({
         name: "id",
         type: "0"
     });
 
-    /* append basic fields  (id, title, image, description, price)*/
+    /* append basic fields  (id, title, image, description, price, quantity)*/
     $('form ul').append("<li class='list-group-item'>title</li>");
     data.fields.push({
         name: "title",
         type: "0"
     });
 
-    /* append basic fields  (id, title, image, description, price)*/
+    /* append basic fields  (id, title, image, description, price, quantity)*/
     $('form ul').append("<li class='list-group-item'>image</li>");
     data.fields.push({
         name: "image",
         type: "2"
     });
 
-    /* append basic fields  (id, title, image, description, price)*/
+    /* append basic fields  (id, title, image, description, price, quantity)*/
     $('form ul').append("<li class='list-group-item'>description</li>");
     data.fields.push({
         name: "description",
         type: "2"
     });
 
-    /* append basic fields  (id, title, image, description, price)*/
+    /* append basic fields  (id, title, image, description, price, quantity)*/
     $('form ul').append("<li class='list-group-item'>price</li>");
     data.fields.push({
         name: "price",
+        type: "4"
+    });
+
+    /* append basic fields  (id, title, image, description, price, quantity)*/
+    $('form ul').append("<li class='list-group-item'>quantity</li>");
+    data.fields.push({
+        name: "quantity",
         type: "1"
     });
 
@@ -98,14 +112,18 @@ $(document).ready(function () {
      * this function is used to add fields to the create store list
      */
     function addField() {
-        if (fieldInput != null) {
-            $('form ul').append("<li class='list-group-item'>" + fieldInput + " <span class='badge badge-danger badge-pill right'>X</span></li>");
+        var regex = new RegExp("^[a-zA-Z0-9]*$");
+        if (fieldInput != null && regex.test(fieldInput) == true) {
+            $('form ul').append("<li class='list-group-item'>" + fieldInput + "</li>");
             data.fields.push({
                 name: fieldInput,
                 type: $('#fieldType').val()
             });
             $('#exampleInputFields1').val("");
             fieldInput = null;
+        }
+        else {
+            alert("No spaces are allowed, only numbers and letters are allowed in field name");
         }
     }
 
@@ -130,18 +148,20 @@ $(document).ready(function () {
         if (validateForm() == true) {
             try {
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", "http://10.0.0.21:8080/Server/CreateStoreController", true);
+                xhr.open("POST", "http://10.100.102.40:8080/Server/CreateStoreController", true);
                 data.storeName = $('#InputName').val();
                 data.ownerName = $('#InputOwner').val();
                 data.thumbnail = $('#InputThumbnail').val();
                 data.description = $('#InputDescription').val();
                 data.ip = $('#InputIP').val();
                 data.phone = $('#InputPhone').val();
-                data.shopAddress = $('#InputShopAddress').val();
+                data.address = $('#InputShopAddress').val();
                 data.category = $('#exampleFormControlSelect1').val();
+
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
-
+                        var obj = JSON.parse(xhr.responseText);
+                        $('#error').html(obj.errorMessage);
                     } else if (xhr.status === 0) {
                         $('#error').html('Server is offline!');
                     }

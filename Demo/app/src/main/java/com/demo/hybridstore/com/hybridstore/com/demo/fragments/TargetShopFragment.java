@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demo.hybridstore.CartActivity;
+import com.demo.hybridstore.com.hybridstore.model.Auth;
 import com.demo.hybridstore.com.hybridstore.model.Cart;
 import com.hybridstore.app.R;
 import com.demo.hybridstore.com.hybridstore.adapters.ItemAdapter;
@@ -44,6 +46,7 @@ public class TargetShopFragment extends Fragment {
     View rootView;
     Shop shop;
     public static ArrayList<Item> card;
+
     public TargetShopFragment() {
     }
 
@@ -58,28 +61,12 @@ public class TargetShopFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_targetshop, container, false);
         getActivity().setTitle(shop.getShopName());
 
-        if (CartActivity.card.size() != 0) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("Are you sure you want to start new cart?")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            CartActivity.clearCart();
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                            getActivity().getSupportFragmentManager().popBackStack();
-                        }
-                    });
-
-            AlertDialog alert = builder.create();
-            alert.show();
-        } else
+        if (CartActivity.card.size() != 0)
             Toast.makeText(getContext(), "Long press on item to add to cart!", Toast.LENGTH_SHORT).show();
 
-        CartActivity.shopName = shop.getShopName();
+        Auth.shopName = shop.getShopName();
+
+        //initialize view ids
         final ImageView imageView = (ImageView) rootView.findViewById(R.id.targetShopThumbnail);
         final TextView shopSubTitles = (TextView) rootView.findViewById(R.id.targetShopSubTitles);
         ImageButton info = (ImageButton) rootView.findViewById(R.id.targetShopInformation);
@@ -102,10 +89,14 @@ public class TargetShopFragment extends Fragment {
         });
 
         new ItemAsyncer().execute();
-
         return rootView;
     }
 
+    /**
+     * this function is used to get target shop items
+     * status 200 : get success
+     * status 0 : offline server
+     */
     public class ItemAsyncer extends AsyncTask<String, Void, String> {
         public void onPreExecute() {
         }
@@ -132,43 +123,63 @@ public class TargetShopFragment extends Fragment {
 
         @Override
         public void onPostExecute(String result) {
-            Gson gs = new GsonBuilder().create();
-            Item[] item = gs.fromJson(result, Item[].class);
+            if (result != null) {
+                Gson gs = new GsonBuilder().create();
+                Item[] item = gs.fromJson(result, Item[].class);
 
-            mViewCard = rootView.findViewById(R.id.viewCard);
-            mRecycleView = rootView.findViewById(R.id.recycleviewer);
-            mRecycleView.setHasFixedSize(true);
-            mLayoutManager = new LinearLayoutManager(rootView.getContext());
-            TargetShopFragment.card = new ArrayList<Item>(Arrays.asList(item));
+                mViewCard = rootView.findViewById(R.id.viewCard);
+                mRecycleView = rootView.findViewById(R.id.recycleviewer);
+                mRecycleView.setHasFixedSize(true);
+                mLayoutManager = new LinearLayoutManager(rootView.getContext());
+                TargetShopFragment.card = new ArrayList<Item>(Arrays.asList(item));
 
-            for (int i = 0; i < card.size(); i++) {
-                card.get(i).resetColor();
+                for (int i = 0; i < card.size(); i++) {
+                    card.get(i).resetColor();
+                }
+
+                mAdapter = new ItemAdapter(card);
+                mRecycleView.setAdapter(mAdapter);
+                mRecycleView.setLayoutManager(mLayoutManager);
+
+                mAdapter.setOnItemClickListener(new ItemAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        TargetItemFragment fragment = new TargetItemFragment();
+                        fragment.setTargetItem(card.get(position), shop.getShopName());
+                        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                                ((FragmentActivity) rootView.getContext()).getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment_container, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                });
+                mAdapter.setOnItemLongClickListener(new ItemAdapter.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(int position) {
+                        card.get(position).switchColor();
+                        mAdapter.notifyDataSetChanged();
+                        return true;
+                    }
+                });
             }
+        }
+    }
 
-            mAdapter = new ItemAdapter(card);
-            mRecycleView.setAdapter(mAdapter);
-            mRecycleView.setLayoutManager(mLayoutManager);
-
-            mAdapter.setOnItemClickListener(new ItemAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-                    TargetItemFragment fragment = new TargetItemFragment();
-                    fragment.setTargetItem(card.get(position), shop.getShopName());
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
-                            ((FragmentActivity) rootView.getContext()).getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_container, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+    @Override
+    public void onResume() {
+        super.onResume();
+        //getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        if (mAdapter != null) {
+            for (int j = 0; j < TargetShopFragment.card.size(); j++) {
+                for (int i = 0; i < CartActivity.card.size(); i++) {
+                    if (CartActivity.card.get(i).getId() == TargetShopFragment.card.get(j).getId()) {
+                        TargetShopFragment.card.get(j).turnOnColor();
+                    } else {
+                        TargetShopFragment.card.get(j).resetColor();
+                    }
                 }
-            });
-            mAdapter.setOnItemLongClickListener(new ItemAdapter.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(int position) {
-                    card.get(position).switchColor();
-                    mAdapter.notifyDataSetChanged();
-                    return true;
-                }
-            });
+            }
+            mAdapter.notifyDataSetChanged();
         }
     }
 }

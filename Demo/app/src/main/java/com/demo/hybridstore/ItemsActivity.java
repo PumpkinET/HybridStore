@@ -33,6 +33,7 @@ public class ItemsActivity extends AppCompatActivity {
 
         setTitle("Ordered Items");
 
+        //Initialize view ids
         mRecycleView = findViewById(R.id.itemsrecycleviewer);
         mRecycleView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getBaseContext());
@@ -70,12 +71,14 @@ public class ItemsActivity extends AppCompatActivity {
 
         @Override
         public void onPostExecute(String result) {
-            Gson gs = new GsonBuilder().create();
-            final Item[] item = gs.fromJson(result, Item[].class);
+            if (result != null) {
+                Gson gs = new GsonBuilder().create();
+                final Item[] item = gs.fromJson(result, Item[].class);
 
-            mAdapter = new ItemAdapter(new ArrayList<Item>(Arrays.asList(item)));
-            mRecycleView.setAdapter(mAdapter);
-            mRecycleView.setLayoutManager(mLayoutManager);
+                mAdapter = new ItemAdapter(new ArrayList<Item>(Arrays.asList(item)));
+                mRecycleView.setAdapter(mAdapter);
+                mRecycleView.setLayoutManager(mLayoutManager);
+            }
         }
     }
 }

@@ -107,16 +107,30 @@ function getAll() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var obj = JSON.parse(xhr.responseText);
                 for (var i = 0; i < obj.length; i++) {
-                    $("#tbody").append("<tr class='targetRow'>" +
-                        "<td><span>" + obj[i].username + "</span></td>" +
-                        "<td><span>" + obj[i].password + "</span></td>" +
-                        "<td><span>" + obj[i].email + "</span></td>" +
-                        "<td><span style='display:none;'>" + obj[i].grade + "</span><span>" + obj[i].value + "</span></td>" +
-                        "<td><span>" + obj[i].name + "</span></td>" +
-                        "<td><span>" + obj[i].age + "</span></td>" +
-                        "<td><span>" + obj[i].address + "</span></td>" +
-                        "<td><span>" + obj[i].id + "</span></td>" +
-                        "<td><i class='material-icons permission' data-toggle='modal' data-target='#editModal'>mode_edit</i></td></tr>");
+                    var user = JSON.parse(sessionStorage.getItem('user_info'));
+                    if (user.grade == 0) {
+                        $("#tbody").append("<tr class='targetRow'>" +
+                            "<td><span>" + obj[i].username + "</span></td>" +
+                            "<td><span>***</span></td>" +
+                            "<td><span>" + obj[i].email + "</span></td>" +
+                            "<td><span style='display:none;'>" + obj[i].grade + "</span><span>" + obj[i].value + "</span></td>" +
+                            "<td><span>" + obj[i].name + "</span></td>" +
+                            "<td><span>" + obj[i].age + "</span></td>" +
+                            "<td><span>" + obj[i].address + "</span></td>" +
+                            "<td><span>" + obj[i].id + "</span></td>" +
+                            "<td><i class='material-icons permission' data-toggle='modal' data-target='#editModal'>mode_edit</i></td></tr>");
+                    } else {
+                        $("#tbody").append("<tr class='targetRow'>" +
+                            "<td><span>" + obj[i].username + "</span></td>" +
+                            "<td><span>" + obj[i].password + "</span></td>" +
+                            "<td><span>" + obj[i].email + "</span></td>" +
+                            "<td><span style='display:none;'>" + obj[i].grade + "</span><span>" + obj[i].value + "</span></td>" +
+                            "<td><span>" + obj[i].name + "</span></td>" +
+                            "<td><span>" + obj[i].age + "</span></td>" +
+                            "<td><span>" + obj[i].address + "</span></td>" +
+                            "<td><span>" + obj[i].id + "</span></td>" +
+                            "<td><i class='material-icons permission' data-toggle='modal' data-target='#editModal'>mode_edit</i></td></tr>");
+                    }
                 }
             } else if (xhr.status === 0) {
                 alert('Server is offline!');

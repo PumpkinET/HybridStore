@@ -14,5 +14,6 @@ $(document).ready(function () {
     }
     if(user.grade != 2) {
         $(".reportNav").hide();//hide report for regular and adminstrator user
+        $(".settingsNav").hide();//hide report for regular and adminstrator user
     }
 });

@@ -3,6 +3,7 @@ package com.demo.hybridstore.com.hybridstore.com.demo.fragments;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,35 +36,16 @@ public class TargetItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //update side menu and title
         rootView = inflater.inflate(R.layout.fragment_targetitem, container, false);
         getActivity().setTitle(shopName);
 
+        //initialize view ids
         mTitle = (TextView) rootView.findViewById(R.id.history_Title);
         mImageView = (ImageView) rootView.findViewById(R.id.history_Thumbnail);
         mDescription = (TextView) rootView.findViewById(R.id.cart_Description);
         mPrice = (TextView) rootView.findViewById(R.id.cardPrice);
         mAddRemove = (FloatingActionButton) rootView.findViewById(R.id.addRemove);
-
-        for (int i = 0; i < CartActivity.card.size(); i++) {
-            if (CartActivity.card.get(i).getId().equals(item.getId())) {
-                mAddRemove.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_remove_from_cart));
-                bAdd = false;
-            }
-        }
-        mAddRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (bAdd) {
-                    CartActivity.addtoCart(new Cart(item.getId(), item.getTitle(), item.getImageResource(), item.getPrice()));
-                    mAddRemove.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_remove_from_cart));
-                    bAdd = false;
-                } else {
-                    CartActivity.removeFromCart(new Cart(item.getId(), item.getTitle(), item.getImageResource(), item.getPrice()));
-                    mAddRemove.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_add_to_cart));
-                    bAdd = true;
-                }
-            }
-        });
 
         mTitle.setText(item.getTitle());
         Picasso.get().load(item.getImageResource()).into(mImageView);
@@ -71,4 +53,37 @@ public class TargetItemFragment extends Fragment {
         mPrice.setText("Price " + item.getPrice() + "₪");
         return rootView;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //if cart is empty then switch icon to add to cart
+        if(CartActivity.card.size() == 0) {
+            mAddRemove.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_add_to_cart));
+            bAdd = true;
+        }
+        //update current item status based on cart items
+        for (int i = 0; i < CartActivity.card.size(); i++) {
+            if (CartActivity.card.get(i).getId().equals(item.getId())) {
+                mAddRemove.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_remove_from_cart));
+                bAdd = false;
+            }
+        }
+        //add/remove item from cart by clicking on floating action button
+        mAddRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (bAdd) {
+                    CartActivity.addtoCart(new Cart(item.getId(), item.getTitle(), item.getImageResource(), item.getPrice(),1));
+                    mAddRemove.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_remove_from_cart));
+                    bAdd = false;
+                } else {
+                    CartActivity.removeFromCart(new Cart(item.getId(), item.getTitle(), item.getImageResource(), item.getPrice(),0));
+                    mAddRemove.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_add_to_cart));
+                    bAdd = true;
+                }
+            }
+        });
+    }
+
 }

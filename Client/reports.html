@@ -22,16 +22,18 @@
 		Orders
 		Reports (current)
 		Routine
+		Settings
+		Logout
 	-->
 	<header>
 		<navbar>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<a class="navbar-brand" href="#">
-					<img src="img/logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+					<img src="img/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
 					<span class="currentNav" id="shopName"></span>
 				</a>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-				    aria-expanded="false" aria-label="Toggle navigation">
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+				    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -56,6 +58,9 @@
 						</li>
 					</ul>
 					<ul class="navbar-nav">
+						<li class="nav-item settingsNav">
+							<a class="nav-link" href="settings.html">Settings</a>
+						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="#" id="logout">Logout</a>
 						</li>
@@ -64,6 +69,12 @@
 			</nav>
 		</navbar>
 	</header>
+	<form action="javascript:void(0);">
+		<fieldset>
+			<legend>Missing items</legend>
+		</fieldset>
+	</form>
+	<div id="missing_div"></div>
 	<!-- Form to filter pie report by dates -->
 	<form action="javascript:void(0);">
 		<fieldset>
@@ -83,7 +94,7 @@
 	<!-- Form to filter line report by dates -->
 	<form action="javascript:void(0);">
 		<fieldset>
-			<legend>Total Items per order(s)</legend>
+			<legend>Total orders per month</legend>
 			<div class="form-group">
 				<label for="exampleFormControlSelect1">Select year</label>
 				<select class="form-control" id="exampleFormControlSelect1">
@@ -104,6 +115,9 @@
 	<script src="js/logout.js"></script>
 	<script src="js/sort.js"></script>
 	<script src="js/ReportsService.js"></script>
+	<script>
+		window.addEventListener("load", missingItems(), false);
+	</script>
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>

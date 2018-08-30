@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/shippingAddress_fullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/payment_email"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="Full name"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/shippingAddress_streetAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/shippingAddress_fullName"
+                    android:layout_alignStart="@+id/shippingAddress_fullName"
+                    android:layout_below="@+id/shippingAddress_fullName"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="Street address"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/shippingAddress_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/shippingAddress_streetAddress"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="Country"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/shippingAddress_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/shippingAddress_country"
+                    android:layout_alignStart="@+id/shippingAddress_country"
+                    android:layout_below="@+id/shippingAddress_country"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="City"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/shippingAddress_postalCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/shippingAddress_city"
+                    android:layout_alignStart="@+id/shippingAddress_city"
+                    android:layout_below="@+id/shippingAddress_city"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="Postal code"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/shippingAddress_phoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/shippingAddress_postalCode"
+                    android:layout_alignStart="@+id/shippingAddress_postalCode"
+                    android:layout_below="@+id/shippingAddress_postalCode"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="Phone number"
+                    android:inputType="textPersonName" />
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/shippingAddress_save"
+            android:layout_width="76dp"
+            android:layout_height="36dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="12dp"
+            android:layout_marginEnd="11dp"
+            android:background="@color/colorAccent"
+            android:text="Save"
+            android:textColor="#FFF" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

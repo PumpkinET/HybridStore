@@ -14,10 +14,28 @@ function validateAddItem() {
     let res = true;
     for (var i = 0; i < dynamicData.length; i++) {
         var check = $("#add-" + dynamicData[i].column).val()
-        if (check == "") {
-            $('#error').append("<div>" + dynamicData[i].column + " must be filled out</div>");
-            res = false;
-        }
+		if(dynamicData[i].column == "price") // check if interger 
+		{
+			if (check == "") {
+				$('#error').append("<div>" + dynamicData[i].column + " must be filled out</div>");
+				res = false;
+			}
+			if (!(!isNaN(check) && check.toString().indexOf('.') != -1)) {
+				$('#error').append("<div>" + dynamicData[i].column + " must be float</div>");
+				res = false;
+			}
+			/*if (!(Number.isInteger(check))) {
+				$('#error').append("<div>" + dynamicData[i].column + " must be filled out</div>");
+				res = false;
+			}*/
+		}
+		else 
+		{
+			if (check == "") {
+				$('#error').append("<div>" + dynamicData[i].column + " must be filled out</div>");
+				res = false;
+			}
+		}
     }
     return res;
 }
@@ -25,10 +43,23 @@ function validateEditItem() {
     let res = true;
     for (var i = 0; i < dynamicData.length; i++) {
         var check = $("#edit-" + dynamicData[i].column).val()
-        if (check == "") {
-            $('#error_edit').append("<div>" + dynamicData[i].column + " must be filled out</div>");
-            res = false;
-        }
+		if(dynamicData[i].column == "price") // check if interger 
+		{
+			if (check == "") {
+				$('#error_edit').append("<div>" + dynamicData[i].column + " must be filled out</div>");
+				res = false;
+			}
+			if (!(!isNaN(check) && check.toString().indexOf('.') != -1)) {
+				$('#error_edit').append("<div>" + dynamicData[i].column + " must be float</div>");
+				res = false;
+			}
+		}
+		else {
+			if (check == "") {
+				$('#error_edit').append("<div>" + dynamicData[i].column + " must be filled out</div>");
+				res = false;
+			}
+		}
     }
     return res;
 }

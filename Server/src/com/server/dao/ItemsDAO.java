@@ -13,6 +13,7 @@ import com.server.model.CRUDMessages;
 import com.server.model.ErrorMessage;
 import com.server.model.Item;
 import com.server.model.Items;
+import com.server.model.OrderItems;
 import com.server.util.MySQLUtil;
 
 public class ItemsDAO {
@@ -91,7 +92,7 @@ public class ItemsDAO {
 					"SELECT id, title, image, description, price FROM ITEM WHERE id=" + itemsArray[0] + patent);
 
 			while (rs.next())
-				item.add(new Item(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+				item.add(new Item(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getFloat(5)));
 
 			stmt.close();
 			getConnection().close();
@@ -113,7 +114,7 @@ public class ItemsDAO {
 			ResultSet rs = stmt.executeQuery("SELECT id, title, image, description, price FROM ITEM");
 
 			while (rs.next())
-				item.add(new Item(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+				item.add(new Item(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getFloat(5)));
 
 			stmt.close();
 			getConnection().close();
@@ -212,5 +213,53 @@ public class ItemsDAO {
 			result.setErrorMessage(e.toString());
 		}
 		return result;
+	}
+	/**
+	 * @param item
+	 *            to specify which item to update from the database
+	 * @return error message with results
+	 */
+	public ArrayList<ErrorMessage> updateQuantity(OrderItems item) {
+		ArrayList<ErrorMessage> result = new ArrayList<ErrorMessage>();
+		try {
+			String[] items = item.getItems().split(",");
+			for(int i = 0; i<items.length; i++) {
+				String[] quantity = items[i].split("x");
+//				PreparedStatement stmt = getConnection()
+//						.prepareStatement("UPDATE ITEM SET QUANTITY = QUANTITY - " + quantity[1] + " WHERE id ='" + quantity[0] + "'" + " and QUANTITY > 0");
+				PreparedStatement stmt = getConnection()
+				.prepareStatement("UPDATE ITEM SET QUANTITY = QUANTITY - " + quantity[1] + " WHERE id ='" + quantity[0] + "'");
+		
+				result.add(new ErrorMessage(stmt.executeUpdate()==1, quantity[0]));
+				stmt.close();
+			}
+			getConnection().close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.add(new ErrorMessage(false,""));
+		}
+		return result;
+	}
+	
+	/**
+	 * this function is used in website
+	 * 
+	 * @return array list of store items select only id, title, image, description, quantity WHERE quantity < 0
+	 */
+	public ArrayList<Item> getMissingItems() {
+		ArrayList<Item> item = new ArrayList<Item>();
+		try {
+			Statement stmt = getConnection().createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT id, title, image, description, price, quantity FROM ITEM WHERE quantity <= 0");
+
+			while (rs.next())
+				item.add(new Item(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getFloat(5), rs.getInt(6)));
+
+			stmt.close();
+			getConnection().close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return item;
 	}
 }

@@ -1,11 +1,80 @@
+'use strict';
 $(document).ready(function () {
-    for(var i = 2018; i<2050; i++) {
+    for (var i = 2018; i < 2050; i++) {
         $('#exampleFormControlSelect1').append("<option>" + i + "</option>");
     }
     document.getElementById('add-start-date').valueAsDate = new Date("2018-01-01");
     document.getElementById('add-end-date').valueAsDate = new Date();
 });
 
+/**
+ * this function is used to generate pie chart based on filter date
+ * status 200 : get success
+ * status 0 : offline server
+ */
+function missingItems() {
+    google.charts.load('current', {
+        'packages': ['corechart', 'line']
+    });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var colsArray = [];
+        var rowsArray = [];
+        var bucketSort = [];
+        var totalOrders = 0;
+        var totalPrice = 0;
+        colsArray.push({
+            id: "",
+            label: 'Topping',
+            pattern: "",
+            type: 'string'
+        });
+        colsArray.push({
+            id: "",
+            label: 'Slices',
+            pattern: "",
+            type: 'number'
+        });
+
+
+        try {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://localhost:8080/Server/ItemsController?dbName=" + sessionStorage.getItem('storename') + "&missing=true", true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var obj = JSON.parse(xhr.responseText);
+                    for (var i = 0; i < obj.length; i++) {
+                        rowsArray.push({
+                            c: [{
+                                v: "Title : " + obj[i].title,
+                                f: null
+                            }, {
+                                v: obj[i].quantity*-1,
+                                f: null
+                            }]
+                        });
+                    }
+                }
+                var data = new google.visualization.DataTable({
+                    cols: colsArray,
+                    rows: rowsArray
+                });
+                var chart = new google.visualization.PieChart(document.getElementById('missing_div'));
+                console.log(rowsArray.length);
+                chart.draw(data, {
+                    title: rowsArray.length == 0 ? '' : 'Please provide them soon as possible',
+                    width: '100%',
+                    height: rowsArray.length == 0 ? 100 : 500
+                });
+            }
+            xhr.send();
+        } catch (exception) {
+            alert("Request failed");
+        }
+    }
+}
 /**
  * this function is used to generate pie chart based on filter date
  * status 200 : get success
@@ -24,6 +93,7 @@ function pie() {
     var bucketSort = [];
     var totalOrders = 0;
     var totalPrice = 0;
+
     function drawChart() {
         colsArray.push({
             id: "",
@@ -40,27 +110,27 @@ function pie() {
 
         try {
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", "http://localhost:8080/appBackend/OrdersController?shopName=" + sessionStorage.getItem('storename')+"&startDate="+start+"&endDate="+end, true);
+            xhr.open("GET", "http://localhost:8080/appBackend/OrdersController?shopName=" + sessionStorage.getItem('storename') + "&startDate=" + start + "&endDate=" + end, true);
 
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var obj = JSON.parse(xhr.responseText);
                     totalOrders = obj.length;
-
                     for (var i = 0; i < obj.length; i++) {
                         var items = obj[i].items.split(",");
                         for (var key in items) {
-                            if (!isNaN(parseInt(items[key], 10))) {
-                                bucketSort[parseInt(items[key], 10)] = 0;
+                            var itemId = items[key].split("x");
+                            if (!isNaN(parseInt(itemId[0], 10))) {
+                                bucketSort[parseInt(itemId[0], 10)] = 0;
                             }
                         }
                     }
-
                     for (var i = 0; i < obj.length; i++) {
                         var items = obj[i].items.split(",");
                         for (var key in items) {
-                            if (!isNaN(parseInt(items[key], 10))) {
-                                bucketSort[parseInt(items[key], 10)]++;
+                            var itemQuantity = items[key].split("x");
+                            if (!isNaN(parseInt(itemQuantity[0], 10))) {
+                                bucketSort[parseInt(itemQuantity[0], 10)] += parseInt(itemQuantity[1], 10);
                             }
                         }
                     }
@@ -93,19 +163,20 @@ function pie() {
                     for (var i = 0; i < obj.length; i++) {
                         for (var j = 0; j < bucketSort.length; j++) {
                             if (bucketSort[j] !== undefined) {
-                                if (j == obj[i].id)
+                                if (j == obj[i].id) {
                                     rowsArray.push({
                                         c: [{
-                                            v: "Title : " + obj[i].title+" Profit : " + obj[i].price*bucketSort[j],
+                                            v: "Title : " + obj[i].title + " Profit : " + obj[i].price * bucketSort[j],
                                             f: null
                                         }, {
                                             v: bucketSort[j],
                                             f: null
                                         }]
                                     });
+                                    totalPrice += parseInt(obj[i].price, 10) * bucketSort[j];
+                                }
                             }
                         }
-                        totalPrice += parseInt(obj[i].price, 10);
                     }
                     var data = new google.visualization.DataTable({
                         cols: colsArray,
@@ -139,7 +210,7 @@ function line() {
     google.charts.setOnLoadCallback(drawBasic);
 
     function drawBasic() {
-        
+
         var year = $('#exampleFormControlSelect1').val();
         var colsArray = [];
         var rowsArray = [];
@@ -167,18 +238,16 @@ function line() {
         }
         try {
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", "http://localhost:8080/appBackend/OrdersController?shopName=" + sessionStorage.getItem('storename')+"&startDate="+year, true);
+            xhr.open("GET", "http://localhost:8080/appBackend/OrdersController?shopName=" + sessionStorage.getItem('storename') + "&startDate=" + year, true);
 
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var obj = JSON.parse(xhr.responseText);
                     for (var i = 0; i < obj.length; i++) {
                         var month = obj[i].date.split(' ');
-                        console.log(monthToIndex(month[0]));
                         bucketSort[monthToIndex(month[0])]++;
-                        
+
                     }
-                    console.log(bucketSort);
                     for (var i = 0; i < bucketSort.length; i++) {
                         rowsArray.push({
                             c: [{

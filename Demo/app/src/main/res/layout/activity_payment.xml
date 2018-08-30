@@ -74,7 +74,7 @@
                     android:inputType="textPersonName" />
 
                 <EditText
-                    android:id="@+id/payment_firstName"
+                    android:id="@+id/payment_fullName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/payment_email"
@@ -87,25 +87,12 @@
                     android:inputType="textPersonName" />
 
                 <EditText
-                    android:id="@+id/payment_lastName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/payment_firstName"
-                    android:layout_alignStart="@+id/payment_firstName"
-                    android:layout_below="@+id/payment_firstName"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginTop="30dp"
-                    android:ems="10"
-                    android:hint="Last name"
-                    android:inputType="textPersonName" />
-
-                <EditText
                     android:id="@+id/payment_streetAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/payment_lastName"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="30dp"
+                    android:layout_alignLeft="@+id/payment_fullName"
+                    android:layout_alignStart="@+id/payment_fullName"
+                    android:layout_below="@+id/payment_fullName"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="30dp"
                     android:ems="10"
@@ -113,12 +100,12 @@
                     android:inputType="textPersonName" />
 
                 <EditText
-                    android:id="@+id/payment_Country"
+                    android:id="@+id/payment_country"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/payment_streetAddress"
-                    android:layout_alignStart="@+id/payment_streetAddress"
                     android:layout_below="@+id/payment_streetAddress"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="30dp"
                     android:ems="10"
@@ -126,12 +113,25 @@
                     android:inputType="textPersonName" />
 
                 <EditText
+                    android:id="@+id/payment_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/payment_country"
+                    android:layout_alignStart="@+id/payment_country"
+                    android:layout_below="@+id/payment_country"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:ems="10"
+                    android:hint="City"
+                    android:inputType="textPersonName" />
+
+                <EditText
                     android:id="@+id/payment_postalCode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/payment_City"
-                    android:layout_alignStart="@+id/payment_City"
-                    android:layout_below="@+id/payment_City"
+                    android:layout_alignLeft="@+id/payment_city"
+                    android:layout_alignStart="@+id/payment_city"
+                    android:layout_below="@+id/payment_city"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="30dp"
                     android:ems="10"
@@ -139,16 +139,16 @@
                     android:inputType="textPersonName" />
 
                 <EditText
-                    android:id="@+id/payment_City"
+                    android:id="@+id/payment_phoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/payment_Country"
-                    android:layout_alignStart="@+id/payment_Country"
-                    android:layout_below="@+id/payment_Country"
+                    android:layout_alignLeft="@+id/payment_postalCode"
+                    android:layout_alignStart="@+id/payment_postalCode"
+                    android:layout_below="@+id/payment_postalCode"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="30dp"
                     android:ems="10"
-                    android:hint="City"
+                    android:hint="Phone number"
                     android:inputType="textPersonName" />
 
             </RelativeLayout>

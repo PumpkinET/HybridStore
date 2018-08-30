@@ -7,14 +7,16 @@ public class Cart {
     private String id;
     private String title;
     private String image;
-    private int price;
+    private float price;
     private String color = "#FFFFFF";
+    private int quantity;
 
-    public Cart(String id, String title, String image, int price) {
+    public Cart(String id, String title, String image, float price, int quantity) {
         this.id = id;
         this.title = title;
         this.image = image;
         this.price = price;
+        this.quantity = 1;
     }
 
     public String getColor() {
@@ -37,12 +39,20 @@ public class Cart {
         return this.image;
     }
 
-    public int getPrice() {
+    public float getPrice() {
         return this.price;
     }
 
     public String getId() {
         return this.id;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
 }

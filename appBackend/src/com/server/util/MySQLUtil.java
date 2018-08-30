@@ -11,7 +11,7 @@ public class MySQLUtil {
 	private static Connection connection = null;
 	public static String url = "jdbc:mysql://localhost:3306/appbackenddb";
 	public static String username = "root";
-	public static String password = "4a5awhat";
+	public static String password = "shadi1309";
 	
 	public static Connection getConnection() throws ClassNotFoundException, SQLException {
         if (connection == null || connection.isClosed()) {

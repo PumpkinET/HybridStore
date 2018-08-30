@@ -20,7 +20,7 @@
                 android:scaleType="centerCrop" />
 
             <EditText
-                android:id="@+id/editText_username"
+                android:id="@+id/editText_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -30,8 +30,8 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="28dp"
                 android:ems="10"
-                android:hint="Username"
-                android:inputType="textPersonName"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
                 android:text="sheli@gmail.com"
                 android:textAlignment="center" />
 
@@ -39,7 +39,7 @@
                 android:id="@+id/editView_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editText_username"
+                android:layout_below="@+id/editText_email"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"

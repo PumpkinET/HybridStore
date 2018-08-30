@@ -15,12 +15,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.server.dao.CreateStoreDAO;
 import com.server.model.CreateStore;
+import com.server.model.ErrorMessage;
 
-import net.sf.json.JSONObject;
 
 @WebServlet("/CreateStoreController")
 public class CreateStoreController extends HttpServlet {
@@ -49,20 +52,27 @@ public class CreateStoreController extends HttpServlet {
 		CreateStore store = gson.fromJson(json, CreateStore.class);
 
 		// register store in application server
-		URL url = new URL("http://10.0.0.21:8080/appBackend/ShopController");
+		URL url = new URL("http://10.100.102.40:8080/appBackend/ShopController");
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("POST");
 		conn.setDoOutput(true);
 		JSONObject jObj = new JSONObject();
 
-		jObj.put("shopName", store.getStoreName());
-		jObj.put("shopOwner", store.getOwnerName());
-		jObj.put("shopThumbnail", store.getThumbnail());
-		jObj.put("shopDescription", store.getDescription());
-		jObj.put("shopIp", store.getIp());
-		jObj.put("shopCategory", store.getCategory());
-		jObj.put("shopPhone", store.getPhone());
-		jObj.put("shopAddress", store.getAddress());
+		try {
+			jObj.put("shopName", store.getStoreName());
+			jObj.put("shopOwner", store.getOwnerName());
+			jObj.put("shopThumbnail", store.getThumbnail());
+			jObj.put("shopDescription", store.getDescription());
+			jObj.put("shopIp", store.getIp());
+			jObj.put("shopCategory", store.getCategory());
+			jObj.put("shopPhone", store.getPhone());
+			jObj.put("shopAddress", store.getAddress());
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		OutputStream os = conn.getOutputStream();
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
@@ -73,7 +83,20 @@ public class CreateStoreController extends HttpServlet {
 		conn.connect();
 		int statusCode = conn.getResponseCode();
 		if (statusCode == 200) {// HTTP.OK
-			createStoreDAO.createItemsTable(store);
+			
+			BufferedReader br_res = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String json_res = "";
+			if (br_res != null)
+				json_res = br_res.readLine();
+			
+			Gson gson_res = new GsonBuilder().create();  
+			ErrorMessage errors = gson_res.fromJson(json_res, ErrorMessage.class);
+			if(errors.isResult() == true) {
+				createStoreDAO.createItemsTable(store);
+			} else {
+				response.getWriter().write(new Gson().toJson(errors));
+				response.getWriter().close();
+			}
 		}
 	}
 

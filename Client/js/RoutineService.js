@@ -53,6 +53,7 @@ function render() {
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
+            displayEventTime:false,
             navLinks: true,
             selectable: false,
             selectHelper: true,
@@ -71,6 +72,7 @@ function render() {
  */
 function addDate() {
     $('#error').html("");
+
     if (validateAddRoutine() == true) {
         try {
             var xhr = new XMLHttpRequest();
@@ -81,7 +83,7 @@ function addDate() {
                 "targetuser": $('#add-targetuser').val(),
                 "title": $('#add-title').val(),
                 "startDate": $('#add-start-date').val(),
-                "endDate": $('#add-end-date').val()
+                "endDate": $('#add-end-date').val()+"T23:59:00"
             });
 
             xhr.onreadystatechange = function () {

@@ -32,6 +32,7 @@ public class ItemsController extends HttpServlet {
 	 * case 1 : get items details by string array, example : filter=true&items=1,2,3
 	 * case 2 : get all store items for application (id, title, image, description) fields only
 	 * case 3 : get all store items for website, all fields are retrieved
+	 * case 4 : get all missing items, example : missing=true
 	 * parameter dbName : specify database name
 	 * parameter filter : whether select all items or selection
 	 * parameter items : specify items selection
@@ -46,6 +47,7 @@ public class ItemsController extends HttpServlet {
 			itemsDAO.setDbName(dbName);//initialize db connection
 			String filter = request.getParameter("filter");
 			String items = request.getParameter("items");
+			String missing = request.getParameter("missing");
 			if (filter != null) {
 				if (items != null)
 					response.getWriter().write(new Gson().toJson(itemsDAO.getCartHistory(items)));//case 1
@@ -54,6 +56,8 @@ public class ItemsController extends HttpServlet {
 			} else {
 				if (items != null)
 					response.getWriter().write(new Gson().toJson(itemsDAO.getCartHistory(items)));//case 1
+				else if(missing != null)
+					response.getWriter().write(new Gson().toJson(itemsDAO.getMissingItems()));//case 4
 				else
 					response.getWriter().write(new Gson().toJson(itemsDAO.getAll()));//case 3
 			}
@@ -71,8 +75,8 @@ public class ItemsController extends HttpServlet {
 		response.setContentType("application/json");//specify return content
 		
 		String session = request.getParameter("session");
-		if (session != null && SessionUtil.adminSessions.get(session) != null) {
-			String dbName = SessionUtil.adminSessions.get(session).getDbName();
+		if (session != null && SessionUtil.sessions.get(session) != null && SessionUtil.sessions.get(session).getGrade() != 0) {
+			String dbName = SessionUtil.sessions.get(session).getDbName();
 			if (dbName != null) {
 				itemsDAO.setDbName(dbName);//initialize db connection
 				
@@ -100,8 +104,8 @@ public class ItemsController extends HttpServlet {
 		response.setContentType("application/json");//specify return content
 		
 		String session = request.getParameter("session");
-		if (session != null && SessionUtil.adminSessions.get(session) != null) {
-			String dbName = SessionUtil.adminSessions.get(session).getDbName();
+		if (session != null && SessionUtil.sessions.get(session) != null && SessionUtil.sessions.get(session).getGrade() != 0) {
+			String dbName = SessionUtil.sessions.get(session).getDbName();
 			if (dbName != null) {
 				itemsDAO.setDbName(dbName);//initialize db connection
 				
@@ -129,8 +133,8 @@ public class ItemsController extends HttpServlet {
 		response.setContentType("application/json");//specify return content
 		
 		String session = request.getParameter("session");
-		if (session != null && SessionUtil.adminSessions.get(session) != null) {
-			String dbName = SessionUtil.adminSessions.get(session).getDbName();
+		if (session != null && SessionUtil.sessions.get(session) != null && SessionUtil.sessions.get(session).getGrade() != 0) {
+			String dbName = SessionUtil.sessions.get(session).getDbName();
 			if (dbName != null) {
 				itemsDAO.setDbName(dbName);//initialize db connection
 				
@@ -148,12 +152,12 @@ public class ItemsController extends HttpServlet {
 	@Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		setAccessControlHeaders(response);
+		//setAccessControlHeaders(response);
 		response.setStatus(HttpServletResponse.SC_OK);//HTTP.OK status
 	}
 
 	private void setAccessControlHeaders(HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "localhost");
+		response.setHeader("Access-Control-Allow-Origin", "http://*");
 		response.setHeader("Access-Control-Allow-Methods", "GET");
 		response.setHeader("Access-Control-Allow-Methods", "POST");
 		response.setHeader("Access-Control-Allow-Methods", "PUT");

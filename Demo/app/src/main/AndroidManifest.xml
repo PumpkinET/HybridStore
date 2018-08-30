@@ -6,9 +6,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_hybrid"
         android:label="HybridStore"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -24,6 +23,8 @@
         <activity android:name="com.demo.hybridstore.CartActivity"></activity>
         <activity android:name="com.demo.hybridstore.PaymentActivity"></activity>
         <activity android:name="com.demo.hybridstore.ItemsActivity"></activity>
+        <activity android:name="com.demo.hybridstore.AddressActivity"></activity>
+        <activity android:name="com.demo.hybridstore.ConfirmActivity"></activity>
         <!--<activity-->
             <!--android:name=".TabsActivity"-->
             <!--android:label="@string/title_activity_tabs"-->

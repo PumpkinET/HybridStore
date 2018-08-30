@@ -12,6 +12,7 @@ import java.sql.Statement;
 
 import javax.imageio.ImageIO;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.server.android.LoginAndroid;
 import com.server.android.RegisterAndroid;
 import com.server.model.CRUDMessages;
@@ -38,7 +39,7 @@ public class AuthDAO {
 
 	public AuthDAO() {
 		try {
-			connection = MySQLUtil.getConnection();//initialize db connection
+			connection = MySQLUtil.getConnection();// initialize db connection
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -55,11 +56,14 @@ public class AuthDAO {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Statement stmt = getConnection().createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM USERS WHERE EMAIL='" + login.getEmail() + "' AND PASSWORD='"
-					+ login.getPassword() + "'");
+			ResultSet rs = stmt.executeQuery(
+					"SELECT U.*, A.FULLNAME, A.STREETADD, A.COUNTRY, A.CITY, A.POSTALCODE, A.PHONENUMBER FROM USERS U INNER JOIN ADDRESS A ON U.EMAIL = A.EMAIL WHERE U.EMAIL='"
+							+ login.getEmail() + "' AND U.PASSWORD='" + login.getPassword() + "'");
 
 			while (rs.next()) {
-				loginObj = new Login(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
+				loginObj = new Login(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
+						rs.getString(10));
 			}
 			getConnection().close();
 		} catch (Exception e) {
@@ -98,8 +102,12 @@ public class AuthDAO {
 			File outputfile = new File("C:\\AppServ\\www\\android\\profile\\" + register.getEmail());
 			ImageIO.write(image, "png", outputfile);
 		} catch (Exception e) {
+			if (e instanceof MySQLIntegrityConstraintViolationException)
+				result.setErrorMessage("Email already exists!");
+			else
+				result.setErrorMessage(e.toString());
+
 			e.printStackTrace();
-			result.setErrorMessage(e.toString());
 		}
 		return result;
 	}
@@ -121,7 +129,7 @@ public class AuthDAO {
 			stmt.setString(1, register.getPassword());
 			stmt.setString(2, register.getName());
 			stmt.setString(3, register.getEmail());
-			
+
 			result.setResult(stmt.executeUpdate() == 1);
 			result.setErrorMessage(CRUDMessages.add);
 

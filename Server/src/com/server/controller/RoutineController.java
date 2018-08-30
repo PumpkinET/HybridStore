@@ -54,8 +54,8 @@ public class RoutineController extends HttpServlet {
 		response.setContentType("application/json");//specify return content
 		
 		String session = request.getParameter("session");
-		if (session != null && SessionUtil.adminSessions.get(session) != null) {
-			String dbName = SessionUtil.adminSessions.get(session).getDbName();
+		if (session != null && SessionUtil.sessions.get(session) != null && SessionUtil.sessions.get(session).getGrade() != 0) {
+			String dbName = SessionUtil.sessions.get(session).getDbName();
 			if (dbName != null) {
 				routineDAO.setDbName(dbName);//initialize db connection
 				
@@ -83,8 +83,8 @@ public class RoutineController extends HttpServlet {
 		response.setContentType("application/json");//specify return content
 		
 		String session = request.getParameter("session");
-		if (session != null && SessionUtil.adminSessions.get(session) != null) {
-			String dbName = SessionUtil.adminSessions.get(session).getDbName();
+		if (session != null && SessionUtil.sessions.get(session) != null && SessionUtil.sessions.get(session).getGrade() != 0) {
+			String dbName = SessionUtil.sessions.get(session).getDbName();
 			if (dbName != null) {
 				routineDAO.setDbName(dbName);//initialize db connection
 				

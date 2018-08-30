@@ -62,9 +62,6 @@ public class AuthController extends HttpServlet {
 				String session = request.getSession().getId();
 				Users user = usersDAO.get(login.getUsername());
 
-				if (user.getGrade() != 0)// save admin/owner session
-					SessionUtil.adminSessions.put(session, user);
-
 				SessionUtil.sessions.put(session, user);// save user session
 				user.setSession(session);
 				user.setDbName(dbName);//store database name for future requests

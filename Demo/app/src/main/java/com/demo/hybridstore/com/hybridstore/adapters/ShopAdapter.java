@@ -1,8 +1,11 @@
 package com.demo.hybridstore.com.hybridstore.adapters;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -19,6 +22,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.demo.hybridstore.CartActivity;
+import com.demo.hybridstore.com.hybridstore.model.Auth;
 import com.hybridstore.app.R;
 import com.demo.hybridstore.com.hybridstore.com.demo.fragments.TargetShopFragment;
 import com.demo.hybridstore.com.hybridstore.model.Shop;
@@ -79,13 +84,41 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
         mShopHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TargetShopFragment fragment = new TargetShopFragment();
-                fragment.setTargetShop(shop);
-                android.support.v4.app.FragmentTransaction fragmentTransaction =
-                        ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                if (CartActivity.card.size() == 0 || Auth.shopName.equals(shop.getShopName())) {
+                    TargetShopFragment fragment = new TargetShopFragment();
+                    fragment.setTargetShop(shop);
+                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                            ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+                else if (CartActivity.card.size() != 0 && Auth.shopName.equals(shop.getShopName()) == false) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Activity) v.getContext());
+                    builder.setMessage("Are you sure you want to start new cart?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    CartActivity.clearCart();
+                                    TargetShopFragment fragment = new TargetShopFragment();
+                                    fragment.setTargetShop(shop);
+                                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                                            ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.fragment_container, fragment);
+                                    fragmentTransaction.addToBackStack(null);
+                                    fragmentTransaction.commit();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                    ((FragmentActivity) mContext).getSupportFragmentManager().popBackStack();
+                                }
+                            });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
             }
         });
 
@@ -98,16 +131,13 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
 //                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
 //                mapIntent.setPackage("com.google.android.apps.maps");
 //                v.getContext().startActivity(mapIntent);
-                try
-                {
-                    String url = "https://waze.com/ul?q="+shop.getShopAddress();
-                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( url ) );
-                    v.getContext().startActivity( intent );
-                }
-                catch ( ActivityNotFoundException ex  )
-                {
+                try {
+                    String url = "https://waze.com/ul?q=" + shop.getShopAddress();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    v.getContext().startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
                     // If Waze is not installed, open it in Google Play:
-                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "market://details?id=com.waze" ) );
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.waze"));
                     v.getContext().startActivity(intent);
                 }
             }
@@ -118,7 +148,7 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:"+shop.getShopPhone()));
+                callIntent.setData(Uri.parse("tel:" + shop.getShopPhone()));
                 v.getContext().startActivity(callIntent);
             }
         });
@@ -143,6 +173,7 @@ public class ShopAdapter extends BaseAdapter implements Filterable {
                 results.values = resultsData;
                 return results;
             }
+
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 filList = (ArrayList<Shop>) results.values;

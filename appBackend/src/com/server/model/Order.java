@@ -1,10 +1,12 @@
 package com.server.model;
 
+import java.sql.Date;
+
 public class Order {
 	private String shopName;
 	private String shopThumbnail;
 	private String shopIp;
-	private String finalPrice;
+	private float finalPrice;
 	private String streetAdd;
 	private String country;
 	private String city;
@@ -12,8 +14,11 @@ public class Order {
 	private String items;
 	private int	status;
 	private java.sql.Date date;
-	public Order(String shopName, String shopThumbnail, String shopIp, String finalPrice, String streetAdd,
-			String country, String city, String postalcode, String items, int status) {
+	private String phoneNumber;
+	
+	
+	public Order(String shopName, String shopThumbnail, String shopIp, float finalPrice, String streetAdd,
+			String country, String city, String postalcode, String items, int status, String phoneNumber) {
 		super();
 		this.shopName = shopName;
 		this.shopThumbnail = shopThumbnail;
@@ -25,9 +30,12 @@ public class Order {
 		this.postalcode = postalcode;
 		this.items = items;
 		this.status = status;
+		this.phoneNumber = phoneNumber;
 	}
-	public Order(String shopName, String shopThumbnail, String shopIp, String finalPrice, String streetAdd,
-			String country, String city, String postalcode, String items, int status, java.sql.Date date) {
+	
+	
+	public Order(String shopName, String shopThumbnail, String shopIp, float finalPrice, String streetAdd,
+			String country, String city, String postalcode, String items, int status, Date date, String phoneNumber) {
 		super();
 		this.shopName = shopName;
 		this.shopThumbnail = shopThumbnail;
@@ -40,7 +48,9 @@ public class Order {
 		this.items = items;
 		this.status = status;
 		this.date = date;
+		this.phoneNumber = phoneNumber;
 	}
+
 
 	public String getShopName() {
 		return shopName;
@@ -66,11 +76,11 @@ public class Order {
 		this.shopIp = shopIp;
 	}
 
-	public String getFinalPrice() {
+	public float getFinalPrice() {
 		return finalPrice;
 	}
 
-	public void setFinalPrice(String finalPrice) {
+	public void setFinalPrice(float finalPrice) {
 		this.finalPrice = finalPrice;
 	}
 
@@ -131,12 +141,22 @@ public class Order {
 		this.date = date;
 	}
 
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+
 	@Override
 	public String toString() {
 		return "Order [shopName=" + shopName + ", shopThumbnail=" + shopThumbnail + ", shopIp=" + shopIp
 				+ ", finalPrice=" + finalPrice + ", streetAdd=" + streetAdd + ", country=" + country + ", city=" + city
-				+ ", postalcode=" + postalcode + ", items=" + items + ", status=" + status + "]";
+				+ ", postalcode=" + postalcode + ", items=" + items + ", status=" + status + ", date=" + date
+				+ ", phoneNumber=" + phoneNumber + "]";
 	}
-	
-
 }

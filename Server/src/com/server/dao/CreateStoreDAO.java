@@ -44,13 +44,16 @@ public class CreateStoreDAO {
 			str = " VARCHAR(50)";
 			break;
 		case 1:
-			str = " INT(11)";
+			str = " INT(11) DEFAULT '0'";
 			break;
 		case 2:
 			str = " VARCHAR(999)";
 			break;
 		case 3:
 			str = " DATE";
+			break;
+		case 4: 
+			str = " FLOAT";
 			break;
 		}
 		return str;

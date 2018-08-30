@@ -25,9 +25,7 @@ public class CartActivity extends AppCompatActivity {
     public static ArrayList<Cart> card = new ArrayList<>();
     public static CartAdapter mAdapter = new CartAdapter(card);
 
-    public static String shopName = "";
     FloatingActionButton fab, clear;
-    float totalPriceValue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,40 +33,37 @@ public class CartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
 
         setTitle("My Cart");
-        for (int i = 0; i < card.size(); i++) totalPriceValue += card.get(i).getPrice();
-
+        //Initialize view ids
         mRecycleView = findViewById(R.id.cartrecycleviewer);
         mRecycleView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getBaseContext());
-
+        fab = findViewById(R.id.confirmCart);
+        clear = findViewById(R.id.clearCart);
         mRecycleView.setAdapter(mAdapter);
         mRecycleView.setLayoutManager(mLayoutManager);
 
+        //On long click highlight selected item
         mAdapter.setOnItemLongClickListener(new CartAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(int position) {
-                totalPriceValue -= card.get(position).getPrice();
                 removeFromCart(card.get(position));
-                //card.remove(position);
-                //mAdapter.notifyDataSetChanged();
                 return true;
             }
         });
-
-        fab = findViewById(R.id.confirmCart);
+        //On pressing the next floating button proceed to payment activity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Auth.email != null) {
+                if (CartActivity.card.size() == 0 && Auth.email == null)
+                    Toast.makeText(getApplicationContext(), "Your cart is empty!", Toast.LENGTH_SHORT).show();
+                else if (Auth.email != null) {
                     Intent i = new Intent(CartActivity.this, PaymentActivity.class);
-                    i.putExtra("finalPrice", totalPriceValue);
-                    i.putExtra("shopName", shopName);
+                    i.putExtra("shopName", Auth.shopName);
                     startActivity(i);
                 } else
                     Toast.makeText(CartActivity.this, "Please login first", Toast.LENGTH_LONG).show();
             }
         });
-        clear = findViewById(R.id.clearCart);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,7 +81,7 @@ public class CartActivity extends AppCompatActivity {
             }
         }
         if (b == false) {
-            card.add(new Cart(cart.getId(), cart.getTitle(), cart.getImageResource(), cart.getPrice()));
+            card.add(new Cart(cart.getId(), cart.getTitle(), cart.getImageResource(), cart.getPrice(), cart.getQuantity()));
             mAdapter.notifyDataSetChanged();
         }
     }

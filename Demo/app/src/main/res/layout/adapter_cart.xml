@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="5dp">
 
     <RelativeLayout
@@ -46,12 +47,61 @@
             android:textStyle="bold" />
 
         <ImageView
+            android:id="@+id/cart_Expand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             app:srcCompat="@drawable/ic_menu_open" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_below="@+id/cart_Title"
+            android:layout_alignStart="@id/cart_Title"
+            android:layout_alignLeft="@id/cart_Expand"
+            android:layout_toRightOf="@id/cart_Thumbnail"
+            android:layout_toLeftOf="@id/cart_Expand">
+
+            <TextView
+                android:id="@+id/cart_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="25sp" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/cart_dec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:clickable="true"
+                android:src="@drawable/ic_menu_dec"
+                app:fabSize="mini"
+                tools:ignore="VectorDrawableCompat" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/cart_inc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="15dp"
+                android:clickable="true"
+                android:src="@drawable/ic_menu_add"
+                app:fabSize="mini"
+                tools:ignore="VectorDrawableCompat" />
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
 

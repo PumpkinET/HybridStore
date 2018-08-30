@@ -1,6 +1,8 @@
 package com.demo.hybridstore.com.hybridstore.adapters;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +47,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder
         public TextView mTitle;
         public ImageView mImageView;
         public TextView mPrice;
-
+        public TextView mQuantity;
+        public FloatingActionButton mDec;
+        public FloatingActionButton mInc;
         public CardViewHolder(View itemView, final OnItemClickListener listener, final OnItemLongClickListener listener2) {
             super(itemView);
 
@@ -53,6 +57,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder
             mTitle = itemView.findViewById(R.id.cart_Title);
             mImageView = itemView.findViewById(R.id.cart_Thumbnail);
             mPrice = itemView.findViewById(R.id.cart_Price);
+            mQuantity = itemView.findViewById(R.id.cart_quantity);
+            mDec = itemView.findViewById(R.id.cart_dec);
+            mInc = itemView.findViewById(R.id.cart_inc);
 
             //on long click listener
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -96,12 +103,33 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CardViewHolder
     }
 
     @Override
-    public void onBindViewHolder(CardViewHolder holder, int position) {
-        Cart currentItem = mCardList.get(position);
+    public void onBindViewHolder(final CardViewHolder holder, int position) {
+        final Cart currentItem = mCardList.get(position);
+
+        //on click listener to decrease quantity
+        holder.mDec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentItem.getQuantity()-1 >= 1) {
+                    currentItem.setQuantity(currentItem.getQuantity() - 1);
+                    holder.mQuantity.setText(currentItem.getQuantity() + "");
+                }
+            }
+        });
+
+        //on click listener to increase quantity
+        holder.mInc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentItem.setQuantity(currentItem.getQuantity()+1);
+                holder.mQuantity.setText(currentItem.getQuantity() + "");
+            }
+        });
 
         //set data to view
         holder.mTitle.setText(currentItem.getTitle());
         Picasso.get().load(currentItem.getImageResource()).into(holder.mImageView);
         holder.mPrice.setText(currentItem.getPrice() + "₪");
+        holder.mQuantity.setText(currentItem.getQuantity() + "");
     }
 }

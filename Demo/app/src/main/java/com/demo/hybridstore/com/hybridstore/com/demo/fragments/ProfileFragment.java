@@ -44,6 +44,7 @@ public class ProfileFragment extends Fragment {
         return rootView;
     }
 
+    //split profile into two tabs (profile and history)
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {

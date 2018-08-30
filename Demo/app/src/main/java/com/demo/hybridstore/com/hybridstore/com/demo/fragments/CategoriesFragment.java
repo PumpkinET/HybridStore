@@ -32,6 +32,7 @@ import java.util.Arrays;
 public class CategoriesFragment extends Fragment {
     View rootView;
     GridView gridview;
+    EditText filter_categories;
     CategoriesAdapter categoriesAdapter;
 
     public CategoriesFragment() {
@@ -43,13 +44,16 @@ public class CategoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_categories, container, false);
 
+        //update side menu and title
         getActivity().setTitle("Categories");
-
         ((MainActivity) getActivity()).updateMenu(R.id.nav_categories);
-        new CategoriesAsyncer().execute();
-        gridview = (GridView) rootView.findViewById(R.id.categoriesGridView);
-        EditText filter_categories = (EditText) rootView.findViewById(R.id.filter_categories);
 
+        //initialize view ids
+        gridview = (GridView) rootView.findViewById(R.id.categoriesGridView);
+        filter_categories = (EditText) rootView.findViewById(R.id.filter_categories);
+
+        new CategoriesAsyncer().execute();
+        //filter categories
         filter_categories.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -69,6 +73,11 @@ public class CategoriesFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * this function is used to get categories list
+     * status 200 : get success
+     * status 0 : offline server
+     */
     public class CategoriesAsyncer extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {

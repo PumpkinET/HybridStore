@@ -58,14 +58,16 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        //initialize view ids
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_signout).setVisible(false);
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileName)).setText("Welcome guest, ");
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileEmail)).setText("Please login to start buying.");
         navigationView.setNavigationItemSelectedListener(this);
-
+        myCart = (ImageView) findViewById(R.id.myCart);
         profileLayout = (LinearLayout) navigationView.getHeaderView(0).findViewById(R.id.profileLayout);
 
+        //profile button
         profileLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-        myCart = (ImageView) findViewById(R.id.myCart);
+        //cart button
         myCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    //alert message when back press on main menu
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -186,6 +189,14 @@ public class MainActivity extends AppCompatActivity
         Auth.email = null;
         Auth.password = null;
         Auth.session = null;
+        Auth.fullname = null;
+        Auth.streetAdd = null;
+        Auth.country = null;
+        Auth.city = null;
+        Auth.postalCode = null;
+        Auth.phonenumber = null;
+        Auth.session = null;
+
         navigationView.getMenu().findItem(R.id.nav_signup).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_signout).setVisible(false);
