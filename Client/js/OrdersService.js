@@ -35,8 +35,7 @@ function getAll() {
                     $("#tbody_list").append("<tr class='targetRow'>" +
                         "<td><span>" + obj[i].id + "</span></td>" +
                         "<td><span>" + obj[i].email + "</span></td>" +
-                        "<td><span>" + obj[i].firstName + "</span></td>" +
-                        "<td><span>" + obj[i].lastName + "</span></td>" +
+                        "<td><span>" + obj[i].fullName + "</span></td>" +
                         "<td><span>" + obj[i].streetAdd + "</span></td>" +
                         "<td><span>" + obj[i].country + "</span></td>" +
                         "<td><span>" + obj[i].city + "</span></td>" +
@@ -156,17 +155,16 @@ function invoice() {
         doc.text(105, 20, 'Invoice number : ' + $('#add-invoice-number').val(), null, null, 'center');
         doc.setFontType("normal");
         doc.text(105, 30, ('Email : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(2) span').text()), null, null, 'center');
-        doc.text(105, 40, ('First name : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(3) span').text()), null, null, 'center');
-        doc.text(105, 50, ('Last name : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(4) span').text()), null, null, 'center');
-        doc.text(105, 60, ('Street address : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(5) span').text()), null, null, 'center');
-        doc.text(105, 70, ('Country : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(6) span').text()), null, null, 'center');
-        doc.text(105, 80, ('City : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(7) span').text()), null, null, 'center');
-        doc.text(105, 90, ('Phone Number : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(8) span').text()), null, null, 'center');
-        doc.text(105, 100, ('Postal code : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(9) span').text()), null, null, 'center');
+        doc.text(105, 40, ('Full name : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(3) span').text()), null, null, 'center');
+        doc.text(105, 60, ('Street address : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(4) span').text()), null, null, 'center');
+        doc.text(105, 70, ('Country : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(5) span').text()), null, null, 'center');
+        doc.text(105, 80, ('City : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(6) span').text()), null, null, 'center');
+        doc.text(105, 90, ('Phone Number : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(7) span').text()), null, null, 'center');
+        doc.text(105, 100, ('Postal code : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(8) span').text()), null, null, 'center');
         doc.setFontType("bold");
-        doc.text(105, 110, ('Total price : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(10) span').text() + " N.I.S."), null, null, 'center');
+        doc.text(105, 110, ('Total price : ' + $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(9) span').text() + " N.I.S."), null, null, 'center');
 
-        var itemsString = $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(11) span:nth-child(1)').text();
+        var itemsString = $('#tbody_list .targetRow:nth-child(' + tempIndex + ') td:nth-child(10) span:nth-child(1)').text();
         getItems(doc, itemsString);
     }
 }
