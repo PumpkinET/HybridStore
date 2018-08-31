@@ -2,14 +2,12 @@ package com.server.android;
 
 public class RegisterAndroid {
 	String email;
-	String name;
 	String password;
 	private String imageString;
 
-	public RegisterAndroid(String email, String name, String password, String imageString) {
+	public RegisterAndroid(String email, String password, String imageString) {
 		super();
 		this.email = email;
-		this.name = name;
 		this.password = password;
 		this.imageString = imageString;
 	}
@@ -26,17 +24,13 @@ public class RegisterAndroid {
 		return email;
 	}
 
-	public String getName() {
-		return name;
-	}
-
 	public String getPassword() {
 		return password;
 	}
 
 	@Override
 	public String toString() {
-		return "RegisterAndroid [email=" + email + ", name=" + name + ", password=" + password + "]";
+		return "RegisterAndroid [email=" + email +  ", password=" + password + "]";
 	}
 
 }

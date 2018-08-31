@@ -148,7 +148,6 @@ public class LoginFragment extends Fragment {
                 Auth.email = login.getEmail();
                 Auth.password = login.getPassword();
                 Auth.avatar = login.getAvatar();
-                Auth.name = login.getName();
                 Auth.fullname = login.getFullname();
                 Auth.streetAdd = login.getStreetAdd();
                 Auth.country = login.getCountry();
@@ -157,7 +156,7 @@ public class LoginFragment extends Fragment {
                 Auth.phonenumber = login.getPhonenumber();
                 Auth.session = login.getSession();
                 Log.d("session", login.getSession());
-                ((MainActivity) getActivity()).loginMenu(login.getName(), login.getEmail(), login.getAvatar());
+                ((MainActivity) getActivity()).loginMenu(login.getEmail(), login.getAvatar());
                 CategoriesFragment fragment = new CategoriesFragment();
                 android.support.v4.app.FragmentTransaction fragmentTransaction =
                         getFragmentManager().beginTransaction();

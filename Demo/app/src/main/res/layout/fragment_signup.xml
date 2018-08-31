@@ -6,25 +6,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
-
-        <EditText
-            android:id="@+id/signup_Name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="28dp"
-            android:ems="10"
-            android:hint="Name"
-            android:inputType="textPersonName"
-            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/signup_Email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="96dp"
+            android:layout_marginTop="28dp"
             android:ems="10"
             android:hint="Email"
             android:inputType="textEmailAddress"
@@ -34,9 +24,8 @@
             android:id="@+id/signup_Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="166dp"
+            android:layout_marginTop="96dp"
             android:ems="10"
             android:hint="Password"
             android:inputType="textPassword"
@@ -46,10 +35,12 @@
             android:id="@+id/signup_VerifyPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="166dp"
             android:ems="10"
-            android:hint="Verify password"
             android:focusable="true"
+            android:hint="Verify password"
             android:inputType="textPassword"
             android:textAlignment="center" />
 

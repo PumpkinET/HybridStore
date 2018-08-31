@@ -50,7 +50,7 @@ public class SignupFragment extends Fragment {
     String encodedImage;
     JSONObject jsonObject;
     Uri selectedImage;
-    EditText email, password, verifypassword, name;
+    EditText email, password, verifypassword;
     Button bSignup;
 
     public SignupFragment() {
@@ -71,7 +71,6 @@ public class SignupFragment extends Fragment {
         email = (EditText) rootView.findViewById(R.id.signup_Email);
         password = (EditText) rootView.findViewById(R.id.signup_Password);
         verifypassword = (EditText) rootView.findViewById(R.id.signup_VerifyPassword);
-        name = (EditText) rootView.findViewById(R.id.signup_Name);
         bSignup = (Button) rootView.findViewById(R.id.bRegister);
 
         img.setOnClickListener(new View.OnClickListener() {
@@ -85,15 +84,15 @@ public class SignupFragment extends Fragment {
         bSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validate(email, password, verifypassword, name, img) == true)
-                    new RegisterAsyncer().execute(email.getText().toString(), password.getText().toString(), verifypassword.getText().toString(), name.getText().toString());
+                if (validate(email, password, verifypassword, img) == true)
+                    new RegisterAsyncer().execute(email.getText().toString(), password.getText().toString(), verifypassword.getText().toString());
             }
         });
 
         return rootView;
     }
 
-    public boolean validate(EditText email, EditText password, EditText verifypassword, EditText name, ImageView img) {
+    public boolean validate(EditText email, EditText password, EditText verifypassword, ImageView img) {
         boolean res = true;
         if (email.getText().toString().length() == 0 || !android.util.Patterns.EMAIL_ADDRESS.matcher(email.getText().toString()).matches()) {
             email.setError("Email must be filled out");
@@ -108,11 +107,6 @@ public class SignupFragment extends Fragment {
             verifypassword.setError("Passwords are not matching");
             password.requestFocus();
             verifypassword.requestFocus();
-            res = false;
-        }
-        if (name.getText().toString().length() == 0) {
-            name.setError("Name must be filled out");
-            name.requestFocus();
             res = false;
         }
         if (img.getDrawable() == null) {

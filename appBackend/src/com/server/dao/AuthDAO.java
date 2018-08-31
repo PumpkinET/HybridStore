@@ -62,8 +62,7 @@ public class AuthDAO {
 
 			while (rs.next()) {
 				loginObj = new Login(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
-						rs.getString(10));
+						rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
 			}
 			getConnection().close();
 		} catch (Exception e) {
@@ -83,12 +82,11 @@ public class AuthDAO {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			PreparedStatement stmt = getConnection()
-					.prepareStatement("INSERT INTO USERS(EMAIL, PASSWORD, AVATAR, NAME) VALUES(?,?,?,?)");
+					.prepareStatement("INSERT INTO USERS(EMAIL, PASSWORD, AVATAR) VALUES(?,?,?)");
 
 			stmt.setString(1, register.getEmail());
 			stmt.setString(2, register.getPassword());
-			stmt.setString(3, "http://10.0.0.21/android/profile/" + register.getEmail());
-			stmt.setString(4, register.getName());
+			stmt.setString(3, "http://10.100.102.40/android/profile/" + register.getEmail());
 
 			result.setResult(stmt.executeUpdate() == 1);
 			result.setErrorMessage(CRUDMessages.add);
@@ -99,7 +97,7 @@ public class AuthDAO {
 			String dataString = register.getImageString();
 			byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(dataString);
 			BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
-			File outputfile = new File("C:\\AppServ\\www\\android\\profile\\" + register.getEmail());
+			File outputfile = new File("C:\\xampp\\htdocs\\android\\profile\\" + register.getEmail());
 			ImageIO.write(image, "png", outputfile);
 		} catch (Exception e) {
 			if (e instanceof MySQLIntegrityConstraintViolationException)
@@ -124,11 +122,10 @@ public class AuthDAO {
 			Class.forName("com.mysql.jdbc.Driver");
 
 			PreparedStatement stmt = getConnection()
-					.prepareStatement("UPDATE USERS SET PASSWORD=?, NAME=? WHERE EMAIL=?");
+					.prepareStatement("UPDATE USERS SET PASSWORD=? WHERE EMAIL=?");
 
 			stmt.setString(1, register.getPassword());
-			stmt.setString(2, register.getName());
-			stmt.setString(3, register.getEmail());
+			stmt.setString(2, register.getEmail());
 
 			result.setResult(stmt.executeUpdate() == 1);
 			result.setErrorMessage(CRUDMessages.add);
@@ -140,7 +137,7 @@ public class AuthDAO {
 				String dataString = register.getImageString();
 				byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(dataString);
 				BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
-				File outputfile = new File("C:\\AppServ\\www\\android\\profile\\" + register.getEmail());
+				File outputfile = new File("C:\\xampp\\htdocs\\android\\profile\\" + register.getEmail());
 				ImageIO.write(image, "png", outputfile);
 			}
 		} catch (Exception e) {

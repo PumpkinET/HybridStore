@@ -20,14 +20,10 @@ function validateAddItem() {
 				$('#error').append("<div>" + dynamicData[i].column + " must be filled out</div>");
 				res = false;
 			}
-			if (!(!isNaN(check) && check.toString().indexOf('.') != -1)) {
-				$('#error').append("<div>" + dynamicData[i].column + " must be float</div>");
+			if (!(!isNaN(check))) {
+				$('#error').append("<div>" + dynamicData[i].column + " must be number</div>");
 				res = false;
 			}
-			/*if (!(Number.isInteger(check))) {
-				$('#error').append("<div>" + dynamicData[i].column + " must be filled out</div>");
-				res = false;
-			}*/
 		}
 		else 
 		{
@@ -49,7 +45,7 @@ function validateEditItem() {
 				$('#error_edit').append("<div>" + dynamicData[i].column + " must be filled out</div>");
 				res = false;
 			}
-			if (!(!isNaN(check) && check.toString().indexOf('.') != -1)) {
+			if (!(!isNaN(check))) {
 				$('#error_edit').append("<div>" + dynamicData[i].column + " must be float</div>");
 				res = false;
 			}

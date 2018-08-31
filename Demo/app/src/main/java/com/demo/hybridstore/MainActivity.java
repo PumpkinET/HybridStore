@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity
         //initialize view ids
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_signout).setVisible(false);
-        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileName)).setText("Welcome guest, ");
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileEmail)).setText("Please login to start buying.");
         navigationView.setNavigationItemSelectedListener(this);
         myCart = (ImageView) findViewById(R.id.myCart);
@@ -90,6 +89,17 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i);
             }
         });
+
+        Bundle b = getIntent().getExtras();
+        try {
+            boolean bReset = b.getBoolean("bReset");
+            if (bReset && Auth.session != null) {
+                loginMenu(Auth.email, Auth.avatar);
+            }
+        }
+        catch(NullPointerException e) {
+
+        }
     }
 
     //alert message when back press on main menu
@@ -169,19 +179,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void loginMenu(String name, String email, String avatar) {
+    public void loginMenu(String email, String avatar) {
         navigationView.getMenu().findItem(R.id.nav_signup).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_signout).setVisible(true);
 
-        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileName)).setText(name);
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileEmail)).setText(email);
 
         ImageView img = navigationView.getHeaderView(0).findViewById(R.id.profileAvatar);
         img.setBackgroundColor(Color.TRANSPARENT);
         Picasso.get().load(avatar).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(img);
 
-        Toast.makeText(MainActivity.this, "Welcome back, " + name + "!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Welcome back, " + email + "!", Toast.LENGTH_SHORT).show();
     }
 
     public void resetMenu() {
@@ -201,7 +210,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_signout).setVisible(false);
 
-        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileName)).setText("Welcome guest, ");
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.profileEmail)).setText("Please login to start buying.");
 
         ImageView img = navigationView.getHeaderView(0).findViewById(R.id.profileAvatar);

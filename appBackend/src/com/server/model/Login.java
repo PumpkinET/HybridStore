@@ -4,7 +4,6 @@ public class Login {
 	String email;
 	String password;
 	String avatar;
-	String name;
 	String fullname;
 	String streetAdd;
 	String country;
@@ -20,13 +19,12 @@ public class Login {
 	}
 
 	
-	public Login(String email, String password, String avatar, String name, String fullname, String streetAdd,
+	public Login(String email, String password, String avatar, String fullname, String streetAdd,
 			String country, String city, String postalCode, String phonenumber) {
 		super();
 		this.email = email;
 		this.password = password;
 		this.avatar = avatar;
-		this.name = name;
 		this.fullname = fullname;
 		this.streetAdd = streetAdd;
 		this.country = country;
@@ -38,13 +36,12 @@ public class Login {
 
 
 
-	public Login(String email, String password, String avatar, String name, String fullname, String streetAdd,
+	public Login(String email, String password, String avatar, String fullname, String streetAdd,
 			String country, String city, String postalCode, String phonenumber, String session) {
 		super();
 		this.email = email;
 		this.password = password;
 		this.avatar = avatar;
-		this.name = name;
 		this.fullname = fullname;
 		this.streetAdd = streetAdd;
 		this.country = country;
@@ -65,11 +62,7 @@ public class Login {
 	public String getAvatar() {
 		return avatar;
 	}
-
-	public String getName() {
-		return name;
-	}
-
+	
 	public String getSession() {
 		return session;
 	}
@@ -102,7 +95,7 @@ public class Login {
 
 	@Override
 	public String toString() {
-		return "Login [email=" + email + ", password=" + password + ", avatar=" + avatar + ", name=" + name
+		return "Login [email=" + email + ", password=" + password + ", avatar=" + avatar 
 				+ ", fullname=" + fullname + ", streetAdd=" + streetAdd + ", country=" + country + ", city=" + city
 				+ ", postalCode=" + postalCode + ", phonenumber=" + phonenumber + ", session=" + session + "]";
 	}

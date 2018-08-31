@@ -49,8 +49,7 @@ public class AuthController extends HttpServlet {
 			response.setStatus(403);// HTTP.FORBDDEN status code
 		} else {
 			String session = request.getSession().getId();
-			Login secured = new Login(loginObj.getEmail(), loginObj.getPassword(), loginObj.getAvatar(),
-					loginObj.getName(), loginObj.getFullname(), loginObj.getStreetAdd(), loginObj.getCountry(), loginObj.getCity(), loginObj.getPostalCode(), loginObj.getPhonenumber(), session);
+			Login secured = new Login(loginObj.getEmail(), loginObj.getPassword(), loginObj.getAvatar(), loginObj.getFullname(), loginObj.getStreetAdd(), loginObj.getCountry(), loginObj.getCity(), loginObj.getPostalCode(), loginObj.getPhonenumber(), session);
 			SessionUtil.sessions.put(session, secured);
 			response.getWriter().write(new Gson().toJson(secured));
 			response.getWriter().close();

@@ -155,7 +155,6 @@ public class ProfileFragmentTab extends Fragment {
                 jsonObject = new JSONObject();
                 jsonObject.put("email", Auth.email);
                 jsonObject.put("password", params[0]);
-                jsonObject.put("name", params[1]);
                 jsonObject.put("imageString", encodedImage);
 
                 String data = jsonObject.toString();
